@@ -13,17 +13,14 @@ function prepareDirectory(filePath: string) {
 }
 
 export default async function copy(args: Config) {
-  console.log('Bootstrapping your plugin package');
-  console.log(args);
-
   const templateFiles = await globby(args.templateDir);
   for (const sourcePath of templateFiles) {
     const relativePath = path.relative(args.templateDir, sourcePath);
     const targetPath = path.resolve(args.packageDir, relativePath);
     prepareDirectory(targetPath);
-    console.log(`Copying ${relativePath}`);
-    let sourceData: Buffer = fs.readFileSync(sourcePath);
-    let targetData: Buffer = sourceData;
+    console.log(`Creating ${relativePath}`);
+    let sourceData = fs.readFileSync(sourcePath);
+    let targetData = sourceData;
     if (isUtf8(sourceData)) {
       targetData = Buffer.from(
         Mustache.render(sourceData.toString(), args.view),

@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import chalk from 'chalk';
 import gitconfig from 'gitconfig';
 import yargsInteractive, {Option} from 'yargs-interactive';
-import chalk from 'chalk';
 
 import copy from './template';
 
@@ -34,8 +34,8 @@ export async function createSomething(
       interactive: {default: true},
       description: {
         type: 'input',
-        describe: 'your package description',
-        default: 'package description',
+        describe: 'describe your package',
+        default: 'my awesome package',
         prompt: 'if-no-arg',
       },
       author: {
@@ -52,7 +52,7 @@ export async function createSomething(
       },
       license: {
         type: 'list',
-        describe: 'package license',
+        describe: 'choose license',
         choices: ['MIT', 'Apache'],
         prompt: 'if-no-arg',
       },
@@ -93,12 +93,16 @@ export async function createSomething(
       year: new Date().getFullYear(),
     };
 
-    const copyConfig = {
+    console.log('Bootstrapping your package');
+
+    await copy({
       packageDir,
       templateDir,
       view,
-    };
-    await copy(copyConfig);
+    });
+
+    console.log(`✨ Package ${packageName} has been created!`);
+    console.log(packageDir);
   } catch (err) {
     console.log(chalk.red(`Error: ${err.message}`));
   }

@@ -54,7 +54,7 @@ export async function create(
       license: {
         type: 'list',
         describe: 'choose license',
-        choices: ['MIT', 'Apache'],
+        choices: ['mit'],
         prompt: 'if-no-arg',
       },
       template: {

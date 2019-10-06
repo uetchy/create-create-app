@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import {tmpdir} from 'os';
 import globby from 'globby';
 import Mustache from 'mustache';
 import isUtf8 from 'is-utf8';

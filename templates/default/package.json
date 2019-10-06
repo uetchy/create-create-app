@@ -5,6 +5,6 @@
   "author": "{{author}} <{{email}}>",
   "license": "{{license}}",
   "dependencies": {
-    "create-something": "1.0.0"
+    "create-whatever": "1.0.0"
   }
 }

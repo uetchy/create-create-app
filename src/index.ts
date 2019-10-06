@@ -24,10 +24,7 @@ async function getGitUser() {
   return config.user;
 }
 
-export async function createSomething(
-  appName: string,
-  extraOptions: Option = {},
-) {
+export async function create(appName: string, extraOptions: Option = {}) {
   try {
     const gitUser = await getGitUser();
     const options: Option = {

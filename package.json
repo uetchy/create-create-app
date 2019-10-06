@@ -1,6 +1,6 @@
 {
-  "name": "create-something",
-  "description": "create-something",
+  "name": "create-whatever",
+  "description": "create 'create-' app",
   "version": "1.0.0",
   "scripts": {
     "build": "NODE_ENV=production tsc",
@@ -30,18 +30,18 @@
   "main": "dist/index.js",
   "bin": "dist/cli.js",
   "bugs": {
-    "url": "https://github.com/uetchy/create-something/issues"
+    "url": "https://github.com/uetchy/create-whatever/issues"
   },
   "files": [
     "dist",
     "templates"
   ],
-  "homepage": "https://github.com/uetchy/create-something",
+  "homepage": "https://github.com/uetchy/create-whatever",
   "keywords": [
-    "create-something"
+    "create-whatever"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/uetchy/create-something.git"
+    "url": "https://github.com/uetchy/create-whatever.git"
   }
 }

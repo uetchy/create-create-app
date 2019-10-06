@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-import {createSomething} from '.';
+import {create} from '.';
 
-createSomething('create-something');
+create('create-whatever');

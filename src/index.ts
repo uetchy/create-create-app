@@ -76,11 +76,15 @@ export async function create(
       .usage('$0 <name> [args]')
       .interactive(options);
 
-    let packageName: string =
-      firstArg === '.' ? path.basename(process.cwd()) : firstArg;
-
-    const packageDir = path.resolve(packageName);
+    const useCurrentDir = firstArg === '.';
+    const packageName: string = useCurrentDir
+      ? path.basename(process.cwd())
+      : firstArg;
+    const packageDir = useCurrentDir
+      ? process.cwd()
+      : path.resolve(packageName);
     const templateDir = path.resolve(templateRoot, args.template);
+
     if (!fs.existsSync(templateDir)) {
       throw new Error('No template found');
     }

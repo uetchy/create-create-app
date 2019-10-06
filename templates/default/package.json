@@ -12,6 +12,7 @@
     "create-whatever": "^1.0.0",
     "typescript": "^3.6.3"
   },
+  "devDependencies": {},
   "bin": "dist/cli.js",
   "files": [
     "dist",

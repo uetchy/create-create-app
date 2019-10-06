@@ -8,6 +8,9 @@
     "test": "echo notest"
   },
   "dependencies": {
+    "@types/inquirer": "^6.5.0",
+    "@types/mustache": "^0.8.32",
+    "@types/yargs-interactive": "^2.1.0",
     "chalk": "^2.4.2",
     "gitconfig": "^2.0.8",
     "globby": "^10.0.1",
@@ -17,10 +20,7 @@
     "yargs-interactive": "^3.0.0"
   },
   "devDependencies": {
-    "@types/inquirer": "^6.5.0",
-    "@types/mustache": "^0.8.32",
     "@types/node": "^12.7.11",
-    "@types/yargs-interactive": "^2.1.0",
     "typescript": "^3.6.3"
   },
   "author": "Yasuaki Uechi <y@uechi.io>",

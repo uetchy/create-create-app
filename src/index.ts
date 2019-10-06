@@ -3,11 +3,6 @@ import yargs from 'yargs';
 import cli from './cli';
 
 const argv = yargs
-  .option('pluginName', {
-    alias: 'n',
-    type: 'string',
-    description: 'plugin name',
-  })
   .option('description', {
     alias: 'd',
     type: 'string',

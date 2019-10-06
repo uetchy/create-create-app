@@ -1,16 +1,18 @@
-import {tmpdir} from 'os';
 import fs from 'fs';
 import path from 'path';
+import {tmpdir} from 'os';
 import globby from 'globby';
 import Mustache from 'mustache';
 import inquirer from 'inquirer';
 import gitconfig from 'gitconfig';
+import isUtf8 from 'is-utf8';
+
+const APP_NAME = 'create-something';
 
 interface Arguments {
   [key: string]: unknown;
   $0: string;
   _: string[];
-  pluginName?: string;
   author?: string;
   email?: string;
   description: string;
@@ -43,7 +45,7 @@ function validateEmptiness(s: string) {
 export default async function cli(args: Arguments) {
   let name: string;
   if (args._.length === 0) {
-    throw new Error('create-figma-plugin <name>');
+    throw new Error(`${APP_NAME} <name>`);
   } else if (args._[0] === '.') {
     name = path.basename(process.cwd());
   } else {
@@ -53,8 +55,6 @@ export default async function cli(args: Arguments) {
   const targetDir = path.resolve(name);
 
   console.log('Bootstrapping your plugin package');
-  const pluginName =
-    args.pluginName || (await ask('pluginName', {validate: validateEmptiness}));
   const description = args.description || (await ask('description'));
   const author =
     args.author ||
@@ -74,7 +74,6 @@ export default async function cli(args: Arguments) {
   }
 
   const view = {
-    pluginName,
     name,
     description,
     author,
@@ -89,8 +88,11 @@ export default async function cli(args: Arguments) {
     const targetPath = path.resolve(targetDir, relativePath);
     prepareDirectory(targetPath);
     console.log(`Copying ${relativePath}`);
-    const sourceData = fs.readFileSync(sourcePath);
-    const templatedData = Mustache.render(sourceData.toString(), view);
-    fs.writeFileSync(targetPath, templatedData, 'utf-8');
+    let sourceData: Buffer = fs.readFileSync(sourcePath);
+    let targetData: Buffer = sourceData;
+    if (isUtf8(sourceData)) {
+      targetData = Buffer.from(Mustache.render(sourceData.toString(), view));
+    }
+    fs.writeFileSync(targetPath, targetData, 'utf-8');
   }
 }

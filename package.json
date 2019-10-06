@@ -9,14 +9,11 @@
   },
   "dependencies": {
     "chalk": "^2.4.2",
-    "cli-progress": "^3.3.1",
     "gitconfig": "^2.0.8",
     "globby": "^10.0.1",
     "inquirer": "^7.0.0",
     "is-utf8": "^0.2.1",
-    "listr": "^0.14.3",
     "mustache": "^3.1.0",
-    "ora": "^4.0.2",
     "yargs-interactive": "^3.0.0"
   },
   "devDependencies": {

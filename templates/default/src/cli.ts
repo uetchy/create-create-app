@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+import {resolve} from 'path';
 import {create} from 'create-whatever';
 
-create('{{name}}');
+const templateRoot = resolve(__dirname, '../templates');
+
+create('{{name}}', templateRoot);

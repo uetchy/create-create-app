@@ -24,7 +24,11 @@ async function getGitUser() {
   return config.user;
 }
 
-export async function create(appName: string, extraOptions: Option = {}) {
+export async function create(
+  appName: string,
+  templateRoot: string,
+  extraOptions: Option = {},
+) {
   try {
     const gitUser = await getGitUser();
     const options: Option = {
@@ -76,7 +80,7 @@ export async function create(appName: string, extraOptions: Option = {}) {
       firstArg === '.' ? path.basename(process.cwd()) : firstArg;
 
     const packageDir = path.resolve(packageName);
-    const templateDir = path.resolve(__dirname, '../templates', args.template);
+    const templateDir = path.resolve(templateRoot, args.template);
     if (!fs.existsSync(templateDir)) {
       throw new Error('No template found');
     }

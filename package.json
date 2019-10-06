@@ -1,7 +1,7 @@
 {
   "name": "create-whatever",
   "description": "create 'create-' app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "build": "NODE_ENV=production tsc",
     "dev": "tsc -w",

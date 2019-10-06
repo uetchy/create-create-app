@@ -1,0 +1,44 @@
+{
+  "name": "create-figma-plugin",
+  "description": "create-figma-plugin",
+  "version": "0.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@types/inquirer": "^6.5.0",
+    "@types/mustache": "^0.8.32",
+    "@types/node": "^12.7.11",
+    "@types/yargs": "^13.0.3",
+    "typescript": "^3.6.3"
+  },
+  "author": "Yasuaki Uechi <y@uechi.io> (https://uechi.io/)",
+  "license": "MIT",
+  "main": "index.js",
+  "bugs": {
+    "url": "https://github.com/uetchy/create-figma-plugin/issues"
+  },
+  "homepage": "https://github.com/uetchy/create-figma-plugin",
+  "keywords": [
+    "create-figma-plugin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uetchy/create-figma-plugin.git"
+  },
+  "dependencies": {
+    "cli-progress": "^3.3.1",
+    "file-type": "^12.3.0",
+    "gitconfig": "^2.0.8",
+    "globby": "^10.0.1",
+    "inquirer": "^7.0.0",
+    "inquiry": "^0.0.3",
+    "listr": "^0.14.3",
+    "mustache": "^3.1.0",
+    "ora": "^4.0.2",
+    "read-chunk": "^3.2.0",
+    "yargs": "^14.0.0"
+  }
+}

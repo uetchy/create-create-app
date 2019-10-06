@@ -1,9 +1,10 @@
 {
-  "name": "create-figma-plugin",
-  "description": "create-figma-plugin",
+  "name": "create-something",
+  "description": "create-something",
   "version": "0.0.0",
   "scripts": {
-    "build": "NODE_ENV=production tsc"
+    "build": "NODE_ENV=production tsc",
+    "dev": "tsc -w"
   },
   "dependencies": {
     "cli-progress": "^3.3.1",
@@ -28,22 +29,22 @@
     "@types/yargs": "^13.0.3",
     "typescript": "^3.6.3"
   },
-  "author": "Yasuaki Uechi <y@uechi.io> (https://uechi.io/)",
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "bin": "dist/index.js",
   "bugs": {
-    "url": "https://github.com/uetchy/create-figma-plugin/issues"
+    "url": "https://github.com/uetchy/create-something/issues"
   },
   "files": [
     "dist",
     "templates"
   ],
-  "homepage": "https://github.com/uetchy/create-figma-plugin",
+  "homepage": "https://github.com/uetchy/create-something",
   "keywords": [
-    "create-figma-plugin"
+    "create-something"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/uetchy/create-figma-plugin.git"
+    "url": "https://github.com/uetchy/create-something.git"
   }
 }

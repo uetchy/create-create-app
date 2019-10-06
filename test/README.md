@@ -1,6 +1,6 @@
-# {{name}}
+# test
 
-> {{description}}
+> package description
 
 ## Usage
 

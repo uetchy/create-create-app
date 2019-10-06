@@ -1,34 +1,105 @@
-import yargs from 'yargs';
+import fs from 'fs';
+import path from 'path';
+import gitconfig from 'gitconfig';
+import yargsInteractive, {Option} from 'yargs-interactive';
+import chalk from 'chalk';
 
-import cli from './cli';
+import copy from './template';
 
-const argv = yargs
-  .option('description', {
-    alias: 'd',
-    type: 'string',
-    description: 'package description',
-    default: 'package description',
-  })
-  .option('author', {
-    alias: 'a',
-    type: 'string',
-    description: "author's name",
-  })
-  .option('email', {
-    alias: 'e',
-    type: 'string',
-    description: "author's email",
-  })
-  .option('license', {
-    alias: 'l',
-    type: 'string',
-    description: 'package license',
-  })
-  .option('template', {
-    alias: 't',
-    type: 'string',
-    description: 'template name',
-    default: 'default',
-  }).argv;
+export interface Config {
+  packageDir: string;
+  templateDir: string;
+  view: View;
+}
 
-cli(argv).catch((err) => console.log(err.message));
+export interface View {
+  author: string;
+  email: string;
+  description: string;
+  license: string;
+}
+
+async function getGitUser() {
+  const config = await gitconfig.get({location: 'global'});
+  return config.user;
+}
+
+export async function createSomething(
+  appName: string,
+  extraOptions: Option = {},
+) {
+  try {
+    const gitUser = await getGitUser();
+    const options: Option = {
+      interactive: {default: true},
+      description: {
+        type: 'input',
+        describe: 'your package description',
+        default: 'package description',
+        prompt: 'if-no-arg',
+      },
+      author: {
+        type: 'input',
+        describe: "author's name",
+        default: gitUser.name,
+        prompt: 'if-no-arg',
+      },
+      email: {
+        type: 'input',
+        describe: "author's email",
+        default: gitUser.email,
+        prompt: 'if-no-arg',
+      },
+      license: {
+        type: 'list',
+        describe: 'package license',
+        choices: ['MIT', 'Apache'],
+        prompt: 'if-no-arg',
+      },
+      template: {
+        type: 'list',
+        describe: 'template name',
+        default: 'default',
+        choices: ['default'],
+        prompt: 'if-no-arg',
+      },
+      ...extraOptions,
+    };
+
+    const firstArg = process.argv[2];
+    if (firstArg === undefined) {
+      throw new Error(`${appName} <name>`);
+    }
+
+    const args = await yargsInteractive()
+      .usage('$0 <name> [args]')
+      .interactive(options);
+
+    let packageName: string =
+      firstArg === '.' ? path.basename(process.cwd()) : firstArg;
+
+    const packageDir = path.resolve(packageName);
+    const templateDir = path.resolve(__dirname, '../templates', args.template);
+    if (!fs.existsSync(templateDir)) {
+      throw new Error('No template found');
+    }
+
+    const view = {
+      name: packageName,
+      description: args.description,
+      author: args.author,
+      email: args.email,
+      license: args.license,
+      year: new Date().getFullYear(),
+    };
+
+    const copyConfig = {
+      packageDir,
+      templateDir,
+      view,
+    };
+    await copy(copyConfig);
+  } catch (err) {
+    console.log(chalk.red(`Error: ${err.message}`));
+  }
+}

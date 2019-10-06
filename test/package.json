@@ -1,0 +1,7 @@
+{
+  "name": "test",
+  "description": "package description",
+  "version": "1.0.0",
+  "author": "Yasuaki Uechi <y@uechi.io>",
+  "license": "MIT"
+}

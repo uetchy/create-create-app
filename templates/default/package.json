@@ -1,7 +1,10 @@
 {
   "name": "{{name}}",
   "description": "{{description}}",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "author": "{{author}} <{{email}}>",
-  "license": "{{license}}"
+  "license": "{{license}}",
+  "dependencies": {
+    "create-something": "1.0.0"
+  }
 }

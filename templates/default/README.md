@@ -4,6 +4,6 @@
 
 ## Usage
 
-## Further reads
-
-- [Figma plugin documentation](https://www.figma.com/plugin-docs/intro/)
+```bash
+npx {{name}} <name>
+```

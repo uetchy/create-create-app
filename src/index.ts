@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
+import execa from 'execa';
+import {spawn} from 'cross-spawn';
 import gitconfig from 'gitconfig';
 import yargsInteractive, {Option} from 'yargs-interactive';
 
@@ -19,6 +21,11 @@ export interface View {
   license: string;
 }
 
+export interface Options {
+  extra?: Option;
+  caveat?: string;
+}
+
 async function getGitUser() {
   const config = await gitconfig.get({location: 'global'});
   return config.user;
@@ -27,11 +34,11 @@ async function getGitUser() {
 export async function create(
   appName: string,
   templateRoot: string,
-  extraOptions: Option = {},
+  options: Options = {},
 ) {
   try {
     const gitUser = await getGitUser();
-    const options: Option = {
+    const yarnOption: Option = {
       interactive: {default: true},
       description: {
         type: 'input',
@@ -64,7 +71,7 @@ export async function create(
         choices: ['default'],
         prompt: 'if-no-arg',
       },
-      ...extraOptions,
+      ...options.extra,
     };
 
     const firstArg = process.argv[2];
@@ -74,7 +81,7 @@ export async function create(
 
     const args = await yargsInteractive()
       .usage('$0 <name> [args]')
-      .interactive(options);
+      .interactive(yarnOption);
 
     const useCurrentDir = firstArg === '.';
     const packageName: string = useCurrentDir
@@ -98,17 +105,65 @@ export async function create(
       year: new Date().getFullYear(),
     };
 
-    console.log('Bootstrapping your package');
-
+    // copy files from template
+    console.log(`\nCreating a new app in ${chalk.green(packageDir)}.\n`);
     await copy({
       packageDir,
       templateDir,
       view,
     });
 
-    console.log(`✨ Package ${packageName} has been created!`);
-    console.log(packageDir);
+    // install dependencies using yarn / npm
+    console.log(`Installing dependencies.`);
+    const useYarn = await IsYarnAvaialable();
+    await installDeps(packageDir, useYarn);
+    if (useYarn) {
+      console.log('');
+    }
+
+    // init git
+    await initGit(packageDir);
+    console.log('\nInitialized a git repository\n');
+
+    console.log(`Success! Created ${packageName} at ${packageDir}`);
+    if (options.caveat) {
+      console.log(options.caveat);
+    }
   } catch (err) {
     console.log(chalk.red(`Error: ${err.message}`));
   }
+}
+
+function installDeps(rootDir: string, useYarn: boolean) {
+  return new Promise((resolve, reject) => {
+    let command: string;
+    let args: string[];
+    if (useYarn) {
+      command = 'yarnpkg';
+      args = ['install', '--cwd', rootDir];
+    } else {
+      command = 'npm';
+      args = ['install', '--prefix', rootDir];
+    }
+    const child = spawn(command, args, {stdio: 'inherit'});
+    child.on('close', (code) => {
+      if (code !== 0) {
+        return reject(`installDeps failed: ${command} ${args.join(' ')}`);
+      }
+      resolve();
+    });
+  });
+}
+
+async function IsYarnAvaialable() {
+  try {
+    await execa('yarnpkg', ['--version']);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function initGit(root: string) {
+  await execa('git init', {shell: true, cwd: root});
 }

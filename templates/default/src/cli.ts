@@ -4,5 +4,11 @@ import {resolve} from 'path';
 import {create} from 'create-whatever';
 
 const templateRoot = resolve(__dirname, '../templates');
+const caveat = `Inside that directory, you can run several commands:
+yarn dev
+  Starts 'tsc -w'.
+yarn build
+  Build the app for production.
+`;
 
-create('{{name}}', templateRoot);
+create('{{name}}', templateRoot, {caveat});

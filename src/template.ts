@@ -17,7 +17,6 @@ export default async function copy(args: Config) {
     const relativePath = path.relative(args.templateDir, sourcePath);
     const targetPath = path.resolve(args.packageDir, relativePath);
     prepareDirectory(targetPath);
-    console.log(`Creating ${relativePath}`);
     let sourceData = fs.readFileSync(sourcePath);
     let targetData = sourceData;
     if (isUtf8(sourceData)) {

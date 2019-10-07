@@ -55,7 +55,7 @@ function installDeps(rootDir: string, useYarn: boolean) {
 
 async function IsYarnAvaialable() {
   try {
-    await execa('yarnapkg', ['--version']);
+    await execa('yarnpkg', ['--version']);
     return true;
   } catch (e) {
     return false;

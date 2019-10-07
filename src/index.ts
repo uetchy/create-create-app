@@ -5,6 +5,7 @@ import execa from 'execa';
 import {spawn} from 'cross-spawn';
 import gitconfig from 'gitconfig';
 import yargsInteractive, {Option} from 'yargs-interactive';
+import {makeLicenseSync, availableLicenses} from 'license.js';
 
 import copy from './template';
 
@@ -29,6 +30,44 @@ export interface Options {
 async function getGitUser() {
   const config = await gitconfig.get({location: 'global'});
   return config.user;
+}
+
+function installDeps(rootDir: string, useYarn: boolean) {
+  return new Promise((resolve, reject) => {
+    let command: string;
+    let args: string[];
+    if (useYarn) {
+      command = 'yarnpkg';
+      args = ['install', '--cwd', rootDir];
+    } else {
+      command = 'npm';
+      args = ['install', '--prefix', rootDir];
+    }
+    const child = spawn(command, args, {stdio: 'inherit'});
+    child.on('close', (code) => {
+      if (code !== 0) {
+        return reject(`installDeps failed: ${command} ${args.join(' ')}`);
+      }
+      resolve();
+    });
+  });
+}
+
+async function IsYarnAvaialable() {
+  try {
+    await execa('yarnapkg', ['--version']);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function initGit(root: string) {
+  await execa('git init', {shell: true, cwd: root});
+}
+
+function fullAuthor(author: string, email?: string) {
+  return `${author}${email ? ` <${email}>` : ''}`;
 }
 
 export async function create(
@@ -61,7 +100,7 @@ export async function create(
       license: {
         type: 'list',
         describe: 'choose license',
-        choices: ['mit'],
+        choices: availableLicenses(),
         prompt: 'if-no-arg',
       },
       template: {
@@ -69,7 +108,6 @@ export async function create(
         describe: 'template name',
         default: 'default',
         choices: ['default'],
-        prompt: 'if-no-arg',
       },
       ...options.extra,
     };
@@ -91,6 +129,7 @@ export async function create(
       ? process.cwd()
       : path.resolve(packageName);
     const templateDir = path.resolve(templateRoot, args.template);
+    const year = new Date().getFullYear();
 
     if (!fs.existsSync(templateDir)) {
       throw new Error('No template found');
@@ -101,8 +140,9 @@ export async function create(
       description: args.description,
       author: args.author,
       email: args.email,
+      author_email: fullAuthor(args.author, args.email),
       license: args.license,
-      year: new Date().getFullYear(),
+      year,
     };
 
     // copy files from template
@@ -113,13 +153,20 @@ export async function create(
       view,
     });
 
+    // create LICENSE
+    const license = makeLicenseSync(args.license, {
+      year,
+      project: packageName,
+      description: args.description,
+      organization: fullAuthor(args.author, args.email),
+    });
+    const licenseText = license.header + license.text + license.warranty;
+    fs.writeFileSync(path.resolve(packageDir, 'LICENSE'), licenseText);
+
     // install dependencies using yarn / npm
     console.log(`Installing dependencies.`);
     const useYarn = await IsYarnAvaialable();
     await installDeps(packageDir, useYarn);
-    if (useYarn) {
-      console.log('');
-    }
 
     // init git
     await initGit(packageDir);
@@ -132,38 +179,4 @@ export async function create(
   } catch (err) {
     console.log(chalk.red(`Error: ${err.message}`));
   }
-}
-
-function installDeps(rootDir: string, useYarn: boolean) {
-  return new Promise((resolve, reject) => {
-    let command: string;
-    let args: string[];
-    if (useYarn) {
-      command = 'yarnpkg';
-      args = ['install', '--cwd', rootDir];
-    } else {
-      command = 'npm';
-      args = ['install', '--prefix', rootDir];
-    }
-    const child = spawn(command, args, {stdio: 'inherit'});
-    child.on('close', (code) => {
-      if (code !== 0) {
-        return reject(`installDeps failed: ${command} ${args.join(' ')}`);
-      }
-      resolve();
-    });
-  });
-}
-
-async function IsYarnAvaialable() {
-  try {
-    await execa('yarnpkg', ['--version']);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-async function initGit(root: string) {
-  await execa('git init', {shell: true, cwd: root});
 }

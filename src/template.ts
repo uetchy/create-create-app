@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import globby from 'globby';
-import Mustache from 'mustache';
 import isUtf8 from 'is-utf8';
+import Mustache from 'mustache';
 import {Config} from '.';
 
 function prepareDirectory(filePath: string) {

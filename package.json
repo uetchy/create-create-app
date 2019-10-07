@@ -5,6 +5,8 @@
   "scripts": {
     "build": "NODE_ENV=production tsc",
     "dev": "tsc -w",
+    "release:prepare": "shipjs prepare",
+    "release:trigger": "shipjs trigger",
     "test": "echo notest"
   },
   "dependencies": {
@@ -25,6 +27,7 @@
   "devDependencies": {
     "@types/cross-spawn": "^6.0.1",
     "@types/node": "^12.7.11",
+    "shipjs": "^0.6.0",
     "typescript": "^3.6.3"
   },
   "author": "Yasuaki Uechi <y@uechi.io>",

@@ -70,12 +70,39 @@ function fullAuthor(author: string, email?: string) {
   return `${author}${email ? ` <${email}>` : ''}`;
 }
 
+function isOccupied(dirname: string) {
+  try {
+    return fs.readdirSync(dirname) !== null;
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      return false;
+    }
+    throw err;
+  }
+}
+
 export async function create(
   appName: string,
   templateRoot: string,
   options: Options = {},
 ) {
   try {
+    const firstArg = process.argv[2];
+    if (firstArg === undefined) {
+      throw new Error(`${appName} <name>`);
+    }
+    const useCurrentDir = firstArg === '.';
+    const packageName: string = useCurrentDir
+      ? path.basename(process.cwd())
+      : firstArg;
+    const packageDir = useCurrentDir
+      ? process.cwd()
+      : path.resolve(packageName);
+
+    if (isOccupied(packageDir)) {
+      throw new Error(`${packageDir} is not empty directory.`);
+    }
+
     const gitUser = await getGitUser();
     const yarnOption: Option = {
       interactive: {default: true},
@@ -112,22 +139,10 @@ export async function create(
       ...options.extra,
     };
 
-    const firstArg = process.argv[2];
-    if (firstArg === undefined) {
-      throw new Error(`${appName} <name>`);
-    }
-
     const args = await yargsInteractive()
       .usage('$0 <name> [args]')
       .interactive(yarnOption);
 
-    const useCurrentDir = firstArg === '.';
-    const packageName: string = useCurrentDir
-      ? path.basename(process.cwd())
-      : firstArg;
-    const packageDir = useCurrentDir
-      ? process.cwd()
-      : path.resolve(packageName);
     const templateDir = path.resolve(templateRoot, args.template);
     const year = new Date().getFullYear();
 

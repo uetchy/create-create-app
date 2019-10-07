@@ -1,8 +1,13 @@
 # create-whatever
 
+> The smartest `create-` app template generator.
+
 ![screencast](https://raw.githubusercontent.com/uetchy/create-whatever/master/.github/assets/screencast.gif)
 
-The universal template for creating `create-` package.
+## Why?
+
+- **License chooser** No need to care about license things.
+- **Template engine** Just put files with template strings inside `templates/default` and we will handle the rest.
 
 ## Usage
 
@@ -22,7 +27,8 @@ Edit files inside `templates/default`. Text files will be passed through Mustach
 - `{{author}}` author name
 - `{{email}}` author email
 - `{{author_full}}` author name formatted with `{{name}} <{{email}}>` if email given, otherwise `{{name}}`
-- `{{license}}` package license
+- `{{license}}` package license (e.g. `MIT`)
+- `{{year}}` current year (e.g. `2020`)
 
 ## Config
 
@@ -32,13 +38,15 @@ You can find the app config in `src/cli.ts`.
 import {create} from 'create-whatever';
 
 create('create-greet', templateRoot, {
-  caveat: `You app has been created successfuly!`
+  caveat: `Your app has been created successfuly!`
 });
 ```
 
+`templateRoot` set to `path.resolve(__dirname, '../templates')` but you can change it to whereever you want.
+
 ### `caveat`
 
-`string`
+`string | undefined`
 
 This message will be shown after the generation process.
 

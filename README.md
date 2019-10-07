@@ -34,11 +34,11 @@ Edit files inside `templates/default`. Text files will be passed through Mustach
 
 You can find the app config in `src/cli.ts`.
 
-```
+```ts
 import {create} from 'create-whatever';
 
 create('create-greet', templateRoot, {
-  caveat: `Your app has been created successfuly!`
+  caveat: `Your app has been created successfuly!`,
 });
 ```
 

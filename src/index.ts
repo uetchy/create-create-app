@@ -20,6 +20,7 @@ export interface View {
   email: string;
   description: string;
   license: string;
+  [key: string]: string | number | boolean | any[];
 }
 
 export interface Options {
@@ -134,12 +135,10 @@ export async function create(
       throw new Error(`${appName} <name>`);
     }
     const useCurrentDir = firstArg === '.';
-    const packageName: string = useCurrentDir
+    const name: string = useCurrentDir
       ? path.basename(process.cwd())
       : firstArg;
-    const packageDir = useCurrentDir
-      ? process.cwd()
-      : path.resolve(packageName);
+    const packageDir = useCurrentDir ? process.cwd() : path.resolve(name);
 
     if (isOccupied(packageDir)) {
       throw new Error(`${packageDir} is not empty directory.`);
@@ -152,23 +151,31 @@ export async function create(
 
     const templateDir = path.resolve(templateRoot, args.template);
     const year = new Date().getFullYear();
+    const author_full = authorString(args.author, args.email);
 
     if (!fs.existsSync(templateDir)) {
       throw new Error('No template found');
     }
 
+    const filterdArgs = Object.entries<string>(args)
+      .filter(
+        (arg) =>
+          arg[0].match(/^[^$_]/) &&
+          !['interactive', 'template'].includes(arg[0]),
+      )
+      .reduce((sum, cur) => ((sum[cur[0]] = cur[1]), sum), {} as {
+        [key in keyof View]: View[key];
+      });
+
     const view = {
-      name: packageName,
-      description: args.description,
-      author: args.author,
-      email: args.email,
-      author_full: authorString(args.author, args.email),
-      license: args.license,
+      ...filterdArgs,
+      name,
       year,
+      author_full,
     };
 
     // copy files from template
-    console.log(`\nCreating a new app in ${chalk.green(packageDir)}.\n`);
+    console.log(`\nCreating a new package in ${chalk.green(packageDir)}.\n`);
     await copy({
       packageDir,
       templateDir,
@@ -178,7 +185,7 @@ export async function create(
     // create LICENSE
     const license = makeLicenseSync(args.license, {
       year,
-      project: packageName,
+      project: name,
       description: args.description,
       organization: authorString(args.author, args.email),
     });
@@ -194,7 +201,7 @@ export async function create(
     await initGit(packageDir);
     console.log('\nInitialized a git repository\n');
 
-    console.log(`Success! Created ${packageName} at ${packageDir}`);
+    console.log(`Success! Created ${name} at ${packageDir}`);
     if (options.caveat) {
       console.log(options.caveat);
     }

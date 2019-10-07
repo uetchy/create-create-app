@@ -10,14 +10,31 @@
 - **Template engine** Just put files with template strings and we will do the rest.
 - **Highly customizable** Can change caveat text, and add extra cli options.
 
-## Usage
+## How
 
-1. `npx create-whatever create-greet --template typescript`
-2. `cd create-greet`
-3. edit files inside `templates/default`
-4. `yarn build` or `npm run build`
-5. `yarn publish` or `npm publish`
-6. profit!
+Create `create-greet` package in four steps.
+
+### 1. Generate template
+
+```shell
+yarn create whatever create-greet --template typescript
+```
+
+or if you use `npm`, then run `npx create-whatever create-greet`
+
+### 2. Edit templates
+
+`cd create-greet` and edit files inside `templates/default`.
+
+#### TypeScript
+
+Run `yarn build` or `npm run build` to transpile TypeScript into JavaScript.
+
+### 3. Publish package to npm
+
+Run `yarn publish` or `npm publish` to publish your `create-` app to npm.
+
+### 4. PROFIT!!!
 
 ## Template
 
@@ -40,6 +57,14 @@ import {create} from 'create-whatever';
 
 create('create-greet', templateRoot, {
   caveat: `Your app has been created successfuly!`,
+  extra: {
+    language: {
+      type: 'input',
+      describe: 'greeting language',
+      default: 'en',
+      prompt: 'if-no-arg',
+    },
+  },
 });
 ```
 
@@ -50,6 +75,12 @@ create('create-greet', templateRoot, {
 `string | undefined`
 
 This message will be shown after the generation process.
+
+### `extra`
+
+`object | undefined`
+
+An extra options passed to the app. These options will be accessible as template string. In this case, `--language` cli option and `{{language}}` template string will be available.
 
 ## Contribution
 

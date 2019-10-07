@@ -11,4 +11,6 @@ yarn build
   Build the app for production.
 `;
 
-create('create-whatever', templateRoot, {caveat});
+create('create-whatever', templateRoot, {
+  caveat,
+});

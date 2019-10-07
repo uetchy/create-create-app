@@ -81,6 +81,45 @@ function isOccupied(dirname: string) {
   }
 }
 
+async function getYargsOptions(extraOptions: Option = {}) {
+  const gitUser = await getGitUser();
+  const yargOption: Option = {
+    interactive: {default: true},
+    description: {
+      type: 'input',
+      describe: 'describe your package',
+      default: 'my awesome package',
+      prompt: 'if-no-arg',
+    },
+    author: {
+      type: 'input',
+      describe: "author's name",
+      default: gitUser.name,
+      prompt: 'if-no-arg',
+    },
+    email: {
+      type: 'input',
+      describe: "author's email",
+      default: gitUser.email,
+      prompt: 'if-no-arg',
+    },
+    license: {
+      type: 'list',
+      describe: 'choose license',
+      choices: availableLicenses(),
+      prompt: 'if-no-arg',
+    },
+    template: {
+      type: 'list',
+      describe: 'template name',
+      default: 'default',
+      choices: ['default'],
+    },
+    ...extraOptions,
+  };
+  return yargOption;
+}
+
 export async function create(
   appName: string,
   templateRoot: string,
@@ -103,45 +142,10 @@ export async function create(
       throw new Error(`${packageDir} is not empty directory.`);
     }
 
-    const gitUser = await getGitUser();
-    const yarnOption: Option = {
-      interactive: {default: true},
-      description: {
-        type: 'input',
-        describe: 'describe your package',
-        default: 'my awesome package',
-        prompt: 'if-no-arg',
-      },
-      author: {
-        type: 'input',
-        describe: "author's name",
-        default: gitUser.name,
-        prompt: 'if-no-arg',
-      },
-      email: {
-        type: 'input',
-        describe: "author's email",
-        default: gitUser.email,
-        prompt: 'if-no-arg',
-      },
-      license: {
-        type: 'list',
-        describe: 'choose license',
-        choices: availableLicenses(),
-        prompt: 'if-no-arg',
-      },
-      template: {
-        type: 'list',
-        describe: 'template name',
-        default: 'default',
-        choices: ['default'],
-      },
-      ...options.extra,
-    };
-
+    const yargsOption = await getYargsOptions(options.extra);
     const args = await yargsInteractive()
       .usage('$0 <name> [args]')
-      .interactive(yarnOption);
+      .interactive(yargsOption);
 
     const templateDir = path.resolve(templateRoot, args.template);
     const year = new Date().getFullYear();

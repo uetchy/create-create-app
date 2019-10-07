@@ -4,11 +4,8 @@ import {resolve} from 'path';
 import {create} from 'create-whatever';
 
 const templateRoot = resolve(__dirname, '../templates');
-const caveat = `Inside that directory, you can run several commands:
-yarn dev
-  Starts 'tsc -w'.
-yarn build
-  Build the app for production.
+const caveat = `This is a caveat!
+You can find this section in "src/cli.ts".
 `;
 
 create('{{name}}', templateRoot, {caveat});

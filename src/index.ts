@@ -66,7 +66,7 @@ async function initGit(root: string) {
   await execa('git init', {shell: true, cwd: root});
 }
 
-function fullAuthor(author: string, email?: string) {
+function authorString(author: string, email?: string) {
   return `${author}${email ? ` <${email}>` : ''}`;
 }
 
@@ -159,7 +159,7 @@ export async function create(
       description: args.description,
       author: args.author,
       email: args.email,
-      author_email: fullAuthor(args.author, args.email),
+      author_full: authorString(args.author, args.email),
       license: args.license,
       year,
     };
@@ -177,7 +177,7 @@ export async function create(
       year,
       project: packageName,
       description: args.description,
-      organization: fullAuthor(args.author, args.email),
+      organization: authorString(args.author, args.email),
     });
     const licenseText = license.header + license.text + license.warranty;
     fs.writeFileSync(path.resolve(packageDir, 'LICENSE'), licenseText);

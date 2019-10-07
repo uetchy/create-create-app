@@ -42,7 +42,7 @@ create('create-greet', templateRoot, {
 });
 ```
 
-`templateRoot` set to `path.resolve(__dirname, '../templates')` but you can change it to whereever you want.
+`templateRoot` set to `path.resolve(__dirname, '../templates')`. You can change it to whereever you want.
 
 ### `caveat`
 

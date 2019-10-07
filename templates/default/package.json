@@ -2,22 +2,14 @@
   "name": "{{name}}",
   "description": "{{description}}",
   "version": "0.0.0",
-  "scripts": {
-    "build": "shx rm -rf dist && NODE_ENV=production tsc && shx chmod +x dist/cli.js",
-    "dev": "tsc -w"
-  },
   "dependencies": {
     "create-whatever": "^2.0.0"
   },
-  "devDependencies": {
-    "shx": "^0.3.2",
-    "typescript": "^3.6.3"
-  },
   "author": "{{author_full}}",
   "license": "{{license}}",
-  "bin": "dist/cli.js",
+  "bin": "src/cli.js",
   "files": [
-    "dist",
+    "src",
     "templates"
   ]
 }

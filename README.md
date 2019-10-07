@@ -12,7 +12,7 @@
 
 ## Usage
 
-1. `npx create-whatever create-greet`
+1. `npx create-whatever create-greet --template typescript`
 2. `cd create-greet`
 3. edit files inside `templates/default`
 4. `yarn build` or `npm run build`

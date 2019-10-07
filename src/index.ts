@@ -7,7 +7,7 @@ import gitconfig from 'gitconfig';
 import yargsInteractive, {Option} from 'yargs-interactive';
 import {makeLicenseSync, availableLicenses} from 'license.js';
 
-import copy from './template';
+import {copy, getAvailableTemplates} from './template';
 
 export interface Config {
   packageDir: string;
@@ -81,7 +81,10 @@ function isOccupied(dirname: string) {
   }
 }
 
-async function getYargsOptions(extraOptions: Option = {}) {
+async function getYargsOptions(
+  templateRoot: string,
+  extraOptions: Option = {},
+) {
   const gitUser = await getGitUser();
   const yargOption: Option = {
     interactive: {default: true},
@@ -113,7 +116,7 @@ async function getYargsOptions(extraOptions: Option = {}) {
       type: 'list',
       describe: 'template name',
       default: 'default',
-      choices: ['default'],
+      choices: getAvailableTemplates(templateRoot),
     },
     ...extraOptions,
   };
@@ -142,7 +145,7 @@ export async function create(
       throw new Error(`${packageDir} is not empty directory.`);
     }
 
-    const yargsOption = await getYargsOptions(options.extra);
+    const yargsOption = await getYargsOptions(templateRoot, options.extra);
     const args = await yargsInteractive()
       .usage('$0 <name> [args]')
       .interactive(yargsOption);

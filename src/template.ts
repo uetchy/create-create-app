@@ -11,12 +11,18 @@ function prepareDirectory(filePath: string) {
   } catch {}
 }
 
-export default async function copy(args: Config) {
+export function getAvailableTemplates(root: string) {
+  return fs.readdirSync(root).filter((d) => !d.startsWith('.'));
+}
+
+export async function copy(args: Config) {
   const templateFiles = await globby(args.templateDir);
   for (const sourcePath of templateFiles) {
     const relativePath = path.relative(args.templateDir, sourcePath);
     const targetPath = path.resolve(args.packageDir, relativePath);
+
     prepareDirectory(targetPath);
+
     let sourceData = fs.readFileSync(sourcePath);
     let targetData = sourceData;
     if (isUtf8(sourceData)) {

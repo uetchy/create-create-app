@@ -8,4 +8,4 @@ const caveat = `This is a caveat!
 You can find this section in "src/cli.ts".
 `;
 
-create('{{name}}', templateRoot, {caveat});
+create('{{kebab name}}', templateRoot, {caveat});

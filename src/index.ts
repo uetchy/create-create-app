@@ -9,23 +9,26 @@ import {makeLicenseSync, availableLicenses} from 'license.js';
 
 import {copy, getAvailableTemplates} from './template';
 
+export interface View {
+  name: string;
+  description: string;
+  author: string;
+  email: string;
+  contact: string;
+  license: string;
+  [key: string]: string | number | boolean | any[];
+}
+
 export interface Config {
   packageDir: string;
   templateDir: string;
   view: View;
 }
 
-export interface View {
-  author: string;
-  email: string;
-  description: string;
-  license: string;
-  [key: string]: string | number | boolean | any[];
-}
-
 export interface Options {
   extra?: Option;
   caveat?: string;
+  after?: () => void;
 }
 
 async function getGitUser() {
@@ -67,7 +70,7 @@ async function initGit(root: string) {
   await execa('git init', {shell: true, cwd: root});
 }
 
-function authorString(author: string, email?: string) {
+function getContact(author: string, email?: string) {
   return `${author}${email ? ` <${email}>` : ''}`;
 }
 
@@ -153,7 +156,7 @@ export async function create(
 
     const templateDir = path.resolve(templateRoot, args.template);
     const year = new Date().getFullYear();
-    const author_full = authorString(args.author, args.email);
+    const contact = getContact(args.author, args.email);
 
     if (!fs.existsSync(templateDir)) {
       throw new Error('No template found');
@@ -173,7 +176,7 @@ export async function create(
       ...filterdArgs,
       name,
       year,
-      author_full,
+      contact,
     };
 
     // copy files from template
@@ -189,7 +192,7 @@ export async function create(
       year,
       project: name,
       description: args.description,
-      organization: authorString(args.author, args.email),
+      organization: getContact(args.author, args.email),
     });
     const licenseText = license.header + license.text + license.warranty;
     fs.writeFileSync(path.resolve(packageDir, 'LICENSE'), licenseText);

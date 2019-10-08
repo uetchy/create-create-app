@@ -1,9 +1,9 @@
-# {{name}}
+# {{capital name space=true}}
 
 > {{description}}
 
 ## Usage
 
 ```bash
-npx {{name}} <name>
+npx {{kebab name}} <name>
 ```

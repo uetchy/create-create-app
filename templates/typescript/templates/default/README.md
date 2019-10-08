@@ -1,5 +1,3 @@
-{{=<% %>=}}
-# {{name}}
+# \{{name}}
 
-{{description}}
-<%={{ }}=%>
+\{{description}}

@@ -11,17 +11,16 @@
   },
   "dependencies": {
     "@types/inquirer": "^6.5.0",
-    "@types/mustache": "^0.8.32",
     "@types/yargs-interactive": "^2.1.0",
     "chalk": "^2.4.2",
     "cross-spawn": "^7.0.0",
     "execa": "^2.0.5",
     "gitconfig": "^2.0.8",
     "globby": "^10.0.1",
+    "handlebars": "^4.4.2",
     "inquirer": "^7.0.0",
     "is-utf8": "^0.2.1",
     "license.js": "^3.1.2",
-    "mustache": "^3.1.0",
     "yargs-interactive": "^3.0.0"
   },
   "devDependencies": {

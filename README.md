@@ -44,7 +44,7 @@ Edit files inside `templates/default`. Text files will be passed through Mustach
 - `{{description}}` package description
 - `{{author}}` author name
 - `{{email}}` author email
-- `{{author_full}}` author name formatted with `{{name}} <{{email}}>` if email given, otherwise `{{name}}`
+- `{{contact}}` author name formatted with `{{name}} <{{email}}>` if email given, otherwise `{{name}}`
 - `{{license}}` package license (e.g. `MIT`)
 - `{{year}}` current year (e.g. `2020`)
 

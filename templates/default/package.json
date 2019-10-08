@@ -1,11 +1,11 @@
 {
-  "name": "{{name}}",
+  "name": "{{kebab name}}",
   "description": "{{description}}",
   "version": "0.0.0",
   "dependencies": {
     "create-whatever": "^3.0.0"
   },
-  "author": "{{author_full}}",
+  "author": "{{contact}}",
   "license": "{{license}}",
   "bin": "src/cli.js",
   "files": [

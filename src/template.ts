@@ -16,7 +16,7 @@ export function getAvailableTemplates(root: string) {
 }
 
 export async function copy(args: Config) {
-  const templateFiles = await globby(args.templateDir);
+  const templateFiles = await globby(args.templateDir, {dot: true});
   for (const sourcePath of templateFiles) {
     const relativePath = path.relative(args.templateDir, sourcePath);
     const targetPath = path.resolve(args.packageDir, relativePath);

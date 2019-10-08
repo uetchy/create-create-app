@@ -73,7 +73,9 @@ function authorString(author: string, email?: string) {
 
 function isOccupied(dirname: string) {
   try {
-    return fs.readdirSync(dirname) !== null;
+    return (
+      fs.readdirSync(dirname).filter((s) => !s.startsWith('.')).length !== 0
+    );
   } catch (err) {
     if (err.code === 'ENOENT') {
       return false;
@@ -91,7 +93,7 @@ async function getYargsOptions(
     interactive: {default: true},
     description: {
       type: 'input',
-      describe: 'describe your package',
+      describe: 'package description',
       default: 'my awesome package',
       prompt: 'if-no-arg',
     },

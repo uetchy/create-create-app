@@ -10,6 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
+      - uses: geertvdc/setup-hub@master
       - run: git switch master
       - run: yarn install
       - run: yarn release

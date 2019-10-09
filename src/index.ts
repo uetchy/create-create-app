@@ -97,7 +97,7 @@ async function getYargsOptions(
     description: {
       type: 'input',
       describe: 'description',
-      default: 'my awesome package',
+      default: 'create whatever you want',
       prompt: 'if-no-arg',
     },
     author: {

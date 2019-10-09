@@ -47,7 +47,7 @@ function kebab(text: string) {
 Handlebars.registerHelper('kebab', kebab);
 
 function format<T>(text: Buffer | string, view: T) {
-  const template = Handlebars.compile(text.toString());
+  const template = Handlebars.compile(text.toString(), {noEscape: true});
   return template(view);
 }
 

@@ -26,6 +26,7 @@ export interface Config {
 }
 
 export interface Options {
+  templateRoot: string;
   extra?: Option;
   caveat?: string;
   after?: () => void;
@@ -129,11 +130,7 @@ async function getYargsOptions(
   return yargOption;
 }
 
-export async function create(
-  appName: string,
-  templateRoot: string,
-  options: Options = {},
-) {
+export async function create(appName: string, options: Options) {
   try {
     const firstArg = process.argv[2];
     if (firstArg === undefined) {
@@ -144,6 +141,7 @@ export async function create(
       ? path.basename(process.cwd())
       : firstArg;
     const packageDir = useCurrentDir ? process.cwd() : path.resolve(name);
+    const templateRoot = options.templateRoot;
 
     if (isOccupied(packageDir)) {
       throw new Error(`${packageDir} is not empty directory.`);

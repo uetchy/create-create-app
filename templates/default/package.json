@@ -3,7 +3,7 @@
   "description": "{{description}}",
   "version": "0.0.0",
   "dependencies": {
-    "create-whatever": "^4.0.0"
+    "create-whatever": "^5.0.0"
   },
   "author": "{{contact}}",
   "license": "{{license}}",

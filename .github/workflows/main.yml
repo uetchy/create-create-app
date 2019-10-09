@@ -9,6 +9,8 @@ jobs:
     runs-on: Ubuntu-latest
     steps:
       - uses: actions/checkout@master
+        with:
+          ref: master
       - uses: actions/setup-node@master
       - run: yarn install
       - run: yarn release:trigger

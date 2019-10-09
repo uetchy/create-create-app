@@ -2,7 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import globby from 'globby';
 import isUtf8 from 'is-utf8';
+import uuidv4 from 'uuid/v4';
 import Handlebars from 'handlebars';
+
 import {Config} from '.';
 
 function trim(text: string) {
@@ -45,6 +47,11 @@ function kebab(text: string) {
   return snake(text).replace(/_/g, '-');
 }
 Handlebars.registerHelper('kebab', kebab);
+
+function uuid() {
+  return uuidv4();
+}
+Handlebars.registerHelper('uuid', uuid);
 
 function format<T>(text: Buffer | string, view: T) {
   const template = Handlebars.compile(text.toString(), {noEscape: true});

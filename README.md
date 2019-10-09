@@ -93,6 +93,15 @@ Output text in kebab-case.
 
 In the case of `name` is `CreateReactApp`, `{{kebab name}}` becomes `create-react-app`.
 
+#### `uuid`
+
+Generates unique UUID string.
+
+```
+{{uuid}}
+{{upper (uuid)}}
+```
+
 ## Config
 
 You can find the app config in `src/cli.ts`.

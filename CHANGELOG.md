@@ -1,3 +1,17 @@
+# [5.0.0](https://github.com/uetchy/create-whatever/compare/v4.1.0...v5.0.0) (2019-10-09)
+
+
+### Bug Fixes
+
+* dissolve templateRoot into options ([07296b4](https://github.com/uetchy/create-whatever/commit/07296b4))
+
+
+### BREAKING CHANGES
+
+* all create() must be fixed
+
+
+
 # [4.1.0](https://github.com/uetchy/create-whatever/compare/v4.0.4...v4.1.0) (2019-10-09)
 
 

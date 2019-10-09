@@ -1,3 +1,12 @@
+## [4.0.4](https://github.com/uetchy/create-whatever/compare/v4.0.3...v4.0.4) (2019-10-09)
+
+
+### Bug Fixes
+
+* no escape template string ([8b3e642](https://github.com/uetchy/create-whatever/commit/8b3e642))
+
+
+
 ## [4.0.3](https://github.com/uetchy/create-whatever/compare/v4.0.0...v4.0.3) (2019-10-08)
 
 ### Bug Fixes

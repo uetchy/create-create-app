@@ -1,5 +1,7 @@
 # create-whatever
 
+[![npm badge](https://img.shields.io/npm/v/create-whatever.svg)](https://npmjs.org/package/create-whatever)
+
 > The smartest `create-` app template generator.
 
 ![screencast](https://raw.githubusercontent.com/uetchy/create-whatever/master/.github/assets/screencast.gif)

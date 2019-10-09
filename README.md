@@ -1,6 +1,11 @@
 # create-whatever
 
-[![npm badge](https://img.shields.io/npm/v/create-whatever.svg)](https://npmjs.org/package/create-whatever)
+[![npm-badge]][npm-url] [![workflow-badge]][workflow-url]
+
+[npm-badge]: https://img.shields.io/npm/v/create-whatever.svg
+[npm-url]: https://npmjs.org/package/create-whatever
+[workflow-badge]: https://github.com/uetchy/create-whatever/workflows/create-whatever/badge.svg
+[workflow-url]: https://github.com/uetchy/create-whatever/actions?workflow=create-whatever
 
 > The smartest `create-` app template generator.
 

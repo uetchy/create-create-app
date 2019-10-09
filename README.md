@@ -45,7 +45,7 @@ Run `yarn publish` or `npm publish` to publish your `create-` app to npm.
 
 ## Template
 
-Edit files inside `templates/default`. Text files will be passed through Mustache template engine that all template strings is replaced with respective value.
+Edit files inside `templates/default`. File names, directory names, and text files will be processed through Handlebars template engine to replace all template strings with respective value.
 
 - `{{name}}` package name
 - `{{description}}` package description
@@ -54,6 +54,44 @@ Edit files inside `templates/default`. Text files will be passed through Mustach
 - `{{contact}}` author name formatted with `{{name}} <{{email}}>` if email given, otherwise `{{name}}`
 - `{{license}}` package license (e.g. `MIT`)
 - `{{year}}` current year (e.g. `2020`)
+
+### Helper functions
+
+#### `upper`
+
+Output text in UPPERCASE.
+
+In the case of `name` is `create-react-app`, `{{upper name}}` becomes `CREATE-REACT-APP`.
+
+#### `lower`
+
+Output text in lowercase.
+
+In the case of `name` is `CREATE-REACT-APP`, `{{lower name}}` becomes `create-react-app`.
+
+#### `camel`
+
+Output text in camelCase.
+
+In the case of `name` is `create-react-app`, `{{camel name}}` becomes `createReactApp`.
+
+#### `capital`
+
+Output text in CapitalCase.
+
+In the case of `name` is `create-react-app`, `{{capital name}}` becomes `CreateReactApp`, and `{{capital name space=true}}` becomes `Create React App`.
+
+#### `snake`
+
+Output text in snake_case.
+
+In the case of `name` is `CreateReactApp`, `{{snake name}}` becomes `create_react_app`.
+
+#### `kebab`
+
+Output text in kebab-case.
+
+In the case of `name` is `CreateReactApp`, `{{kebab name}}` becomes `create-react-app`.
 
 ## Config
 
@@ -87,7 +125,9 @@ This message will be shown after the generation process.
 
 `object | undefined`
 
-An extra options passed to the app. These options will be accessible as template string. In this case, `--language` cli option and `{{language}}` template string will be available.
+Extra options passed to the app. These options will be accessible as a cli option, interactive question, and template string. In this case, `--language` cli option and `{{language}}` template string will be available.
+
+You can find all possible options in [yargs-interactive documentation](https://github.com/nanovazquez/yargs-interactive#options).
 
 ## Contribution
 

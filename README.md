@@ -107,9 +107,11 @@ Generates unique UUID string.
 You can find the app config in `src/cli.ts`.
 
 ```ts
+import {resolve} from 'path';
 import {create} from 'create-whatever';
 
-create('create-greet', templateRoot, {
+create('create-greet', {
+  templateRoot: resolve(__dirname, '../templates'),
   caveat: `Your app has been created successfuly!`,
   extra: {
     language: {

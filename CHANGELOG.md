@@ -1,3 +1,12 @@
+# [4.1.0](https://github.com/uetchy/create-whatever/compare/v4.0.4...v4.1.0) (2019-10-09)
+
+
+### Features
+
+* add uuid template string ([5795ddb](https://github.com/uetchy/create-whatever/commit/5795ddb))
+
+
+
 ## [4.0.4](https://github.com/uetchy/create-whatever/compare/v4.0.3...v4.0.4) (2019-10-09)
 
 

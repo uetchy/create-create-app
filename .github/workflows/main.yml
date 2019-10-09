@@ -9,8 +9,9 @@ jobs:
     runs-on: Ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - run: git switch master
       - uses: actions/setup-node@master
       - uses: geertvdc/setup-hub@master
+      - run: git switch master
+      - run: hub --version
       - run: yarn install
       - run: yarn release

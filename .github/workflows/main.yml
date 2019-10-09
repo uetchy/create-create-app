@@ -12,6 +12,6 @@ jobs:
       - uses: actions/setup-node@master
       - uses: geertvdc/setup-hub@master
       - run: git switch master
-      - run: hub --version
+      - run: hub api user
       - run: yarn install
       - run: yarn release

@@ -10,6 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
+      - uses: geertvdc/setup-hub@master
       - run: git switch master
       - run: yarn install
-      - run: yarn release
+      - run: yarn release:trigger
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

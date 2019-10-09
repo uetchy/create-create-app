@@ -1,4 +1,4 @@
-# create-whatever
+# ✨ Create Whatever
 
 [![npm-badge]][npm-url] [![workflow-badge]][workflow-url]
 
@@ -13,9 +13,9 @@
 
 ## Why?
 
-- **Built-in License chooser** No need to care about license things.
-- **Template engine** Just put files with template strings and we will do the rest.
-- **Highly customizable** Can change caveat text, and add extra cli options.
+- ⚖️ **Built-in License chooser** No need to care about license things.
+- 🎩 **Template engine** Just put files with template strings and we will do the rest.
+- 💄 **Highly customizable** Can change caveat text, and add extra cli options.
 
 ## How
 

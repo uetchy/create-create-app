@@ -5,8 +5,7 @@
   "scripts": {
     "build": "shx rm -rf dist && NODE_ENV=production tsc && shx chmod +x dist/cli.js",
     "dev": "tsc -w",
-    "release:prepare": "shipjs prepare",
-    "release:trigger": "shipjs trigger",
+    "release": "shipjs prepare",
     "test": "echo notest"
   },
   "dependencies": {

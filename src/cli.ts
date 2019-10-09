@@ -4,13 +4,18 @@ import {resolve} from 'path';
 import {create} from '.';
 
 const templateRoot = resolve(__dirname, '../templates');
-const caveat = `Inside that directory, you can run several commands:
+const caveat = `
+Inside that directory, you can run several commands:
 yarn dev
   Starts 'tsc -w'.
 yarn build
   Build the app for production.
+
+Read the doc for the further information:
+https://github.com/uetchy/create-whatever/blob/master/README.md
 `;
 
-create('create-whatever', templateRoot, {
+create('create-whatever', {
+  templateRoot,
   caveat,
 });

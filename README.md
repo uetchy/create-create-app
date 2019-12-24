@@ -61,37 +61,37 @@ Edit files inside `templates/default`. File names, directory names, and text fil
 
 Output text in UPPERCASE.
 
-In the case of `name` is `create-react-app`, `{{upper name}}` becomes `CREATE-REACT-APP`.
+`{{upper name}}` becomes `CREATE-REACT-APP`.
 
 #### `lower`
 
 Output text in lowercase.
 
-In the case of `name` is `CREATE-REACT-APP`, `{{lower name}}` becomes `create-react-app`.
+`{{lower name}}` becomes `create-react-app`.
 
 #### `camel`
 
 Output text in camelCase.
 
-In the case of `name` is `create-react-app`, `{{camel name}}` becomes `createReactApp`.
+`{{camel name}}` becomes `createReactApp`.
 
 #### `capital`
 
 Output text in CapitalCase.
 
-In the case of `name` is `create-react-app`, `{{capital name}}` becomes `CreateReactApp`, and `{{capital name space=true}}` becomes `Create React App`.
+`{{capital name}}` becomes `CreateReactApp`, and `{{capital name space=true}}` becomes `Create React App`.
 
 #### `snake`
 
 Output text in snake_case.
 
-In the case of `name` is `CreateReactApp`, `{{snake name}}` becomes `create_react_app`.
+`{{snake name}}` becomes `create_react_app`.
 
 #### `kebab`
 
 Output text in kebab-case.
 
-In the case of `name` is `CreateReactApp`, `{{kebab name}}` becomes `create-react-app`.
+`{{kebab name}}` becomes `create-react-app`.
 
 #### `uuid`
 

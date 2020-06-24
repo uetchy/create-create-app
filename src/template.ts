@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import globby from 'globby';
 import isUtf8 from 'is-utf8';
-import uuidv4 from 'uuid/v4';
+import {v4 as uuidv4} from 'uuid';
 import Handlebars from 'handlebars';
 
 import {Config} from '.';

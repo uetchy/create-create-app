@@ -2,6 +2,7 @@
   "name": "create-whatever",
   "description": "create 'create-' app",
   "version": "5.0.0",
+  "author": "Yasuaki Uechi <y@uechi.io>",
   "scripts": {
     "build": "shx rm -rf dist && NODE_ENV=production tsc && shx chmod +x dist/cli.js",
     "dev": "tsc -w",
@@ -12,43 +13,42 @@
   "dependencies": {
     "@types/inquirer": "^6.5.0",
     "@types/yargs-interactive": "^2.1.0",
-    "chalk": "^3.0.0",
-    "cross-spawn": "^7.0.1",
-    "execa": "^4.0.0",
+    "chalk": "^4.1.0",
+    "cross-spawn": "^7.0.3",
+    "execa": "^4.0.2",
     "gitconfig": "^2.0.8",
-    "globby": "^10.0.1",
-    "handlebars": "^4.5.3",
-    "inquirer": "^7.0.1",
+    "globby": "^11.0.1",
+    "handlebars": "^4.7.6",
+    "inquirer": "^7.2.0",
     "is-utf8": "^0.2.1",
     "license.js": "^3.1.2",
-    "uuid": "^3.3.3",
+    "uuid": "^8.2.0",
     "yargs-interactive": "^3.0.0"
   },
   "devDependencies": {
-    "@types/cross-spawn": "^6.0.1",
-    "@types/node": "^13.1.0",
-    "@types/uuid": "^3.4.6",
-    "shipjs": "^0.12.0",
+    "@types/cross-spawn": "^6.0.2",
+    "@types/node": "^14.0.13",
+    "@types/uuid": "^8.0.0",
+    "shipjs": "^0.20.1",
     "shx": "^0.3.2",
-    "typescript": "^3.7.4"
+    "typescript": "^3.9.5"
   },
-  "author": "Yasuaki Uechi <y@uechi.io>",
-  "license": "MIT",
   "main": "dist/index.js",
-  "bin": "dist/cli.js",
-  "bugs": {
-    "url": "https://github.com/uetchy/create-whatever/issues"
-  },
   "files": [
     "dist",
     "templates"
   ],
-  "homepage": "https://github.com/uetchy/create-whatever",
-  "keywords": [
-    "create-whatever"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/uetchy/create-whatever.git"
-  }
+  },
+  "license": "MIT",
+  "bin": "dist/cli.js",
+  "bugs": {
+    "url": "https://github.com/uetchy/create-whatever/issues"
+  },
+  "homepage": "https://github.com/uetchy/create-whatever",
+  "keywords": [
+    "create-whatever"
+  ]
 }

@@ -6,9 +6,9 @@ import {create} from '.';
 const templateRoot = resolve(__dirname, '../templates');
 const caveat = `
 Inside that directory, you can run several commands:
-yarn dev
+yarn dev (--template typescript)
   Starts 'tsc -w'.
-yarn build
+yarn build (--template typescript)
   Build the app for production.
 
 Read the doc for the further information:

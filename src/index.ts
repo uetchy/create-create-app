@@ -98,7 +98,7 @@ async function getYargsOptions(
     description: {
       type: 'input',
       describe: 'description',
-      default: 'create whatever you want',
+      default: '',
       prompt: 'if-no-arg',
     },
     author: {
@@ -166,9 +166,12 @@ export async function create(appName: string, options: Options) {
           arg[0].match(/^[^$_]/) &&
           !['interactive', 'template'].includes(arg[0]),
       )
-      .reduce((sum, cur) => ((sum[cur[0]] = cur[1]), sum), {} as {
-        [key in keyof View]: View[key];
-      });
+      .reduce(
+        (sum, cur) => ((sum[cur[0]] = cur[1]), sum),
+        {} as {
+          [key in keyof View]: View[key];
+        },
+      );
 
     const view = {
       ...filterdArgs,

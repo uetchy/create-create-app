@@ -1,3 +1,7 @@
+## [5.0.1](https://github.com/uetchy/create-whatever/compare/v5.0.0...v5.0.1) (2020-06-24)
+
+
+
 # [5.0.0](https://github.com/uetchy/create-whatever/compare/v4.1.0...v5.0.0) (2019-10-09)
 
 

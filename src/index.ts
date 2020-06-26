@@ -231,7 +231,7 @@ export async function create(appName: string, options: Options) {
       options.after(afterHookOptions);
     }
 
-    console.log(`\nSuccess! Created ${chalk.bold.cyan(name)}.\n`);
+    console.log(`\nSuccess! Created ${chalk.bold.cyan(name)}.`);
 
     if (options.caveat) {
       switch (typeof options.caveat) {

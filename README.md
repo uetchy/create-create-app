@@ -56,7 +56,7 @@ Let's create `create-greet` package in four steps.
 yarn create whatever create-greet --template typescript
 ```
 
-or if you use `npm`, then run `npx create-whatever create-greet`
+or if you use `npm`, then run `npm create create-greet`
 
 ### 2. Edit templates
 

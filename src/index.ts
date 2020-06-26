@@ -27,9 +27,8 @@ export interface Config {
 export interface AfterHookOptions {
   packageDir: string;
   templateDir: string;
-  answers: View;
   year: number;
-  contact: string;
+  answers: View;
 }
 
 export interface Options {
@@ -225,7 +224,6 @@ export async function create(appName: string, options: Options) {
       options.after({
         answers: filterdArgs,
         year,
-        contact,
         packageDir,
         templateDir,
       });

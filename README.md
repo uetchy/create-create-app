@@ -40,6 +40,8 @@
 - [Config](#config)
   - [`caveat`](#caveat)
   - [`extra`](#extra)
+  - [`after`](#after)
+    - [AfterHookOptions](#afterhookoptions)
 - [Contribution](#contribution)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -166,6 +168,31 @@ This message will be shown after the generation process.
 Extra options passed to the app. These options will be accessible as a cli option, interactive question, and template string. In this case, `--language` cli option and `{{language}}` template string will be available.
 
 You can find all possible options in [yargs-interactive documentation](https://github.com/nanovazquez/yargs-interactive#options).
+
+### `after`
+
+`(options: AfterHookOptions) => void`
+
+After hook script that runs after the initialization.
+
+#### AfterHookOptions
+
+```typescript
+{
+  packageDir: string;
+  templateDir: string;
+  year: number; // 2020
+  answers: {
+    name: string; // package name
+    description: string; // description
+    author: string; // John Doe
+    email: string; // john@example.com
+    contact: string; // John Doe <john@example.com>
+    license: string; // MIT
+    [key: string]: string | number | boolean | any[]; // any values defined in the `extra` field.
+  }
+}
+```
 
 ## Contribution
 

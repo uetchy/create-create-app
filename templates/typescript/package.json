@@ -3,7 +3,7 @@
   "description": "{{description}}",
   "version": "0.0.0",
   "scripts": {
-    "build": "shx rm -rf dist && NODE_ENV=production tsc && shx chmod +x dist/cli.js",
+    "build": "shx rm -rf lib && NODE_ENV=production tsc && shx chmod +x lib/cli.js",
     "dev": "tsc -w"
   },
   "dependencies": {
@@ -15,9 +15,9 @@
   },
   "author": "{{contact}}",
   "license": "{{license}}",
-  "bin": "dist/cli.js",
+  "bin": "lib/cli.js",
   "files": [
-    "dist",
+    "lib",
     "templates"
   ]
 }

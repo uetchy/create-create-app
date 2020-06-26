@@ -1,12 +1,34 @@
 import chalk from 'chalk';
+import { CommonSpawnOptions } from 'child_process';
 import { spawn } from 'cross-spawn';
-import execa from 'execa';
+import execa, { CommonOptions, ExecaChildProcess } from 'execa';
 import fs from 'fs';
 import gitconfig from 'gitconfig';
 import { availableLicenses, makeLicenseSync } from 'license.js';
 import path from 'path';
-import yargsInteractive, { Option } from 'yargs-interactive';
+import yargsInteractive from 'yargs-interactive';
 import { copy, getAvailableTemplates } from './template';
+
+export interface OptionData {
+  type:
+    | 'input'
+    | 'number'
+    | 'confirm'
+    | 'list'
+    | 'rawlist'
+    | 'expand'
+    | 'checkbox'
+    | 'password'
+    | 'editor';
+  describe: string;
+  default?: string | number | boolean | any[];
+  prompt?: 'always' | 'never' | 'if-no-arg' | 'if-empty';
+  choices?: (string | { name: string; value: any })[];
+}
+
+export interface Option {
+  [key: string]: OptionData | { default: boolean };
+}
 
 export interface Config {
   packageDir: string;
@@ -31,6 +53,11 @@ export interface AfterHookOptions {
   templateDir: string;
   year: number;
   answers: Omit<View, 'name'>;
+  run: (
+    command: string,
+    options?: CommonOptions<string>,
+  ) => ExecaChildProcess<string>;
+  installNpmPackage: (packageName: string) => Promise<void>;
 }
 
 export interface Options {
@@ -45,25 +72,37 @@ async function getGitUser() {
   return config.user;
 }
 
-function installDeps(rootDir: string, useYarn: boolean) {
+function spawnPromise(
+  command: string,
+  args: string[] = [],
+  options: CommonSpawnOptions = {},
+): Promise<number> {
   return new Promise((resolve, reject) => {
-    let command: string;
-    let args: string[];
-    if (useYarn) {
-      command = 'yarnpkg';
-      args = ['install', '--cwd', rootDir];
-    } else {
-      command = 'npm';
-      args = ['install', '--prefix', rootDir];
-    }
-    const child = spawn(command, args, { stdio: 'inherit' });
+    const child = spawn(command, args, { stdio: 'inherit', ...options });
     child.on('close', (code) => {
       if (code !== 0) {
-        return reject(`installDeps failed: ${command} ${args.join(' ')}`);
+        return reject(code);
       }
-      resolve();
+      resolve(code);
     });
   });
+}
+
+async function installDeps(rootDir: string, useYarn: boolean) {
+  let command: string;
+  let args: string[];
+  if (useYarn) {
+    command = 'yarnpkg';
+    args = ['install', '--cwd', rootDir];
+  } else {
+    command = 'npm';
+    args = ['install', '--prefix', rootDir];
+  }
+  try {
+    await spawnPromise(command, args, { stdio: 'inherit' });
+  } catch (err) {
+    throw new Error(`installDeps failed: ${err}`);
+  }
 }
 
 async function IsYarnAvaialable() {
@@ -162,7 +201,7 @@ export async function create(appName: string, options: Options) {
     const yargsOption = await getYargsOptions(templateRoot, options.extra);
     const args = await yargsInteractive()
       .usage('$0 <name> [args]')
-      .interactive(yargsOption);
+      .interactive(yargsOption as any);
 
     const template = args.template;
     const templateDir = path.resolve(templateRoot, template);
@@ -212,9 +251,9 @@ export async function create(appName: string, options: Options) {
     fs.writeFileSync(path.resolve(packageDir, 'LICENSE'), licenseText);
 
     // install dependencies using yarn / npm
+    const useYarn = await IsYarnAvaialable();
     if (exists('package.json', packageDir)) {
       console.log(`Installing dependencies.`);
-      const useYarn = await IsYarnAvaialable();
       await installDeps(packageDir, useYarn);
     }
 
@@ -222,12 +261,44 @@ export async function create(appName: string, options: Options) {
     await initGit(packageDir);
     console.log('\nInitialized a git repository');
 
+    const run = (command: string, options: CommonOptions<string> = {}) => {
+      const args = command.split(' ');
+      return execa(args[0], args.slice(1), {
+        stdio: 'inherit',
+        cwd: packageDir,
+        ...options,
+      });
+    };
+
+    const installNpmPackage = (packageName: string): Promise<void> => {
+      return new Promise((resolve, reject) => {
+        let command: string;
+        let args: string[];
+        if (useYarn) {
+          command = 'yarnpkg';
+          args = ['--cwd', packageDir, 'add', packageName];
+        } else {
+          command = 'npm';
+          args = ['install', '-D', packageName, '--prefix', packageDir];
+        }
+        const child = spawn(command, args, { stdio: 'inherit' });
+        child.on('close', (code) => {
+          if (code !== 0) {
+            return reject(`installDeps failed: ${command} ${args.join(' ')}`);
+          }
+          resolve();
+        });
+      });
+    };
+
     const afterHookOptions = {
       name,
       packageDir,
       template,
       templateDir,
       year,
+      run,
+      installNpmPackage,
       answers: {
         ...filterdArgs,
         contact,

@@ -1,5 +1,5 @@
 {
-  "exclude": ["templates", "lib"],
+  "exclude": ["templates", "lib", "example"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 

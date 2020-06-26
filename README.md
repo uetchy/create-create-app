@@ -27,7 +27,7 @@
   - [2. Edit templates](#2-edit-templates)
     - [TypeScript](#typescript)
   - [3. Publish package to npm](#3-publish-package-to-npm)
-  - [4. PROFIT!!!](#4-profit)
+  - [4. PROFIT!](#4-profit)
 - [Template](#template)
   - [Helper functions](#helper-functions)
     - [`upper`](#upper)
@@ -70,7 +70,7 @@ Run `yarn build` or `npm run build` to transpile TypeScript into JavaScript.
 
 Run `yarn publish` or `npm publish` to publish your `create-` app to npm.
 
-### 4. PROFIT!!!
+### 4. PROFIT!
 
 ```bash
 yarn create greet ohayo
@@ -199,6 +199,7 @@ create('create-greet', {
 
 ```typescript
 {
+  // variables
   packageDir: string;
   templateDir: string;
   year: number; // 2020
@@ -210,7 +211,10 @@ create('create-greet', {
     contact: string; // John Doe <john@example.com>
     license: string; // MIT
     [key: string]: string | number | boolean | any[]; // any values defined in the `extra` field.
-  }
+  };
+  // functions
+  run: (command: string, options?: CommonOptions<string>) => ExecaChildProcess<string>; // run shell command in the package dir
+  installNpmPackage: (packageName: string) => Promise<void>; // use yarn if available
 }
 ```
 

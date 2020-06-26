@@ -1,7 +1,7 @@
 {
   "name": "create-whatever",
   "description": "create 'create-' app",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "author": "Yasuaki Uechi <y@uechi.io>",
   "scripts": {
     "build": "shx rm -rf lib && NODE_ENV=production tsc && shx chmod +x lib/cli.js",

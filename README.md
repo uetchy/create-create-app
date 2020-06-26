@@ -181,7 +181,7 @@ create('create-greet', {
 
 ```js
 create('create-greet', {
-  caveat: ({ answers }) => `Run -> cd {answers.name} && make`,
+  caveat: ({ answers }) => `Run -> cd ${answers.name} && make`,
 });
 ```
 

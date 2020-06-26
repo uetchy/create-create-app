@@ -4,7 +4,7 @@
   "version": "5.0.1",
   "author": "Yasuaki Uechi <y@uechi.io>",
   "scripts": {
-    "build": "shx rm -rf dist && NODE_ENV=production tsc && shx chmod +x dist/cli.js",
+    "build": "shx rm -rf lib && NODE_ENV=production tsc && shx chmod +x lib/cli.js",
     "dev": "tsc -w",
     "prepublish": "yarn build",
     "release:prepare": "shipjs prepare",
@@ -30,26 +30,37 @@
     "@types/cross-spawn": "^6.0.2",
     "@types/node": "^14.0.13",
     "@types/uuid": "^8.0.0",
+    "doctoc": "^1.4.0",
+    "husky": "^4.2.5",
+    "prettier": "^2.0.5",
+    "prettier-plugin-organize-imports": "^1.1.0",
+    "pretty-quick": "^2.0.1",
     "shipjs": "^0.20.1",
     "shx": "^0.3.2",
+    "ts-node": "^8.10.2",
     "typescript": "^3.9.5"
   },
-  "main": "dist/index.js",
+  "main": "lib/index.js",
+  "bin": "lib/cli.js",
   "files": [
-    "dist",
+    "lib",
     "templates"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "doctoc README.md && git add README.md && pretty-quick --staged"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/uetchy/create-whatever.git"
   },
-  "license": "MIT",
-  "bin": "dist/cli.js",
   "bugs": {
     "url": "https://github.com/uetchy/create-whatever/issues"
   },
   "homepage": "https://github.com/uetchy/create-whatever",
   "keywords": [
     "create-whatever"
-  ]
+  ],
+  "license": "MIT"
 }

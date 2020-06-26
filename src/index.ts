@@ -1,13 +1,12 @@
-import fs from 'fs';
-import path from 'path';
 import chalk from 'chalk';
+import { spawn } from 'cross-spawn';
 import execa from 'execa';
-import {spawn} from 'cross-spawn';
+import fs from 'fs';
 import gitconfig from 'gitconfig';
-import yargsInteractive, {Option} from 'yargs-interactive';
-import {makeLicenseSync, availableLicenses} from 'license.js';
-
-import {copy, getAvailableTemplates} from './template';
+import { availableLicenses, makeLicenseSync } from 'license.js';
+import path from 'path';
+import yargsInteractive, { Option } from 'yargs-interactive';
+import { copy, getAvailableTemplates } from './template';
 
 export interface View {
   name: string;
@@ -25,15 +24,23 @@ export interface Config {
   view: View;
 }
 
+export interface AfterHookOptions {
+  packageDir: string;
+  templateDir: string;
+  answers: View;
+  year: number;
+  contact: string;
+}
+
 export interface Options {
   templateRoot: string;
   extra?: Option;
   caveat?: string;
-  after?: () => void;
+  after?: (options: AfterHookOptions) => void;
 }
 
 async function getGitUser() {
-  const config = await gitconfig.get({location: 'global'});
+  const config = await gitconfig.get({ location: 'global' });
   return config.user;
 }
 
@@ -48,7 +55,7 @@ function installDeps(rootDir: string, useYarn: boolean) {
       command = 'npm';
       args = ['install', '--prefix', rootDir];
     }
-    const child = spawn(command, args, {stdio: 'inherit'});
+    const child = spawn(command, args, { stdio: 'inherit' });
     child.on('close', (code) => {
       if (code !== 0) {
         return reject(`installDeps failed: ${command} ${args.join(' ')}`);
@@ -67,8 +74,12 @@ async function IsYarnAvaialable() {
   }
 }
 
+function exists(filePath: string, baseDir: string): boolean {
+  return fs.existsSync(path.resolve(baseDir, filePath));
+}
+
 async function initGit(root: string) {
-  await execa('git init', {shell: true, cwd: root});
+  await execa('git init', { shell: true, cwd: root });
 }
 
 function getContact(author: string, email?: string) {
@@ -94,11 +105,11 @@ async function getYargsOptions(
 ) {
   const gitUser = await getGitUser();
   const yargOption: Option = {
-    interactive: {default: true},
+    interactive: { default: true },
     description: {
       type: 'input',
       describe: 'description',
-      default: '',
+      default: 'description',
       prompt: 'if-no-arg',
     },
     author: {
@@ -199,13 +210,26 @@ export async function create(appName: string, options: Options) {
     fs.writeFileSync(path.resolve(packageDir, 'LICENSE'), licenseText);
 
     // install dependencies using yarn / npm
-    console.log(`Installing dependencies.`);
-    const useYarn = await IsYarnAvaialable();
-    await installDeps(packageDir, useYarn);
+    if (exists('package.json', packageDir)) {
+      console.log(`Installing dependencies.`);
+      const useYarn = await IsYarnAvaialable();
+      await installDeps(packageDir, useYarn);
+    }
 
     // init git
     await initGit(packageDir);
     console.log('\nInitialized a git repository\n');
+
+    // after hook script
+    if (options.after) {
+      options.after({
+        answers: filterdArgs,
+        year,
+        contact,
+        packageDir,
+        templateDir,
+      });
+    }
 
     console.log(`Success! Created ${name} at ${packageDir}`);
     if (options.caveat) {

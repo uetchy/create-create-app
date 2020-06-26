@@ -17,11 +17,38 @@
 - 🎩 **Template engine** Just put files with template strings and we will do the rest.
 - 💄 **Highly customizable** Can change caveat text, and add extra cli options.
 
-## How
+## Table of contents
 
-Create `create-greet` package in four steps.
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-### 1. Generate template
+- [Quick Start](#quick-start)
+  - [1. `yarn create whatever`](#1-yarn-create-whatever)
+  - [2. Edit templates](#2-edit-templates)
+    - [TypeScript](#typescript)
+  - [3. Publish package to npm](#3-publish-package-to-npm)
+  - [4. PROFIT!!!](#4-profit)
+- [Template](#template)
+  - [Helper functions](#helper-functions)
+    - [`upper`](#upper)
+    - [`lower`](#lower)
+    - [`camel`](#camel)
+    - [`capital`](#capital)
+    - [`snake`](#snake)
+    - [`kebab`](#kebab)
+    - [`uuid`](#uuid)
+- [Config](#config)
+  - [`caveat`](#caveat)
+  - [`extra`](#extra)
+- [Contribution](#contribution)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Quick Start
+
+Let's create `create-greet` package in four steps.
+
+### 1. `yarn create whatever`
 
 ```shell
 yarn create whatever create-greet --template typescript

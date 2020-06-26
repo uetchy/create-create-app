@@ -1,11 +1,10 @@
 import fs from 'fs';
-import path from 'path';
 import globby from 'globby';
-import isUtf8 from 'is-utf8';
-import {v4 as uuidv4} from 'uuid';
 import Handlebars from 'handlebars';
-
-import {Config} from '.';
+import isUtf8 from 'is-utf8';
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import { Config } from '.';
 
 function trim(text: string) {
   return text.replace(/[\r\n]/g, '');
@@ -54,14 +53,14 @@ function uuid() {
 Handlebars.registerHelper('uuid', uuid);
 
 function format<T>(text: Buffer | string, view: T) {
-  const template = Handlebars.compile(text.toString(), {noEscape: true});
+  const template = Handlebars.compile(text.toString(), { noEscape: true });
   return template(view);
 }
 
 function prepareDirectory(filePath: string) {
   try {
     const target = path.dirname(filePath);
-    fs.mkdirSync(target, {recursive: true});
+    fs.mkdirSync(target, { recursive: true });
   } catch {}
 }
 
@@ -70,7 +69,7 @@ export function getAvailableTemplates(root: string) {
 }
 
 export async function copy(args: Config) {
-  const templateFiles = await globby(args.templateDir, {dot: true});
+  const templateFiles = await globby(args.templateDir, { dot: true });
   for (const sourcePath of templateFiles) {
     const relativePath = path.relative(args.templateDir, sourcePath);
     const targetPath = format(

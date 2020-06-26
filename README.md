@@ -72,6 +72,10 @@ Run `yarn publish` or `npm publish` to publish your `create-` app to npm.
 
 ### 4. PROFIT!!!
 
+```bash
+yarn create greet ohayo
+```
+
 ## Template
 
 Edit files inside `templates/default`. File names, directory names, and text files will be processed through Handlebars template engine to replace all template strings with respective value.

@@ -38,10 +38,10 @@
     - [`kebab`](#kebab)
     - [`uuid`](#uuid)
 - [Config](#config)
-  - [`caveat`](#caveat)
   - [`extra`](#extra)
-  - [`after`](#after)
+  - [`caveat`](#caveat)
     - [AfterHookOptions](#afterhookoptions)
+  - [`after`](#after)
 - [Contribution](#contribution)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -145,7 +145,6 @@ import {create} from 'create-whatever';
 
 create('create-greet', {
   templateRoot: resolve(__dirname, '../templates'),
-  caveat: `Your app has been created successfuly!`,
   extra: {
     language: {
       type: 'input',
@@ -154,16 +153,11 @@ create('create-greet', {
       prompt: 'if-no-arg',
     },
   },
+  caveat: `Your app has been created successfuly!`,
 });
 ```
 
 `templateRoot` set to `path.resolve(__dirname, '../templates')`. You can change it to whereever you want.
-
-### `caveat`
-
-`string | undefined`
-
-This message will be shown after the generation process.
 
 ### `extra`
 
@@ -173,11 +167,33 @@ Extra options passed to the app. These options will be accessible as a cli optio
 
 You can find all possible options in [yargs-interactive documentation](https://github.com/nanovazquez/yargs-interactive#options).
 
-### `after`
+### `caveat`
 
-`(options: AfterHookOptions) => void`
+`string | ((options: AfterHookOptions) => string | void) | undefined`
 
-After hook script that runs after the initialization.
+The caveat message will be shown after the entire process completed.
+
+```js
+create('create-greet', {
+  caveat: 'Happy coding!',
+});
+```
+
+```js
+create('create-greet', {
+  caveat: ({ answers }) => `Run -> cd {answers.name} && make`,
+});
+```
+
+```js
+create('create-greet', {
+  caveat: async ({ answers }) => {
+    const pkg = answers.plugin;
+    await execa('yarn', ['add', plugin]);
+    console.log(`${plugin} has been added`);
+  },
+});
+```
 
 #### AfterHookOptions
 
@@ -197,6 +213,12 @@ After hook script that runs after the initialization.
   }
 }
 ```
+
+### `after`
+
+`(options: AfterHookOptions) => void`
+
+After hook script that runs after the initialization.
 
 ## Contribution
 

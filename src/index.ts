@@ -8,6 +8,12 @@ import path from 'path';
 import yargsInteractive, { Option } from 'yargs-interactive';
 import { copy, getAvailableTemplates } from './template';
 
+export interface Config {
+  packageDir: string;
+  templateDir: string;
+  view: View;
+}
+
 export interface View {
   name: string;
   description: string;
@@ -16,12 +22,6 @@ export interface View {
   contact: string;
   license: string;
   [key: string]: string | number | boolean | any[];
-}
-
-export interface Config {
-  packageDir: string;
-  templateDir: string;
-  view: View;
 }
 
 export interface AfterHookOptions {
@@ -34,7 +34,7 @@ export interface AfterHookOptions {
 export interface Options {
   templateRoot: string;
   extra?: Option;
-  caveat?: string;
+  caveat?: string | ((options: AfterHookOptions) => string | void);
   after?: (options: AfterHookOptions) => void;
 }
 
@@ -217,21 +217,37 @@ export async function create(appName: string, options: Options) {
 
     // init git
     await initGit(packageDir);
-    console.log('\nInitialized a git repository\n');
+    console.log('\nInitialized a git repository');
+
+    const afterHookOptions = {
+      answers: filterdArgs,
+      year,
+      packageDir,
+      templateDir,
+    };
 
     // after hook script
     if (options.after) {
-      options.after({
-        answers: filterdArgs,
-        year,
-        packageDir,
-        templateDir,
-      });
+      options.after(afterHookOptions);
     }
 
-    console.log(`Success! Created ${name} at ${packageDir}`);
+    console.log(`\nSuccess! Created ${chalk.bold.cyan(name)}.\n`);
+
     if (options.caveat) {
-      console.log(options.caveat);
+      switch (typeof options.caveat) {
+        case 'string':
+          console.log(options.caveat);
+          break;
+        case 'function':
+          const response = await Promise.resolve(
+            options.caveat(afterHookOptions),
+          );
+          if (response) {
+            console.log(response);
+          }
+          break;
+        default:
+      }
     }
   } catch (err) {
     console.log(chalk.red(`Error: ${err.message}`));

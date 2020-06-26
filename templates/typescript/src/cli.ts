@@ -11,7 +11,6 @@ You can change this to whatever you want.
 
 create('{{kebab name}}', {
   templateRoot,
-  caveat,
   extra: {
     architecture: {
       type: 'list',
@@ -25,4 +24,5 @@ create('{{kebab name}}', {
     },
   },
   after: ({ answers }) => console.log(`Ok you chose ${answers.architecture}.`),
+  caveat,
 });

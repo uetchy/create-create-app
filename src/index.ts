@@ -25,10 +25,12 @@ export interface View {
 }
 
 export interface AfterHookOptions {
+  name: string;
   packageDir: string;
+  template: string;
   templateDir: string;
   year: number;
-  answers: View;
+  answers: Omit<View, 'name'>;
 }
 
 export interface Options {
@@ -162,7 +164,8 @@ export async function create(appName: string, options: Options) {
       .usage('$0 <name> [args]')
       .interactive(yargsOption);
 
-    const templateDir = path.resolve(templateRoot, args.template);
+    const template = args.template;
+    const templateDir = path.resolve(templateRoot, template);
     const year = new Date().getFullYear();
     const contact = getContact(args.author, args.email);
 
@@ -220,10 +223,15 @@ export async function create(appName: string, options: Options) {
     console.log('\nInitialized a git repository');
 
     const afterHookOptions = {
-      answers: filterdArgs,
-      year,
+      name,
       packageDir,
+      template,
       templateDir,
+      year,
+      answers: {
+        ...filterdArgs,
+        contact,
+      },
     };
 
     // after hook script

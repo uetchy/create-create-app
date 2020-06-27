@@ -2,7 +2,7 @@
 
 {{description}}
 
-> created by [create-whatever](https://github.com/uetchy/create-whatever/blob/master/README.md).
+> created by [create-create-app](https://github.com/uetchy/create-create-app/blob/master/README.md).
 
 ## Use
 
@@ -32,4 +32,4 @@ npx {{kebab name}} <name>
 - \{{year}} => {{year}}
 - \{{custom}} => {{custom}} (undefined until it is defined in `extra` field in `create` function arguments)
 
-See https://github.com/uetchy/create-whatever#template for the further details.
+See https://github.com/uetchy/create-create-app#template for the further details.

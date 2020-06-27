@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const { resolve } = require('path');
-const { create } = require('create-whatever');
+const { create } = require('create-create-app');
 
 const templateRoot = resolve(__dirname, '../templates');
 
@@ -10,7 +10,7 @@ This is a caveat!
 You can change this in \`src/cli.js\`.
 `;
 
-// See https://github.com/uetchy/create-whatever/blob/master/README.md for the all options.
+// See https://github.com/uetchy/create-create-app/blob/master/README.md for the all options.
 
 create('{{kebab name}}', {
   templateRoot,

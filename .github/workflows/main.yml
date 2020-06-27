@@ -1,4 +1,4 @@
-name: create-whatever
+name: create-create-app
 on:
   push:
     branches:

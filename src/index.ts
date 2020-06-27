@@ -33,6 +33,7 @@ export interface Option {
 export interface Options {
   templateRoot: string;
   alwaysAskForTemplate?: boolean;
+  handleName?: (name: string) => string | Promise<string>;
   extra?: Option;
   caveat?: string | ((options: AfterHookOptions) => string | void);
   after?: (options: AfterHookOptions) => void;
@@ -190,6 +191,8 @@ export async function create(appName: string, options: Options) {
     const useCurrentDir = firstArg === '.';
     const name: string = useCurrentDir
       ? path.basename(process.cwd())
+      : options.handleName
+      ? await Promise.resolve(options.handleName(firstArg))
       : firstArg;
     const packageDir = useCurrentDir ? process.cwd() : path.resolve(name);
     const { templateRoot, alwaysAskForTemplate = false } = options;

@@ -33,14 +33,15 @@ After the build, run ${chalk.cyan(
   text += `
 Read the docs for the further information:
 ${chalk.yellow(
-  'https://github.com/uetchy/create-whatever/blob/master/README.md',
+  'https://github.com/uetchy/create-create-app/blob/master/README.md',
 )}`;
 
   return text;
 };
 
-create('create-whatever', {
+create('create-create-app', {
   templateRoot,
   alwaysAskForTemplate: true,
   caveat,
+  handleName: (name) => (name.startsWith('create-') ? name : `create-${name}`),
 });

@@ -7,7 +7,7 @@
     "dev": "tsc -w"
   },
   "dependencies": {
-    "create-whatever": "^5.0.0"
+    "create-create-app": "^5.5.0"
   },
   "devDependencies": {
     "shx": "^0.3.2",

@@ -1,15 +1,16 @@
-# ✨ Create Whatever
+# ✨ Create Create App
 
-[![npm-badge]][npm-url] [![workflow-badge]][workflow-url]
+[![npm-badge]][npm-url]
+[![workflow-badge]][workflow-url]
 
-[npm-badge]: https://img.shields.io/npm/v/create-whatever.svg
-[npm-url]: https://npmjs.org/package/create-whatever
-[workflow-badge]: https://github.com/uetchy/create-whatever/workflows/create-whatever/badge.svg
-[workflow-url]: https://github.com/uetchy/create-whatever/actions?workflow=create-whatever
+[npm-badge]: https://img.shields.io/npm/v/create-create-app.svg
+[npm-url]: https://npmjs.org/package/create-create-app
+[workflow-badge]: https://github.com/uetchy/create-create-app/workflows/create-create-app/badge.svg
+[workflow-url]: https://github.com/uetchy/create-create-app/actions?workflow=create-create-app
 
-> The smartest `create-` app template generator.
+Create your own `create-something` app.
 
-![screencast](https://raw.githubusercontent.com/uetchy/create-whatever/master/.github/assets/screencast.gif)
+![screencast](https://raw.githubusercontent.com/uetchy/create-create-app/master/.github/assets/screencast.gif)
 
 ## Why?
 
@@ -23,7 +24,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [Quick Start](#quick-start)
-  - [1. `yarn create whatever`](#1-yarn-create-whatever)
+  - [1. `yarn create create-app`](#1-yarn-create-create-app)
   - [2. Edit templates](#2-edit-templates)
     - [TypeScript](#typescript)
   - [3. Publish package to npm](#3-publish-package-to-npm)
@@ -42,6 +43,7 @@
   - [`caveat`](#caveat)
     - [AfterHookOptions](#afterhookoptions)
   - [`after`](#after)
+  - [`handleName`](#handlename)
 - [Contribution](#contribution)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -50,13 +52,13 @@
 
 Let's create `create-greet` package in four steps.
 
-### 1. `yarn create whatever`
+### 1. `yarn create create-app`
 
 ```shell
-yarn create whatever create-greet --template typescript
+yarn create create-app greet
 ```
 
-or if you use `npm`, then run `npm create create-greet`
+or if you use `npm`, then run `npm create create-app greet`
 
 ### 2. Edit templates
 
@@ -141,7 +143,7 @@ You can find the app config in `src/cli.ts`.
 
 ```ts
 import {resolve} from 'path';
-import {create} from 'create-whatever';
+import {create} from 'create-create-app';
 
 create('create-greet', {
   templateRoot: resolve(__dirname, '../templates'),
@@ -153,7 +155,9 @@ create('create-greet', {
       prompt: 'if-no-arg',
     },
   },
+  after: ({installNpmPackage}) => installNpmPackage('chalk'),
   caveat: `Your app has been created successfuly!`,
+  handleName: (name) => `package-prefix-${name}`
 });
 ```
 
@@ -223,6 +227,12 @@ create('create-greet', {
 `(options: AfterHookOptions) => void`
 
 After hook script that runs after the initialization.
+
+### `handleName`
+
+`(name: string) => string | Promise<string>`
+
+Modify `name` property.
 
 ## Contribution
 

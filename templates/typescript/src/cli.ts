@@ -4,10 +4,13 @@ import { create } from 'create-whatever';
 import { resolve } from 'path';
 
 const templateRoot = resolve(__dirname, '../templates');
+
 const caveat = `
 This is a caveat!
-You can change this to whatever you want.
+You can change this in \`src/cli.ts\`.
 `;
+
+// See https://github.com/uetchy/create-whatever/blob/master/README.md for the all options.
 
 create('{{kebab name}}', {
   templateRoot,

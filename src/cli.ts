@@ -2,10 +2,17 @@
 
 import chalk from 'chalk';
 import { resolve } from 'path';
-import { create } from '.';
+import { AfterHookOptions, create } from '.';
 
 const templateRoot = resolve(__dirname, '../templates');
-const caveat = `
+const caveat = ({ name, template }: AfterHookOptions) => {
+  let text = `
+cd ${chalk.bold.green(name)}
+`;
+
+  switch (template) {
+    case 'typescript':
+      text += `
 Inside that directory, you can run several commands:
 
 ${chalk.bold.cyan('yarn dev')}
@@ -13,13 +20,24 @@ ${chalk.bold.cyan('yarn dev')}
 ${chalk.bold.cyan('yarn build')}
   ${chalk.gray('Build the app for production.')}
 
-These commands are only available when you run ${chalk.cyan(
-  'create-whatever <pkg> --template typescript',
-)}
-
-Read the doc for the further information:
-https://github.com/uetchy/create-whatever/blob/master/README.md
+After the build, run ${chalk.cyan(
+        'node lib/cli.js <package>',
+      )} to test your app.
 `;
+      break;
+    default:
+      text += `node src/cli.js <package>
+`;
+  }
+
+  text += `
+Read the docs for the further information:
+${chalk.yellow(
+  'https://github.com/uetchy/create-whatever/blob/master/README.md',
+)}`;
+
+  return text;
+};
 
 create('create-whatever', {
   templateRoot,

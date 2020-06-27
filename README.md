@@ -45,13 +45,13 @@
 
 Let's create `create-greet` package in four steps.
 
-### 1. `yarn create create-app`
+### 1. `npm create create-app`
 
 ```shell
-yarn create create-app greet
+npm create create-app greet
 ```
 
-or if you use `npm`, then run `npm create create-app greet`
+or if you use `yarn`, then run `yarn create create-app greet`
 
 ![screenshot](https://raw.githubusercontent.com/uetchy/create-create-app/master/.github/assets/ss1.png)
 
@@ -136,7 +136,7 @@ Generates unique UUID string.
 
 ## Config
 
-You can find the app config in `src/cli.ts`.
+You can find the app config in `src/cli.ts` (or `src/cli.js` if you chose `default` template).
 
 ```ts
 import {resolve} from 'path';

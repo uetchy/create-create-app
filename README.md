@@ -1,16 +1,10 @@
-# ✨ Create Create App
-
-[![npm-badge]][npm-url]
-[![workflow-badge]][workflow-url]
-
-[npm-badge]: https://img.shields.io/npm/v/create-create-app.svg
-[npm-url]: https://npmjs.org/package/create-create-app
-[workflow-badge]: https://github.com/uetchy/create-create-app/workflows/create-create-app/badge.svg
-[workflow-url]: https://github.com/uetchy/create-create-app/actions?workflow=create-create-app
+<h1 align="center">✨ Create Create App<br/>
+<img src="https://raw.githubusercontent.com/uetchy/create-create-app/master/.github/assets/ss1.png" alt="screenshot"/><br/>
+<a href="https://npmjs.org/package/create-create-app"><img src="https://img.shields.io/npm/v/create-create-app.svg"></a>
+<a href="https://github.com/uetchy/create-create-app/actions?workflow=create-create-app"><img src="https://github.com/uetchy/create-create-app/workflows/create-create-app/badge.svg"/></a>
+</h1>
 
 Create your own `create-something` app.
-
-![screencast](https://raw.githubusercontent.com/uetchy/create-create-app/master/.github/assets/screencast.gif)
 
 ## Why?
 
@@ -60,6 +54,8 @@ yarn create create-app greet
 
 or if you use `npm`, then run `npm create create-app greet`
 
+![screenshot](https://raw.githubusercontent.com/uetchy/create-create-app/master/.github/assets/ss1.png)
+
 ### 2. Edit templates
 
 `cd create-greet` and edit files inside `templates/default`.
@@ -77,6 +73,8 @@ Run `yarn publish` or `npm publish` to publish your `create-` app to npm.
 ```bash
 yarn create greet ohayo
 ```
+
+![screenshot](https://raw.githubusercontent.com/uetchy/create-create-app/master/.github/assets/ss2.png)
 
 ## Template
 

@@ -1,10 +1,9 @@
-<h1 align="center">✨ Create Create App<br/>
+<div align="center"><h1>✨ Create Create App</h1><br/><br/>
+  <b>Create your own `create-something` app.</b><br/>
 <img src="https://raw.githubusercontent.com/uetchy/create-create-app/master/.github/assets/ss1.png" alt="screenshot"/><br/>
 <a href="https://npmjs.org/package/create-create-app"><img src="https://img.shields.io/npm/v/create-create-app.svg"></a>
 <a href="https://github.com/uetchy/create-create-app/actions?workflow=create-create-app"><img src="https://github.com/uetchy/create-create-app/workflows/create-create-app/badge.svg"/></a>
-</h1>
-
-Create your own `create-something` app.
+</div>
 
 ## Why?
 

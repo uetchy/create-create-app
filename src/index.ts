@@ -30,10 +30,12 @@ export interface Option {
   [key: string]: OptionData | { default: boolean };
 }
 
-export interface Config {
-  packageDir: string;
-  templateDir: string;
-  view: View;
+export interface Options {
+  templateRoot: string;
+  alwaysAskForTemplate?: boolean;
+  extra?: Option;
+  caveat?: string | ((options: AfterHookOptions) => string | void);
+  after?: (options: AfterHookOptions) => void;
 }
 
 export interface View {
@@ -58,13 +60,6 @@ export interface AfterHookOptions {
     options?: CommonOptions<string>,
   ) => ExecaChildProcess<string>;
   installNpmPackage: (packageName: string) => Promise<void>;
-}
-
-export interface Options {
-  templateRoot: string;
-  extra?: Option;
-  caveat?: string | ((options: AfterHookOptions) => string | void);
-  after?: (options: AfterHookOptions) => void;
 }
 
 async function getGitUser() {
@@ -141,9 +136,13 @@ function isOccupied(dirname: string) {
 
 async function getYargsOptions(
   templateRoot: string,
+  alwaysAskForTemplate: boolean,
   extraOptions: Option = {},
 ) {
   const gitUser = await getGitUser();
+  const availableTemplates = getAvailableTemplates(templateRoot);
+  const isMultipleTemplates = availableTemplates.length > 1;
+  const askForTemplate = isMultipleTemplates && alwaysAskForTemplate;
   const yargOption: Option = {
     interactive: { default: true },
     description: {
@@ -164,17 +163,18 @@ async function getYargsOptions(
       default: gitUser.email,
       prompt: 'if-no-arg',
     },
+    template: {
+      type: 'list',
+      describe: 'template',
+      default: 'default',
+      prompt: askForTemplate ? 'if-no-arg' : 'never',
+      choices: availableTemplates,
+    },
     license: {
       type: 'list',
       describe: 'license',
       choices: availableLicenses(),
       prompt: 'if-no-arg',
-    },
-    template: {
-      type: 'list',
-      describe: 'template',
-      default: 'default',
-      choices: getAvailableTemplates(templateRoot),
     },
     ...extraOptions,
   };
@@ -192,13 +192,17 @@ export async function create(appName: string, options: Options) {
       ? path.basename(process.cwd())
       : firstArg;
     const packageDir = useCurrentDir ? process.cwd() : path.resolve(name);
-    const templateRoot = options.templateRoot;
+    const { templateRoot, alwaysAskForTemplate = false } = options;
 
     if (isOccupied(packageDir)) {
       throw new Error(`${packageDir} is not empty directory.`);
     }
 
-    const yargsOption = await getYargsOptions(templateRoot, options.extra);
+    const yargsOption = await getYargsOptions(
+      templateRoot,
+      alwaysAskForTemplate,
+      options.extra,
+    );
     const args = await yargsInteractive()
       .usage('$0 <name> [args]')
       .interactive(yargsOption as any);

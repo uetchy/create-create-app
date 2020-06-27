@@ -23,5 +23,6 @@ https://github.com/uetchy/create-whatever/blob/master/README.md
 
 create('create-whatever', {
   templateRoot,
+  alwaysAskForTemplate: true,
   caveat,
 });

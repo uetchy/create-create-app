@@ -4,7 +4,7 @@ import Handlebars from 'handlebars';
 import isUtf8 from 'is-utf8';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { Config } from '.';
+import { View } from '.';
 
 function trim(text: string) {
   return text.replace(/[\r\n]/g, '');
@@ -68,7 +68,13 @@ export function getAvailableTemplates(root: string) {
   return fs.readdirSync(root).filter((d) => !d.startsWith('.'));
 }
 
-export async function copy(args: Config) {
+export interface CopyConfig {
+  packageDir: string;
+  templateDir: string;
+  view: View;
+}
+
+export async function copy(args: CopyConfig) {
   const templateFiles = await globby(args.templateDir, { dot: true });
   for (const sourcePath of templateFiles) {
     const relativePath = path.relative(args.templateDir, sourcePath);

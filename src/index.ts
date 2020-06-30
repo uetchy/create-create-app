@@ -35,8 +35,10 @@ export interface Options {
   alwaysAskForTemplate?: boolean;
   handleName?: (name: string) => string | Promise<string>;
   extra?: Option;
-  caveat?: string | ((options: AfterHookOptions) => string | void);
-  after?: (options: AfterHookOptions) => void;
+  caveat?:
+    | string
+    | ((options: AfterHookOptions) => string | void | Promise<string | void>);
+  after?: (options: AfterHookOptions) => void | Promise<void>;
 }
 
 export interface View {
@@ -314,7 +316,7 @@ export async function create(appName: string, options: Options) {
 
     // after hook script
     if (options.after) {
-      options.after(afterHookOptions);
+      await Promise.resolve(options.after(afterHookOptions));
     }
 
     console.log(`\nSuccess! Created ${chalk.bold.cyan(name)}.`);

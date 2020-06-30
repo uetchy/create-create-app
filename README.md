@@ -17,7 +17,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [Quick Start](#quick-start)
-  - [1. `yarn create create-app`](#1-yarn-create-create-app)
+  - [1. `npm create create-app`](#1-npm-create-create-app)
   - [2. Edit templates](#2-edit-templates)
     - [TypeScript](#typescript)
   - [3. Publish package to npm](#3-publish-package-to-npm)

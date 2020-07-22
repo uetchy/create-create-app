@@ -65,9 +65,13 @@ export interface AfterHookOptions {
   installNpmPackage: (packageName: string) => Promise<void>;
 }
 
-async function getGitUser() {
-  const config = await gitconfig.get({ location: 'global' });
-  return config.user;
+async function getGitUser(): Promise<{ name?: string; email?: string }> {
+  try {
+    const config = await gitconfig.get({ location: 'global' });
+    return config.user;
+  } catch (err) {
+    return {};
+  }
 }
 
 function spawnPromise(
@@ -103,7 +107,7 @@ async function installDeps(rootDir: string, useYarn: boolean) {
   }
 }
 
-async function IsYarnAvaialable() {
+async function IsYarnAvailable() {
   try {
     await execa('yarnpkg', ['--version']);
     return true;
@@ -221,7 +225,7 @@ export async function create(appName: string, options: Options) {
       throw new Error('No template found');
     }
 
-    const filterdArgs = Object.entries<string>(args)
+    const filteredArgs = Object.entries<string>(args)
       .filter(
         (arg) =>
           arg[0].match(/^[^$_]/) &&
@@ -235,7 +239,7 @@ export async function create(appName: string, options: Options) {
       );
 
     const view = {
-      ...filterdArgs,
+      ...filteredArgs,
       name,
       year,
       contact,
@@ -260,15 +264,20 @@ export async function create(appName: string, options: Options) {
     fs.writeFileSync(path.resolve(packageDir, 'LICENSE'), licenseText);
 
     // install dependencies using yarn / npm
-    const useYarn = await IsYarnAvaialable();
+    const useYarn = await IsYarnAvailable();
     if (exists('package.json', packageDir)) {
       console.log(`Installing dependencies.`);
       await installDeps(packageDir, useYarn);
     }
 
     // init git
-    await initGit(packageDir);
-    console.log('\nInitialized a git repository');
+    try {
+      await initGit(packageDir);
+      console.log('\nInitialized a git repository');
+    } catch (err) {
+      if (err.exitCode == 127) return; // no git available
+      throw err;
+    }
 
     const run = (command: string, options: CommonOptions<string> = {}) => {
       const args = command.split(' ');
@@ -309,7 +318,7 @@ export async function create(appName: string, options: Options) {
       run,
       installNpmPackage,
       answers: {
-        ...filterdArgs,
+        ...filteredArgs,
         contact,
       },
     };

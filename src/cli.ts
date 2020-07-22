@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import { resolve } from 'path';
 import { AfterHookOptions, create } from '.';
 
-const templateRoot = resolve(__dirname, '../templates');
+const templateRoot = resolve(__dirname, '..', 'templates');
 const caveat = ({ name, template }: AfterHookOptions) => {
   let text = `
 cd ${chalk.bold.green(name)}

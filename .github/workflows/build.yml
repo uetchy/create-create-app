@@ -1,4 +1,4 @@
-name: create-create-app
+name: build
 on:
   push:
     branches:
@@ -10,10 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
-      - uses: geertvdc/setup-hub@master
-      - run: git switch master
-      - run: yarn install
-      - run: yarn release:trigger
+      - run: |
+          yarn install
+          yarn build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

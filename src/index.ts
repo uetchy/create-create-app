@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import { CommonSpawnOptions } from 'child_process';
 import { spawn } from 'cross-spawn';
+import { EpicfailError } from 'epicfail';
 import execa, { CommonOptions, ExecaChildProcess } from 'execa';
 import fs from 'fs';
 import gitconfig from 'gitconfig';
@@ -103,7 +104,7 @@ async function installDeps(rootDir: string, useYarn: boolean) {
   try {
     await spawnPromise(command, args, { stdio: 'inherit' });
   } catch (err) {
-    throw new Error(`installDeps failed: ${err}`);
+    error(`installDeps failed: ${err}`);
   }
 }
 
@@ -188,165 +189,166 @@ async function getYargsOptions(
   return yargOption;
 }
 
+function error(message: string): void {
+  const err = new EpicfailError(message);
+  err.epicfail = { message: false, stacktrace: false, env: false };
+  throw err;
+}
+
 export async function create(appName: string, options: Options) {
-  try {
-    const firstArg = process.argv[2];
-    if (firstArg === undefined) {
-      throw new Error(`${appName} <name>`);
-    }
-    const useCurrentDir = firstArg === '.';
-    const name: string = useCurrentDir
-      ? path.basename(process.cwd())
-      : options.handleName
-      ? await Promise.resolve(options.handleName(firstArg))
-      : firstArg;
-    const packageDir = useCurrentDir ? process.cwd() : path.resolve(name);
-    const { templateRoot, alwaysAskForTemplate = false } = options;
+  const firstArg = process.argv[2];
+  if (firstArg === undefined) {
+    error(`${appName} <name>`);
+  }
+  const useCurrentDir = firstArg === '.';
+  const name: string = useCurrentDir
+    ? path.basename(process.cwd())
+    : options.handleName
+    ? await Promise.resolve(options.handleName(firstArg))
+    : firstArg;
+  const packageDir = useCurrentDir ? process.cwd() : path.resolve(name);
+  const { templateRoot, alwaysAskForTemplate = false } = options;
 
-    if (isOccupied(packageDir)) {
-      throw new Error(`${packageDir} is not empty directory.`);
-    }
+  if (isOccupied(packageDir)) {
+    error(`${packageDir} is not empty directory.`);
+  }
 
-    const yargsOption = await getYargsOptions(
-      templateRoot,
-      alwaysAskForTemplate,
-      options.extra,
-    );
-    const args = await yargsInteractive()
-      .usage('$0 <name> [args]')
-      .interactive(yargsOption as any);
+  const yargsOption = await getYargsOptions(
+    templateRoot,
+    alwaysAskForTemplate,
+    options.extra,
+  );
+  const args = await yargsInteractive()
+    .usage('$0 <name> [args]')
+    .interactive(yargsOption as any);
 
-    const template = args.template;
-    const templateDir = path.resolve(templateRoot, template);
-    const year = new Date().getFullYear();
-    const contact = getContact(args.author, args.email);
+  const template = args.template;
+  const templateDir = path.resolve(templateRoot, template);
+  const year = new Date().getFullYear();
+  const contact = getContact(args.author, args.email);
 
-    if (!fs.existsSync(templateDir)) {
-      throw new Error('No template found');
-    }
+  if (!fs.existsSync(templateDir)) {
+    error('No template found');
+  }
 
-    const filteredArgs = Object.entries<string>(args)
-      .filter(
-        (arg) =>
-          arg[0].match(/^[^$_]/) &&
-          !['interactive', 'template'].includes(arg[0]),
-      )
-      .reduce(
-        (sum, cur) => ((sum[cur[0]] = cur[1]), sum),
-        {} as {
-          [key in keyof View]: View[key];
-        },
-      );
-
-    const view = {
-      ...filteredArgs,
-      name,
-      year,
-      contact,
-    };
-
-    // copy files from template
-    console.log(`\nCreating a new package in ${chalk.green(packageDir)}.\n`);
-    await copy({
-      packageDir,
-      templateDir,
-      view,
-    });
-
-    // create LICENSE
-    const license = makeLicenseSync(args.license, {
-      year,
-      project: name,
-      description: args.description,
-      organization: getContact(args.author, args.email),
-    });
-    const licenseText = license.header + license.text + license.warranty;
-    fs.writeFileSync(path.resolve(packageDir, 'LICENSE'), licenseText);
-
-    // install dependencies using yarn / npm
-    const useYarn = await IsYarnAvailable();
-    if (exists('package.json', packageDir)) {
-      console.log(`Installing dependencies.`);
-      await installDeps(packageDir, useYarn);
-    }
-
-    // init git
-    try {
-      await initGit(packageDir);
-      console.log('\nInitialized a git repository');
-    } catch (err) {
-      if (err.exitCode == 127) return; // no git available
-      throw err;
-    }
-
-    const run = (command: string, options: CommonOptions<string> = {}) => {
-      const args = command.split(' ');
-      return execa(args[0], args.slice(1), {
-        stdio: 'inherit',
-        cwd: packageDir,
-        ...options,
-      });
-    };
-
-    const installNpmPackage = (packageName: string): Promise<void> => {
-      return new Promise((resolve, reject) => {
-        let command: string;
-        let args: string[];
-        if (useYarn) {
-          command = 'yarnpkg';
-          args = ['--cwd', packageDir, 'add', packageName];
-        } else {
-          command = 'npm';
-          args = ['install', '-D', packageName, '--prefix', packageDir];
-        }
-        const child = spawn(command, args, { stdio: 'inherit' });
-        child.on('close', (code) => {
-          if (code !== 0) {
-            return reject(`installDeps failed: ${command} ${args.join(' ')}`);
-          }
-          resolve();
-        });
-      });
-    };
-
-    const afterHookOptions = {
-      name,
-      packageDir,
-      template,
-      templateDir,
-      year,
-      run,
-      installNpmPackage,
-      answers: {
-        ...filteredArgs,
-        contact,
+  const filteredArgs = Object.entries<string>(args)
+    .filter(
+      (arg) =>
+        arg[0].match(/^[^$_]/) && !['interactive', 'template'].includes(arg[0]),
+    )
+    .reduce(
+      (sum, cur) => ((sum[cur[0]] = cur[1]), sum),
+      {} as {
+        [key in keyof View]: View[key];
       },
-    };
+    );
 
-    // after hook script
-    if (options.after) {
-      await Promise.resolve(options.after(afterHookOptions));
-    }
+  const view = {
+    ...filteredArgs,
+    name,
+    year,
+    contact,
+  };
 
-    console.log(`\nSuccess! Created ${chalk.bold.cyan(name)}.`);
+  // copy files from template
+  console.log(`\nCreating a new package in ${chalk.green(packageDir)}.\n`);
+  await copy({
+    packageDir,
+    templateDir,
+    view,
+  });
 
-    if (options.caveat) {
-      switch (typeof options.caveat) {
-        case 'string':
-          console.log(options.caveat);
-          break;
-        case 'function':
-          const response = await Promise.resolve(
-            options.caveat(afterHookOptions),
-          );
-          if (response) {
-            console.log(response);
-          }
-          break;
-        default:
-      }
-    }
+  // create LICENSE
+  const license = makeLicenseSync(args.license, {
+    year,
+    project: name,
+    description: args.description,
+    organization: getContact(args.author, args.email),
+  });
+  const licenseText = license.header + license.text + license.warranty;
+  fs.writeFileSync(path.resolve(packageDir, 'LICENSE'), licenseText);
+
+  // install dependencies using yarn / npm
+  const useYarn = await IsYarnAvailable();
+  if (exists('package.json', packageDir)) {
+    console.log(`Installing dependencies.`);
+    await installDeps(packageDir, useYarn);
+  }
+
+  // init git
+  try {
+    await initGit(packageDir);
+    console.log('\nInitialized a git repository');
   } catch (err) {
-    console.log(chalk.red(`Error: ${err.message}`));
+    if (err.exitCode == 127) return; // no git available
+    throw err;
+  }
+
+  const run = (command: string, options: CommonOptions<string> = {}) => {
+    const args = command.split(' ');
+    return execa(args[0], args.slice(1), {
+      stdio: 'inherit',
+      cwd: packageDir,
+      ...options,
+    });
+  };
+
+  const installNpmPackage = (packageName: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      let command: string;
+      let args: string[];
+      if (useYarn) {
+        command = 'yarnpkg';
+        args = ['--cwd', packageDir, 'add', packageName];
+      } else {
+        command = 'npm';
+        args = ['install', '-D', packageName, '--prefix', packageDir];
+      }
+      const child = spawn(command, args, { stdio: 'inherit' });
+      child.on('close', (code) => {
+        if (code !== 0) {
+          return reject(`installDeps failed: ${command} ${args.join(' ')}`);
+        }
+        resolve();
+      });
+    });
+  };
+
+  const afterHookOptions = {
+    name,
+    packageDir,
+    template,
+    templateDir,
+    year,
+    run,
+    installNpmPackage,
+    answers: {
+      ...filteredArgs,
+      contact,
+    },
+  };
+
+  // after hook script
+  if (options.after) {
+    await Promise.resolve(options.after(afterHookOptions));
+  }
+
+  console.log(`\nSuccess! Created ${chalk.bold.cyan(name)}.`);
+
+  if (options.caveat) {
+    switch (typeof options.caveat) {
+      case 'string':
+        console.log(options.caveat);
+        break;
+      case 'function':
+        const response = await Promise.resolve(
+          options.caveat(afterHookOptions),
+        );
+        if (response) {
+          console.log(response);
+        }
+        break;
+      default:
+    }
   }
 }

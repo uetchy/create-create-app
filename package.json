@@ -12,10 +12,11 @@
     "test": "echo notest"
   },
   "dependencies": {
-    "@types/inquirer": "^6.5.0",
+    "@types/inquirer": "^7.3.0",
     "@types/yargs-interactive": "^2.1.1",
     "chalk": "^4.1.0",
     "cross-spawn": "^7.0.3",
+    "epicfail": "^0.4.0",
     "execa": "^4.0.3",
     "gitconfig": "^2.0.8",
     "globby": "^11.0.1",
@@ -28,7 +29,7 @@
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.2",
-    "@types/node": "^14.0.23",
+    "@types/node": "^14.0.24",
     "@types/uuid": "^8.0.0",
     "doctoc": "^1.4.0",
     "husky": "^4.2.5",

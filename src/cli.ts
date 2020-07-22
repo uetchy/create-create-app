@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
 import chalk from 'chalk';
+import epicfail from 'epicfail';
 import { resolve } from 'path';
 import { AfterHookOptions, create } from '.';
+
+epicfail();
 
 const templateRoot = resolve(__dirname, '..', 'templates');
 const caveat = ({ name, template }: AfterHookOptions) => {

@@ -4,11 +4,10 @@
   "version": "5.6.1",
   "author": "Yasuaki Uechi <y@uechi.io>",
   "scripts": {
-    "build": "shx rm -rf lib && NODE_ENV=production tsc && shx chmod +x lib/cli.js",
-    "dev": "tsc -w",
+    "build": "shx rm -rf lib && yarn build:ts --minify --dts && shx chmod +x lib/cli.js",
+    "build:ts": "tsup src/{index,cli}.ts -d lib --target es2015",
+    "dev": "yarn build:ts --watch",
     "prepublishOnly": "yarn build",
-    "release:prepare": "shipjs prepare",
-    "release:trigger": "shipjs trigger",
     "test": "echo notest"
   },
   "dependencies": {
@@ -16,7 +15,7 @@
     "@types/yargs-interactive": "^2.1.1",
     "chalk": "^4.1.0",
     "cross-spawn": "^7.0.3",
-    "epicfail": "^0.4.0",
+    "epicfail": "^0.4.2",
     "execa": "^4.0.3",
     "gitconfig": "^2.0.8",
     "globby": "^11.0.1",
@@ -34,11 +33,10 @@
     "doctoc": "^1.4.0",
     "husky": "^4.2.5",
     "prettier": "^2.0.5",
-    "prettier-plugin-organize-imports": "^1.1.1",
     "pretty-quick": "^2.0.1",
-    "shipjs": "^0.20.1",
     "shx": "^0.3.2",
     "ts-node": "^8.10.2",
+    "tsup": "^3.1.1",
     "typescript": "^3.9.7"
   },
   "types": "lib/index.d.ts",

@@ -139,8 +139,8 @@ Generates unique UUID string.
 You can find the app config in `src/cli.ts` (or `src/cli.js` if you chose `default` template).
 
 ```ts
-import {resolve} from 'path';
-import {create} from 'create-create-app';
+import { resolve } from 'path';
+import { create } from 'create-create-app';
 
 create('create-greet', {
   templateRoot: resolve(__dirname, '../templates'),
@@ -152,9 +152,9 @@ create('create-greet', {
       prompt: 'if-no-arg',
     },
   },
-  after: ({installNpmPackage}) => installNpmPackage('chalk'),
+  after: ({ installNpmPackage }) => installNpmPackage('chalk'),
   caveat: `Your app has been created successfuly!`,
-  handleName: (name) => `package-prefix-${name}`
+  handleName: (name) => `package-prefix-${name}`,
 });
 ```
 

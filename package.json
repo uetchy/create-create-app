@@ -5,7 +5,7 @@
   "author": "Yasuaki Uechi <y@uechi.io>",
   "scripts": {
     "build": "shx rm -rf lib && yarn build:ts --minify --dts && shx chmod +x lib/cli.js",
-    "build:ts": "tsup src/{index,cli}.ts -d lib --target es2015",
+    "build:ts": "tsup src/index.ts src/cli.ts -d lib --target es2015",
     "dev": "yarn build:ts --watch",
     "prepublishOnly": "yarn build",
     "test": "echo notest"

@@ -4,8 +4,8 @@
   "version": "5.6.1",
   "author": "Yasuaki Uechi <y@uechi.io>",
   "scripts": {
-    "build": "shx rm -rf lib && yarn build:ts --minify --dts && shx chmod +x lib/cli.js",
-    "build:ts": "tsup src/index.ts src/cli.ts -d lib --target es2015",
+    "build": "shx rm -rf lib && yarn build:ts --minify --dts",
+    "build:ts": "tsup src/index.ts src/cli.ts -d lib",
     "dev": "yarn build:ts --watch",
     "prepublishOnly": "yarn build",
     "test": "echo notest"

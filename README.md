@@ -1,9 +1,13 @@
-<h1 align="center">✨ Create Create App<br/><br/>
-<img src="https://raw.githubusercontent.com/uetchy/create-create-app/master/.github/assets/ss1.png" alt="screenshot"/><br/>
+<div align="center">
+<h1 align="center">✨ Create Create App</h1>
+<h6>Create your own `create-something` app.</h6>
+<br/>
+<img src="https://raw.githubusercontent.com/uetchy/create-create-app/master/.github/assets/ss1.png" alt="screenshot"/>
+<br/><br/>
 <a href="https://npmjs.org/package/create-create-app"><img src="https://img.shields.io/npm/v/create-create-app.svg"></a>
+<a href="https://npmjs.org/package/create-create-app"><img src="https://flat.badgen.net/npm/dt/create-create-app"></a>
 <a href="https://github.com/uetchy/create-create-app/actions?workflow=test"><img src="https://github.com/uetchy/create-create-app/workflows/test/badge.svg"/></a>
-</h1>
-<b align="center">Create your own `create-something` app.</b>
+</div>
 
 ## Why?
 
@@ -245,7 +249,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://uechi.io/"><img src="https://avatars0.githubusercontent.com/u/431808?v=4?s=100" width="100px;" alt=""/><br /><sub><b>uetchy</b></sub></a><br /><a href="https://github.com/uetchy/create-create-app/commits?author=uetchy" title="Code">💻</a></td>
+    <td align="center"><a href="https://uechi.io/"><img src="https://avatars0.githubusercontent.com/u/431808?v=4?s=100" width="100px;" alt=""/><br /><sub><b>uetchy</b></sub></a><br /><a href="https://github.com/uetchy/create-create-app/commits?author=uetchy" title="Code">💻</a> <a href="https://github.com/uetchy/create-create-app/commits?author=uetchy" title="Documentation">📖</a></td>
     <td align="center"><a href="https://vivliostyle.org/"><img src="https://avatars1.githubusercontent.com/u/3324737?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Shinyu Murakami</b></sub></a><br /><a href="https://github.com/uetchy/create-create-app/commits?author=MurakamiShinyu" title="Code">💻</a></td>
   </tr>
 </table>

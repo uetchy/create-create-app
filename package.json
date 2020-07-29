@@ -8,6 +8,7 @@
     "build:ts": "tsup src/index.ts src/cli.ts -d lib",
     "dev": "yarn build:ts --watch",
     "prepublishOnly": "yarn build",
+    "release": "release-it",
     "test": "echo notest"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "yargs-interactive": "^3.0.0"
   },
   "devDependencies": {
+    "@release-it/conventional-changelog": "^1.1.4",
     "@types/cross-spawn": "^6.0.2",
     "@types/node": "^14.0.24",
     "@types/uuid": "^8.0.0",
@@ -35,6 +37,7 @@
     "husky": "^4.2.5",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
+    "release-it": "^13.6.6",
     "shx": "^0.3.2",
     "ts-node": "^8.10.2",
     "tsup": "^3.1.1",

@@ -1,0 +1,11 @@
+# https://github.com/release-it/release-it/blob/master/config/release-it.json
+git:
+  commitMessage: 'chore: release v${version}'
+github:
+  release: true
+plugins:
+  '@release-it/conventional-changelog': # https://github.com/release-it/conventional-changelog
+    preset: angular
+    infile: CHANGELOG.md
+hooks:
+  before:init: yarn test

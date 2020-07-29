@@ -38,7 +38,7 @@
   - [`after`](#after)
   - [`handleName`](#handlename)
 - [Contribution](#contribution)
-- [Contributors ✨](#contributors-)
+  - [Contributors ✨](#contributors-)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -236,7 +236,7 @@ Modify `name` property.
 
 PRs are always welcome!
 
-## Contributors ✨
+### Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
@@ -246,6 +246,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://uechi.io/"><img src="https://avatars0.githubusercontent.com/u/431808?v=4?s=100" width="100px;" alt=""/><br /><sub><b>uetchy</b></sub></a><br /><a href="https://github.com/uetchy/create-create-app/commits?author=uetchy" title="Code">💻</a></td>
+    <td align="center"><a href="https://vivliostyle.org/"><img src="https://avatars1.githubusercontent.com/u/3324737?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Shinyu Murakami</b></sub></a><br /><a href="https://github.com/uetchy/create-create-app/commits?author=MurakamiShinyu" title="Code">💻</a></td>
   </tr>
 </table>
 

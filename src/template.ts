@@ -3,6 +3,7 @@ import globby from 'globby';
 import Handlebars from 'handlebars';
 import isUtf8 from 'is-utf8';
 import path from 'path';
+import slash from 'slash';
 import { v4 as uuidv4 } from 'uuid';
 import { View } from '.';
 
@@ -75,7 +76,7 @@ export interface CopyConfig {
 }
 
 export async function copy(args: CopyConfig) {
-  const templateFiles = await globby(args.templateDir, { dot: true });
+  const templateFiles = await globby(slash(args.templateDir), { dot: true });
   for (const sourcePath of templateFiles) {
     const relativePath = path.relative(args.templateDir, sourcePath);
     const targetPath = format(

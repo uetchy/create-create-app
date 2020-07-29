@@ -1,3 +1,14 @@
+# [5.7.0](https://github.com/uetchy/create-create-app/compare/v5.6.1...v5.7.0) (2020-07-29)
+
+### Bug Fixes
+
+- avoid crashes when git is unavailable ([2f3e50a](https://github.com/uetchy/create-create-app/commit/2f3e50a033c05b42924b8c356a46c97e4c4d05b8))
+- failed to copy template files on Windows ([#17](https://github.com/uetchy/create-create-app/issues/17)) ([1e8d6b7](https://github.com/uetchy/create-create-app/commit/1e8d6b7b36fbd0ed23712751854a126f41b44c6b))
+
+### Features
+
+- add types ([be72e93](https://github.com/uetchy/create-create-app/commit/be72e9331232f00daeafab9907792dcc4d7c9aa8))
+
 ## [5.0.1](https://github.com/uetchy/create-create-app/compare/v5.0.0...v5.0.1) (2020-06-24)
 
 # [5.0.0](https://github.com/uetchy/create-create-app/compare/v4.1.0...v5.0.0) (2019-10-09)

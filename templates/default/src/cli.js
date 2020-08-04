@@ -3,7 +3,7 @@
 const { resolve } = require('path');
 const { create } = require('create-create-app');
 
-const templateRoot = resolve(__dirname, '../templates');
+const templateRoot = resolve(__dirname, '..', 'templates');
 
 const caveat = `
 This is a caveat!

@@ -30,10 +30,11 @@
   - [Helper functions](#helper-functions)
     - [`upper`](#upper)
     - [`lower`](#lower)
-    - [`camel`](#camel)
     - [`capital`](#capital)
+    - [`camel`](#camel)
     - [`snake`](#snake)
     - [`kebab`](#kebab)
+    - [`space`](#space)
     - [`uuid`](#uuid)
 - [Config](#config)
   - [`extra`](#extra)
@@ -94,6 +95,8 @@ Edit files inside `templates/default`. File names, directory names, and text fil
 
 ### Helper functions
 
+In the following example, we assume that variable `name` is `create-react-app`.
+
 #### `upper`
 
 Output text in UPPERCASE.
@@ -106,17 +109,18 @@ Output text in lowercase.
 
 `{{lower name}}` becomes `create-react-app`.
 
+#### `capital`
+
+Output text in CapitalCase.
+
+- `{{capital name}}` becomes `CreateReactApp`
+- `{{capital name space=true}}` becomes `Create React App`.
+
 #### `camel`
 
 Output text in camelCase.
 
 `{{camel name}}` becomes `createReactApp`.
-
-#### `capital`
-
-Output text in CapitalCase.
-
-`{{capital name}}` becomes `CreateReactApp`, and `{{capital name space=true}}` becomes `Create React App`.
 
 #### `snake`
 
@@ -129,6 +133,12 @@ Output text in snake_case.
 Output text in kebab-case.
 
 `{{kebab name}}` becomes `create-react-app`.
+
+#### `space`
+
+Replace all word separators with single space.
+
+`{{space name}}` becomes `create react app`
 
 #### `uuid`
 

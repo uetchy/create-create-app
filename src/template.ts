@@ -7,6 +7,15 @@ import slash from 'slash';
 import { v4 as uuidv4 } from 'uuid';
 import { View } from '.';
 
+function split(word: string): string[] {
+  return word.split(/[-_\s]+/);
+}
+
+function space(word: string): string {
+  return split(trim(word)).join(' ');
+}
+Handlebars.registerHelper('space', space);
+
 function trim(text: string) {
   return text.replace(/[\r\n]/g, '');
 }
@@ -17,15 +26,15 @@ function upper(text: string) {
 }
 Handlebars.registerHelper('upper', upper);
 
-function lower(text: string) {
+function lower(text: string, options?: any) {
+  const space = options && options.hash && options.hash.space;
   return trim(text).toLowerCase();
 }
 Handlebars.registerHelper('lower', lower);
 
 function capital(text: string, options?: any) {
   const space = options && options.hash && options.hash.space;
-  return trim(text)
-    .split(/[-_\s]+/)
+  return split(trim(text))
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
     .join(space ? ' ' : '');
 }

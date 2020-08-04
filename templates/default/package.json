@@ -2,14 +2,14 @@
   "name": "{{kebab name}}",
   "description": "{{description}}",
   "version": "0.0.0",
-  "dependencies": {
-    "create-create-app": "^5.5.0"
-  },
   "author": "{{contact}}",
-  "license": "{{license}}",
+  "dependencies": {
+    "create-create-app": "^5.7.0"
+  },
   "bin": "src/cli.js",
   "files": [
     "src",
     "templates"
-  ]
+  ],
+  "license": "{{license}}"
 }

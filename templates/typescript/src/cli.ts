@@ -3,7 +3,7 @@
 import { create } from 'create-create-app';
 import { resolve } from 'path';
 
-const templateRoot = resolve(__dirname, '../templates');
+const templateRoot = resolve(__dirname, '..', 'templates');
 
 const caveat = `
 This is a caveat!

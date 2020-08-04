@@ -17,11 +17,12 @@ npx {{kebab name}} <name>
 - \{{name}} => {{name}}
 - \{{upper name}} => {{upper name}}
 - \{{lower name}} => {{lower name}}
-- \{{camel name}} => {{camel name}}
 - \{{capital name}} => {{capital name}}
 - \{{capital name space=true}} => {{capital name space=true}}
+- \{{camel name}} => {{camel name}}
 - \{{snake name}} => {{snake name}}
 - \{{kebab name}} => {{kebab name}}
+- \{{space name}} => {{space name}}
 - \{{uuid}} => {{uuid}}
 - \{{upper (uuid)}} => {{upper (uuid)}}
 - \{{description}} => {{description}}

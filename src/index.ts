@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import { CommonSpawnOptions } from 'child_process';
 import { spawn } from 'cross-spawn';
+import epicfail from 'epicfail';
 import execa, { CommonOptions, ExecaChildProcess } from 'execa';
 import fs from 'fs';
 import gitconfig from 'gitconfig';
@@ -65,7 +66,7 @@ export interface AfterHookOptions {
   installNpmPackage: (packageName: string) => Promise<void>;
 }
 
-class CLIError extends Error {
+export class CLIError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'CLIError';
@@ -196,6 +197,10 @@ async function getYargsOptions(
 }
 
 export async function create(appName: string, options: Options) {
+  epicfail({
+    assertExpected: (err) => err.name === 'CLIError',
+  });
+
   const firstArg = process.argv[2];
   if (firstArg === undefined) {
     throw new CLIError(`${appName} <name>`);

@@ -44,7 +44,7 @@ ${chalk.yellow(
 
 create('create-create-app', {
   templateRoot,
-  alwaysAskForTemplate: true,
+  promptForTemplate: true,
+  modifyName: (name) => (name.startsWith('create-') ? name : `create-${name}`),
   caveat,
-  handleName: (name) => (name.startsWith('create-') ? name : `create-${name}`),
 });

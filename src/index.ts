@@ -33,8 +33,8 @@ export interface Option {
 
 export interface Options {
   templateRoot: string;
-  alwaysAskForTemplate?: boolean;
-  handleName?: (name: string) => string | Promise<string>;
+  promptForTemplate?: boolean;
+  modifyName?: (name: string) => string | Promise<string>;
   extra?: Option;
   caveat?:
     | string
@@ -144,13 +144,13 @@ function isOccupied(dirname: string) {
 
 async function getYargsOptions(
   templateRoot: string,
-  alwaysAskForTemplate: boolean,
+  promptForTemplate: boolean,
   extraOptions: Option = {},
 ) {
   const gitUser = await getGitUser();
   const availableTemplates = getAvailableTemplates(templateRoot);
   const isMultipleTemplates = availableTemplates.length > 1;
-  const askForTemplate = isMultipleTemplates && alwaysAskForTemplate;
+  const askForTemplate = isMultipleTemplates && promptForTemplate;
   const yargOption: Option = {
     interactive: { default: true },
     description: {
@@ -203,11 +203,11 @@ export async function create(appName: string, options: Options) {
   const useCurrentDir = firstArg === '.';
   const name: string = useCurrentDir
     ? path.basename(process.cwd())
-    : options.handleName
-    ? await Promise.resolve(options.handleName(firstArg))
+    : options.modifyName
+    ? await Promise.resolve(options.modifyName(firstArg))
     : firstArg;
   const packageDir = useCurrentDir ? process.cwd() : path.resolve(name);
-  const { templateRoot, alwaysAskForTemplate = false } = options;
+  const { templateRoot, promptForTemplate = false } = options;
 
   if (isOccupied(packageDir)) {
     error(`${packageDir} is not empty directory.`);
@@ -215,7 +215,7 @@ export async function create(appName: string, options: Options) {
 
   const yargsOption = await getYargsOptions(
     templateRoot,
-    alwaysAskForTemplate,
+    promptForTemplate,
     options.extra,
   );
   const args = await yargsInteractive()

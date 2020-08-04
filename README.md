@@ -37,11 +37,13 @@
     - [`space`](#space)
     - [`uuid`](#uuid)
 - [Config](#config)
-  - [`extra`](#extra)
-  - [`caveat`](#caveat)
-    - [AfterHookOptions](#afterhookoptions)
-  - [`after`](#after)
-  - [`handleName`](#handlename)
+  - [templateRoot (required)](#templateroot-required)
+  - [promptForTemplate (default: `false`)](#promptfortemplate-default-false)
+  - [extra (default: `undefined`)](#extra-default-undefined)
+  - [modifyName (default: `undefined`)](#modifyname-default-undefined)
+  - [after (default: `undefined`)](#after-default-undefined)
+  - [caveat (default: `undefined`)](#caveat-default-undefined)
+  - [AfterHookOptions](#afterhookoptions)
 - [Contribution](#contribution)
   - [Contributors ✨](#contributors-)
 
@@ -151,14 +153,14 @@ Generates unique UUID string.
 
 ## Config
 
-You can find the app config in `src/cli.ts` (or `src/cli.js` if you chose `default` template).
+You can find the app config in `src/cli.js` (or `src/cli.ts` if you chose `typescript` template).
 
 ```ts
 import { resolve } from 'path';
 import { create } from 'create-create-app';
 
 create('create-greet', {
-  templateRoot: resolve(__dirname, '../templates'),
+  templateRoot: resolve(__dirname, '..', 'templates'),
   extra: {
     language: {
       type: 'input',
@@ -167,15 +169,27 @@ create('create-greet', {
       prompt: 'if-no-arg',
     },
   },
+  modifyName: (name) => `package-prefix-${name}`,
   after: ({ installNpmPackage }) => installNpmPackage('chalk'),
-  caveat: `Your app has been created successfuly!`,
-  handleName: (name) => `package-prefix-${name}`,
+  caveat: `Your app has been created successfully!`,
 });
 ```
 
+### templateRoot (required)
+
 `templateRoot` set to `path.resolve(__dirname, '../templates')`. You can change it to whereever you want.
 
-### `extra`
+### promptForTemplate (default: `false`)
+
+Ask users to choose a template to be used for initialization only if `promptForTemplate` is set `true` AND there's multiple templates found in `templates/`.
+
+With `promptForTemplate` set `false`, users still can specify template via command-line flag `--template`:
+
+```
+create-something <name> --template <template>
+```
+
+### extra (default: `undefined`)
 
 `object | undefined`
 
@@ -183,7 +197,19 @@ Extra options passed to the app. These options will be accessible as a cli optio
 
 You can find all possible options in [yargs-interactive documentation](https://github.com/nanovazquez/yargs-interactive#options).
 
-### `caveat`
+### modifyName (default: `undefined`)
+
+`(name: string) => string | Promise<string>`
+
+Modify `name` property.
+
+### after (default: `undefined`)
+
+`(options: AfterHookOptions) => void`
+
+After hook script that runs after the initialization.
+
+### caveat (default: `undefined`)
 
 `string | ((options: AfterHookOptions) => string | void) | undefined`
 
@@ -211,7 +237,7 @@ create('create-greet', {
 });
 ```
 
-#### AfterHookOptions
+### AfterHookOptions
 
 ```typescript
 {
@@ -233,18 +259,6 @@ create('create-greet', {
   installNpmPackage: (packageName: string) => Promise<void>; // use yarn if available
 }
 ```
-
-### `after`
-
-`(options: AfterHookOptions) => void`
-
-After hook script that runs after the initialization.
-
-### `handleName`
-
-`(name: string) => string | Promise<string>`
-
-Modify `name` property.
 
 ## Contribution
 

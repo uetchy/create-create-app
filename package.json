@@ -1,7 +1,7 @@
 {
   "name": "create-create-app",
   "description": "Create your own `create-something` app.",
-  "version": "5.7.0",
+  "version": "6.0.0",
   "author": "Yasuaki Uechi <y@uechi.io>",
   "scripts": {
     "build": "shx rm -rf lib && yarn build:ts --minify --dts",

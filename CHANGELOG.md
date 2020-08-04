@@ -1,3 +1,19 @@
+# [6.0.0](https://github.com/uetchy/create-create-app/compare/v5.7.0...v6.0.0) (2020-08-04)
+
+### Bug Fixes
+
+- rename to modifyName ([6fba9b9](https://github.com/uetchy/create-create-app/commit/6fba9b97bd4f8cb460ffb515991adcaeac8cc99e))
+- update epicfail ([d55fdca](https://github.com/uetchy/create-create-app/commit/d55fdcae92c9068fcbd1c6ad47f552b13e52aa6a))
+
+### Features
+
+- init epicfail inside create function ([b7168ad](https://github.com/uetchy/create-create-app/commit/b7168ade460dbb0931ac0ed71d471f92d4804b6b))
+- new helper 'space' ([996861e](https://github.com/uetchy/create-create-app/commit/996861e73e84db6e33f3fda4a95a75ffa240c0c2))
+
+### BREAKING CHANGES
+
+- handleName => modifyName
+
 # [5.7.0](https://github.com/uetchy/create-create-app/compare/v5.6.1...v5.7.0) (2020-07-29)
 
 ### Bug Fixes

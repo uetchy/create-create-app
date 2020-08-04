@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "author": "{{contact}}",
   "dependencies": {
-    "create-create-app": "^5.7.0"
+    "create-create-app": "^6.0.0"
   },
   "bin": "src/cli.js",
   "files": [

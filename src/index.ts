@@ -1,7 +1,6 @@
 import chalk from 'chalk';
 import { CommonSpawnOptions } from 'child_process';
 import { spawn } from 'cross-spawn';
-import { EpicfailError } from 'epicfail';
 import execa, { CommonOptions, ExecaChildProcess } from 'execa';
 import fs from 'fs';
 import gitconfig from 'gitconfig';
@@ -66,6 +65,13 @@ export interface AfterHookOptions {
   installNpmPackage: (packageName: string) => Promise<void>;
 }
 
+class CLIError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'CLIError';
+  }
+}
+
 async function getGitUser(): Promise<{ name?: string; email?: string }> {
   try {
     const config = await gitconfig.get({ location: 'global' });
@@ -104,7 +110,7 @@ async function installDeps(rootDir: string, useYarn: boolean) {
   try {
     await spawnPromise(command, args, { stdio: 'inherit' });
   } catch (err) {
-    error(`installDeps failed: ${err}`);
+    throw new CLIError(`installDeps failed: ${err}`);
   }
 }
 
@@ -189,16 +195,10 @@ async function getYargsOptions(
   return yargOption;
 }
 
-function error(message: string): void {
-  const err = new EpicfailError(message);
-  err.epicfail = { message: false, stacktrace: false, env: false };
-  throw err;
-}
-
 export async function create(appName: string, options: Options) {
   const firstArg = process.argv[2];
   if (firstArg === undefined) {
-    error(`${appName} <name>`);
+    throw new CLIError(`${appName} <name>`);
   }
   const useCurrentDir = firstArg === '.';
   const name: string = useCurrentDir
@@ -210,7 +210,7 @@ export async function create(appName: string, options: Options) {
   const { templateRoot, promptForTemplate = false } = options;
 
   if (isOccupied(packageDir)) {
-    error(`${packageDir} is not empty directory.`);
+    throw new CLIError(`${packageDir} is not empty directory.`);
   }
 
   const yargsOption = await getYargsOptions(
@@ -228,7 +228,7 @@ export async function create(appName: string, options: Options) {
   const contact = getContact(args.author, args.email);
 
   if (!fs.existsSync(templateDir)) {
-    error('No template found');
+    throw new CLIError('No template found');
   }
 
   const filteredArgs = Object.entries<string>(args)

@@ -251,12 +251,12 @@
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.0.tgz#69a23a3ad29caf0097f06eda59b361ee2f0639f6"
   integrity sha1-aaI6OtKcrwCX8G7aWbNh7i8GOfY=
 
-"@types/node@*", "@types/node@^14.0.24":
+"@types/node@*":
   version "14.0.24"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.24.tgz#b0f86f58564fa02a28b68f8b55d4cdec42e3b9d6"
   integrity sha512-btt/oNOiDWcSuI721MdL8VQGnjsKjlTMdrKyTcLCKeQp/n4AAMFJ961wMbp+09y8WuGPClDEv07RIItdXKIXAA==
 
-"@types/node@>= 8":
+"@types/node@>= 8", "@types/node@^14.0.27":
   version "14.0.27"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.27.tgz#a151873af5a5e851b51b3b065c9e63390a9e0eb1"
   integrity sha512-kVrqXhbclHNHGu9ztnAwSncIgJv/FaxmzXJvGXNdcCpV1b8u1/Mi6z6m0vwy0LzKeXFTPLH0NzwmoJ3fNCIq0g==
@@ -308,6 +308,18 @@
   integrity sha512-Dk/IDOPtOgubt/IaevIUbTgV7doaKkoorvOyYM2CMwuDyP89bekI7H4xLIwunNYiK9jhCkmc6pUrJk3cj2AB9w==
   dependencies:
     "@types/yargs-parser" "*"
+
+"@uetchy/doctoc@^1.4.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@uetchy/doctoc/-/doctoc-1.5.0.tgz#57ce52f1f7b9567dd8d7a6e9003baa91454f68b3"
+  integrity sha512-GJSTqqyd2jJbRHeoS4hg7E9CONQTi1HUYhHD/ZtIBG4//8cIhw7ylRrmYyeKLJxSkcNw0C8B3zL3pIACujQGgQ==
+  dependencies:
+    "@textlint/markdown-to-ast" "~6.0.9"
+    anchor-markdown-header "^0.5.5"
+    htmlparser2 "~3.9.2"
+    minimist "~1.2.0"
+    underscore "~1.8.3"
+    update-section "^0.3.0"
 
 JSONStream@^1.0.4:
   version "1.3.5"
@@ -1180,18 +1192,6 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-doctoc@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/doctoc/-/doctoc-1.4.0.tgz#3115aa61d0a92f0abb0672036918ea904f5b9e02"
-  integrity sha512-8IAq3KdMkxhXCUF+xdZxdJxwuz8N2j25sMgqiu4U4JWluN9tRKMlAalxGASszQjlZaBprdD2YfXpL3VPWUD4eg==
-  dependencies:
-    "@textlint/markdown-to-ast" "~6.0.9"
-    anchor-markdown-header "^0.5.5"
-    htmlparser2 "~3.9.2"
-    minimist "~1.2.0"
-    underscore "~1.8.3"
-    update-section "^0.3.0"
-
 dom-serializer@0:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/dom-serializer/-/dom-serializer-0.2.2.tgz#1afb81f533717175d478655debc5e332d9f9bb51"
@@ -1281,10 +1281,10 @@ envinfo@^7.5.1:
   resolved "https://registry.yarnpkg.com/envinfo/-/envinfo-7.7.0.tgz#fbfa46d739dec0554ef40220cd91fb20f64c9698"
   integrity sha512-XX0+kACx7HcIFhar/JjsDtDIVcC8hnzQO1Asehq+abs+v9MtzpUuujFb6eBTT4lF9j2Bh6d2XFngbFRryjUAeQ==
 
-epicfail@^0.4.2:
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/epicfail/-/epicfail-0.4.2.tgz#7ce5a12784242729aa9dde1cfcafdb780eba6743"
-  integrity sha512-4jfd8FLydt9cCTd/ospmkow8RyFi7eX9ge46GaJ/48S/RXe/PglvGB/t+08GHhOIZ6KEE3yhVO5krL9AhHJfAA==
+epicfail@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/epicfail/-/epicfail-1.0.0.tgz#adcb42a61ee7b6df206e01a0287d3486baa60710"
+  integrity sha512-7AqQSRzwN5NA9EX9BOyGf4ZOIEuGiguFYAr4mohMDA0tJsGOCkEXHfb1c0RlYOSwHIEO+laRzkobj//lJEaYng==
   dependencies:
     chalk "^4.1.0"
     envinfo "^7.5.1"
@@ -1341,10 +1341,10 @@ es6-weak-map@^2.0.2:
     es6-iterator "^2.0.3"
     es6-symbol "^3.1.1"
 
-esbuild@^0.6.4:
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.6.5.tgz#efbe11cf51abd0d4d489ca1bc80fd4761a35bd16"
-  integrity sha512-glMZd0b6W2soHuUuchM6c55e6gbdDhVpvYcmLsH3OJo87hQZcb3lFPZAJ5MbzLCJa2bChQOaoC4bqVtbqfsM/A==
+esbuild@^0.6.6:
+  version "0.6.16"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.6.16.tgz#a5363761dd17283e090dae398f5ff4908cad789d"
+  integrity sha512-Jm4aJYAk4uBP2RssDe/rvYCrpGkfOJ5tPBZUF6da62pUtyzk8/RVwXZB4q8dxjYLKZNmY4lYJRpWY+wT3kme1w==
 
 escape-goat@^2.0.0:
   version "2.1.1"
@@ -1907,7 +1907,7 @@ ini@^1.3.2, ini@^1.3.5, ini@~1.3.0:
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
   integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
 
-inquirer@7.3.3:
+inquirer@7.3.3, inquirer@^7.3.3:
   version "7.3.3"
   resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-7.3.3.tgz#04d176b2af04afc157a83fd7c100e98ee0aad003"
   integrity sha512-JG3eIAj5V9CwcGvuOmoo6LB9kbAYT8HXffUl6memuszlwDC/qvFAJw49XJ5NROSFNPxp3iQg1GqkFhaY/CR0IA==
@@ -1926,7 +1926,7 @@ inquirer@7.3.3:
     strip-ansi "^6.0.0"
     through "^2.3.6"
 
-inquirer@^7.0.0, inquirer@^7.3.2:
+inquirer@^7.0.0:
   version "7.3.2"
   resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-7.3.2.tgz#25245d2e32dc9f33dbe26eeaada231daa66e9c7c"
   integrity sha512-DF4osh1FM6l0RJc5YWYhSDB6TawiBRlbV9Cox8MWlidU218Tb7fm3lQTULyUJDfJ0tjbzl0W4q651mrCCEM55w==
@@ -3844,15 +3844,15 @@ tslib@^1.9.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
   integrity sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
 
-tsup@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/tsup/-/tsup-3.1.1.tgz#6b433a4a4f85973707c9df7a33d8d34a5f0e81aa"
-  integrity sha512-pBIQn7lKa316VIYAYxOvZJIn3aj4LncE7Inkhk4tOGVqf4PTabFZx0JJxYsUta9WXm7gJvGUa8pRoWoQ9FkGjA==
+tsup@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/tsup/-/tsup-3.4.2.tgz#82a317c65e7b46f729a2c5d953dc2460e77d71bc"
+  integrity sha512-EQ7/tIMu66I5caj5yMdO6o3bh/NTROBrHF7PXqLZqzl2IocTP3EdohkSAk9pNdxB9XOq5GgsK8BkqvlFGD6kLQ==
   dependencies:
     cac "^6.6.1"
     chalk "^4.1.0"
     chokidar "^3.4.1"
-    esbuild "^0.6.4"
+    esbuild "^0.6.6"
     joycon "^2.2.5"
     rollup "^2.22.1"
     rollup-plugin-dts "^1.4.8"
@@ -4019,10 +4019,15 @@ util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
-uuid@8.2.0, uuid@^8.2.0:
+uuid@8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.2.0.tgz#cb10dd6b118e2dada7d0cd9730ba7417c93d920e"
   integrity sha512-CYpGiFTUrmI6OBMkAdjSDM0k5h8SkkiTP4WAjQgDgNB1S3Ou9VBEvr6q0Kv2H1mMk7IWfxYGpMH5sd5AvcIV2Q==
+
+uuid@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.0.tgz#ab738085ca22dc9a8c92725e459b1d507df5d6ea"
+  integrity sha512-fX6Z5o4m6XsXBdli9g7DtWgAx+osMsRRZFKma1mIUsLCz6vRvv+pz5VNbyu9UEDzpMWulZfvpgb/cmDXVulYFQ==
 
 validate-npm-package-license@^3.0.1:
   version "3.0.4"

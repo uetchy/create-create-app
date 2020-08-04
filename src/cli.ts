@@ -5,7 +5,9 @@ import epicfail from 'epicfail';
 import { resolve } from 'path';
 import { AfterHookOptions, create } from '.';
 
-epicfail();
+epicfail({
+  assertExpected: (err) => err.name === 'CLIError',
+});
 
 const templateRoot = resolve(__dirname, '..', 'templates');
 const caveat = ({ name, template }: AfterHookOptions) => {

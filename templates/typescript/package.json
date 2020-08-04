@@ -10,7 +10,7 @@
     "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
-    "create-create-app": "^5.7.0"
+    "create-create-app": "^6.0.0"
   },
   "devDependencies": {
     "tsup": "^3.1.1",

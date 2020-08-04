@@ -9,4 +9,4 @@ plugins:
     preset: angular
     infile: CHANGELOG.md
 hooks:
-  before:init: yarn test
+  before:init: npm test

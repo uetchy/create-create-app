@@ -106,7 +106,8 @@ async function installDeps(rootDir: string, useYarn: boolean) {
     args = ['install', '--cwd', rootDir];
   } else {
     command = 'npm';
-    args = ['install', '--prefix', rootDir];
+    args = ['install'];
+    process.chdir(rootDir);
   }
   try {
     await spawnPromise(command, args, { stdio: 'inherit' });
@@ -307,7 +308,8 @@ export async function create(appName: string, options: Options) {
         args = ['--cwd', packageDir, 'add', packageName];
       } else {
         command = 'npm';
-        args = ['install', '-D', packageName, '--prefix', packageDir];
+        args = ['install', '-D', packageName];
+        process.chdir(packageDir);
       }
       const child = spawn(command, args, { stdio: 'inherit' });
       child.on('close', (code) => {

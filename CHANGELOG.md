@@ -1,3 +1,9 @@
+## [6.0.1](https://github.com/uetchy/create-create-app/compare/v6.0.0...v6.0.1) (2020-08-10)
+
+### Bug Fixes
+
+- Fails on Windows when Yarn is not installed ([adf4f3f](https://github.com/uetchy/create-create-app/commit/adf4f3fffad14dafa92c859da0502acf41d2b370))
+
 # [6.0.0](https://github.com/uetchy/create-create-app/compare/v5.7.0...v6.0.0) (2020-08-04)
 
 ### Bug Fixes

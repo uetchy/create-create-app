@@ -28,7 +28,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "takahashim",
+      "name": "Masayoshi Takahashi",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/10401?v=4",
+      "profile": "http://twitter.com/takahashim",
+      "contributions": [
+        "code"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }

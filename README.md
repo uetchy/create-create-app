@@ -27,6 +27,7 @@
   - [3. Publish package to npm](#3-publish-package-to-npm)
   - [4. PROFIT!](#4-profit)
 - [Template](#template)
+  - [Adding a template](#adding-a-template)
   - [Helper functions](#helper-functions)
     - [`upper`](#upper)
     - [`lower`](#lower)
@@ -44,6 +45,7 @@
   - [after (default: `undefined`)](#after-default-undefined)
   - [caveat (default: `undefined`)](#caveat-default-undefined)
   - [AfterHookOptions](#afterhookoptions)
+- [Showcase](#showcase)
 - [Contribution](#contribution)
   - [Contributors ✨](#contributors-)
 
@@ -69,16 +71,16 @@ or if you use `yarn`, then run `yarn create create-app greet`
 
 #### TypeScript
 
-Run `yarn build` or `npm run build` to transpile TypeScript into JavaScript.
+Run `npm run build` or `yarn build` to transpile TypeScript code into JavaScript.
 
 ### 3. Publish package to npm
 
-Run `yarn publish` or `npm publish` to publish your `create-` app to npm.
+Run `npm publish` or `yarn publish` to publish your `create-greet` app to npm.
 
 ### 4. PROFIT!
 
 ```bash
-yarn create greet ohayo
+npm create greet ohayo
 ```
 
 ![screenshot](https://raw.githubusercontent.com/uetchy/create-create-app/master/.github/assets/ss2.png)
@@ -87,6 +89,8 @@ yarn create greet ohayo
 
 Edit files inside `templates/default`. File names, directory names, and text files will be processed through Handlebars template engine to replace all template strings with respective value.
 
+Built-in variables are:
+
 - `{{name}}` package name
 - `{{description}}` package description
 - `{{author}}` author name
@@ -94,6 +98,11 @@ Edit files inside `templates/default`. File names, directory names, and text fil
 - `{{contact}}` author name formatted with `{{name}} <{{email}}>` if email given, otherwise `{{name}}`
 - `{{license}}` package license (e.g. `MIT`)
 - `{{year}}` current year (e.g. `2020`)
+
+### Adding a template
+
+Add new directory to the location defined in `templateRoot`; it will be accessible in `--template` flag (e.g. `create-something <name> --template <template>`).
+Besides, set `promptForTemplate` true to explicitly ask users to pick a template in initialization phase, otherwise `default` will be used.
 
 ### Helper functions
 
@@ -147,8 +156,8 @@ Replace all word separators with single space.
 Generates unique UUID string.
 
 ```
-{{uuid}}
-{{upper (uuid)}}
+{{uuid}} // => a5df7100-da46-47a6-907e-afe861f48b39
+{{upper (uuid)}} // => A5DF7100-DA46-47A6-907E-AFE861F48B39
 ```
 
 ## Config
@@ -260,6 +269,15 @@ create('create-greet', {
 }
 ```
 
+## Showcase
+
+List of amazing projects built on `create-create-app`.
+
+- [create-create-app](https://github.com/uetchy/create-create-app) - Yes, `create-create-app` uses `create-create-app` itself to generate `create-<app>` template!
+- [create-book](https://github.com/vivliostyle/create-book) - Fast & frictionless book template generator.
+
+> Send a PR to add yours here!
+
 ## Contribution
 
 PRs are always welcome!
@@ -281,6 +299,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

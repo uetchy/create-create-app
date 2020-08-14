@@ -9,17 +9,17 @@
     "dev": "tsc -w",
     "prepublishOnly": "npm run clean && npm run build"
   },
-  "dependencies": {
-    "create-create-app": "^6.0.0"
-  },
-  "devDependencies": {
-    "tsup": "^3.1.1",
-    "typescript": "^3.9.7"
-  },
   "bin": "dist/cli.js",
   "files": [
     "dist",
     "templates"
   ],
+  "dependencies": {
+    "create-create-app": "^6.0.1"
+  },
+  "devDependencies": {
+    "tsup": "^3.1.1",
+    "typescript": "^3.9.7"
+  },
   "license": "{{license}}"
 }

@@ -165,8 +165,8 @@ Generates unique UUID string.
 You can find the app config in `src/cli.js` (or `src/cli.ts` if you chose `typescript` template).
 
 ```ts
-import { resolve } from 'path';
-import { create } from 'create-create-app';
+import { resolve } from 'path'
+import { create } from 'create-create-app'
 
 create('create-greet', {
   templateRoot: resolve(__dirname, '..', 'templates'),
@@ -181,7 +181,7 @@ create('create-greet', {
   modifyName: (name) => `package-prefix-${name}`,
   after: ({ installNpmPackage }) => installNpmPackage('chalk'),
   caveat: `Your app has been created successfully!`,
-});
+})
 ```
 
 ### templateRoot (required)
@@ -227,23 +227,23 @@ The caveat message will be shown after the entire process completed.
 ```js
 create('create-greet', {
   caveat: 'Happy coding!',
-});
+})
 ```
 
 ```js
 create('create-greet', {
   caveat: ({ answers }) => `Run -> cd ${answers.name} && make`,
-});
+})
 ```
 
 ```js
 create('create-greet', {
   caveat: async ({ answers }) => {
-    const pkg = answers.plugin;
-    await execa('yarn', ['add', plugin]);
-    console.log(`${plugin} has been added`);
+    const pkg = answers.plugin
+    await execa('yarn', ['add', plugin])
+    console.log(`${plugin} has been added`)
   },
-});
+})
 ```
 
 ### AfterHookOptions

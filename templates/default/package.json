@@ -3,13 +3,13 @@
   "description": "{{description}}",
   "version": "0.0.0",
   "author": "{{contact}}",
-  "dependencies": {
-    "create-create-app": "^6.0.0"
-  },
   "bin": "src/cli.js",
   "files": [
     "src",
     "templates"
   ],
+  "dependencies": {
+    "create-create-app": "^6.0.1"
+  },
   "license": "{{license}}"
 }

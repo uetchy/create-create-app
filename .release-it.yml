@@ -4,9 +4,9 @@ git:
 github:
   release: true
   releaseName: 'v${version}'
+hooks:
+  before:init: npm test
 plugins:
   '@release-it/conventional-changelog': # https://github.com/release-it/conventional-changelog
     preset: angular
     infile: CHANGELOG.md
-hooks:
-  before:init: npm test

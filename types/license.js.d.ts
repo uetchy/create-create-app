@@ -1,1 +1,1 @@
-declare module 'license.js';
+declare module 'license.js'

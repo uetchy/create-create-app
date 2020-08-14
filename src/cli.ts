@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-import chalk from 'chalk';
-import { resolve } from 'path';
-import { AfterHookOptions, create } from '.';
+import chalk from 'chalk'
+import { resolve } from 'path'
+import { AfterHookOptions, create } from '.'
 
-const templateRoot = resolve(__dirname, '..', 'templates');
+const templateRoot = resolve(__dirname, '..', 'templates')
 const caveat = ({ name, template }: AfterHookOptions) => {
   let text = `
 cd ${chalk.bold.green(name)}
-`;
+`
 
   switch (template) {
     case 'typescript':
@@ -21,27 +21,27 @@ ${chalk.bold.cyan('yarn build')}
   ${chalk.gray('Build the app for production.')}
 
 After the build, run ${chalk.cyan(
-        'node lib/cli.js <package>',
+        'node lib/cli.js <package>'
       )} to test your app.
-`;
-      break;
+`
+      break
     default:
       text += `node src/cli.js <package>
-`;
+`
   }
 
   text += `
 Read the docs for the further information:
 ${chalk.yellow(
-  'https://github.com/uetchy/create-create-app/blob/master/README.md',
-)}`;
+  'https://github.com/uetchy/create-create-app/blob/master/README.md'
+)}`
 
-  return text;
-};
+  return text
+}
 
 create('create-create-app', {
   templateRoot,
   promptForTemplate: true,
   modifyName: (name) => (name.startsWith('create-') ? name : `create-${name}`),
   caveat,
-});
+})

@@ -1,28 +1,27 @@
-import { create, OptionData, Option } from '../src/index';
-import { availableLicenses } from 'license.js';
-import * as path from 'path';
-import * as fs from 'fs';
-import * as os from 'os';
+import { create } from '../src/index'
+import * as path from 'path'
+import * as fs from 'fs'
+import * as os from 'os'
 
-const TEST_WORK_DIR = path.join(os.tmpdir(), 'jest_create_create_app_setup');
-const TEST_CURRENT_DIR = process.cwd();
+const TEST_WORK_DIR = path.join(os.tmpdir(), 'jest_create_create_app_setup')
+const TEST_CURRENT_DIR = process.cwd()
 
 beforeAll(() => {
-  fs.mkdirSync(TEST_WORK_DIR, { recursive: true });
-});
+  fs.mkdirSync(TEST_WORK_DIR, { recursive: true })
+})
 
 afterAll(() => {
-  fs.rmdirSync(TEST_WORK_DIR, { recursive: true });
-});
+  fs.rmdirSync(TEST_WORK_DIR, { recursive: true })
+})
 
 beforeEach(() => {
   // skip
-});
+})
 
 afterEach(() => {
   // back to current dir
-  process.chdir(TEST_CURRENT_DIR);
-});
+  process.chdir(TEST_CURRENT_DIR)
+})
 
 test('create', async () => {
   process.argv = [
@@ -37,32 +36,32 @@ test('create', async () => {
     'awesome@example.com',
     '--license',
     'Apache-2.0',
-  ];
-  process.chdir(TEST_WORK_DIR);
+  ]
+  process.chdir(TEST_WORK_DIR)
 
   const opts = await create('foo', {
     templateRoot: `${TEST_CURRENT_DIR}/templates`,
-  });
+  })
 
-  const newReadMe = fs.readFileSync(`${TEST_WORK_DIR}/sample_book/README.md`);
-  expect(newReadMe.toString()).toMatch('# Sample Book');
-  expect(newReadMe.toString()).toMatch('- {{author}} => Awesome Doe');
-  expect(newReadMe.toString()).toMatch('- {{email}} => awesome@example.com');
+  const newReadMe = fs.readFileSync(`${TEST_WORK_DIR}/sample_book/README.md`)
+  expect(newReadMe.toString()).toMatch('# Sample Book')
+  expect(newReadMe.toString()).toMatch('- {{author}} => Awesome Doe')
+  expect(newReadMe.toString()).toMatch('- {{email}} => awesome@example.com')
   expect(newReadMe.toString()).toMatch(
-    'See https://github.com/uetchy/create-create-app#template for the further details.',
-  );
+    'See https://github.com/uetchy/create-create-app#template for the further details.'
+  )
 
   const newPackageJson = fs.readFileSync(
-    `${TEST_WORK_DIR}/sample_book/package.json`,
-  );
-  expect(newPackageJson.toString()).toMatch('"name": "sample-book",');
-  expect(newPackageJson.toString()).toMatch('"description": "desc.",');
+    `${TEST_WORK_DIR}/sample_book/package.json`
+  )
+  expect(newPackageJson.toString()).toMatch('"name": "sample-book",')
+  expect(newPackageJson.toString()).toMatch('"description": "desc.",')
   expect(newPackageJson.toString()).toMatch(
-    '"author": "Awesome Doe <awesome@example.com>",',
-  );
-  expect(newPackageJson.toString()).toMatch('"license": "Apache-2.0"');
+    '"author": "Awesome Doe <awesome@example.com>",'
+  )
+  expect(newPackageJson.toString()).toMatch('"license": "Apache-2.0"')
 
-  const newSrcCli = fs.readFileSync(`${TEST_WORK_DIR}/sample_book/src/cli.js`);
-  expect(newSrcCli.toString()).toMatch('#!/usr/bin/env node');
-  expect(newSrcCli.toString()).toMatch("create('sample-book', {");
-}, 300000);
+  const newSrcCli = fs.readFileSync(`${TEST_WORK_DIR}/sample_book/src/cli.js`)
+  expect(newSrcCli.toString()).toMatch('#!/usr/bin/env node')
+  expect(newSrcCli.toString()).toMatch("create('sample-book', {")
+}, 300000)

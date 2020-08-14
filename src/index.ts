@@ -265,14 +265,18 @@ export async function create(appName: string, options: Options) {
   })
 
   // create LICENSE
-  const license = makeLicenseSync(args.license, {
-    year,
-    project: name,
-    description: args.description,
-    organization: getContact(args.author, args.email),
-  })
-  const licenseText = license.header + license.text + license.warranty
-  fs.writeFileSync(path.resolve(packageDir, 'LICENSE'), licenseText)
+  try {
+    const license = makeLicenseSync(args.license, {
+      year,
+      project: name,
+      description: args.description,
+      organization: getContact(args.author, args.email),
+    })
+    const licenseText = license.header + license.text + license.warranty
+    fs.writeFileSync(path.resolve(packageDir, 'LICENSE'), licenseText)
+  } catch (e) {
+    // do not generate LICENSE
+  }
 
   // install dependencies using yarn / npm
   const useYarn = await IsYarnAvailable()

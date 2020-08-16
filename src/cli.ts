@@ -15,9 +15,9 @@ cd ${chalk.bold.green(name)}
       text += `
 Inside that directory, you can run several commands:
 
-${chalk.bold.cyan('yarn dev')}
+${chalk.bold.cyan('npm run dev')}
   ${chalk.gray("Starts 'tsc -w'.")}
-${chalk.bold.cyan('yarn build')}
+${chalk.bold.cyan('npm run build')}
   ${chalk.gray('Build the app for production.')}
 
 After the build, run ${chalk.cyan(

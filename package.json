@@ -4,13 +4,14 @@
   "version": "6.0.1",
   "author": "Yasuaki Uechi <y@uechi.io>",
   "scripts": {
-    "build": "shx rm -rf lib && yarn build:ts --minify --dts",
-    "build:ts": "tsup src/index.ts src/cli.ts -d lib",
-    "dev": "yarn build:ts --watch",
-    "prepublishOnly": "yarn build",
+    "build": "npm run tsup -- --minify --dts",
+    "clean": "shx rm -rf lib",
+    "dev": "npm run tsup -- --watch",
+    "prepublishOnly": "npm run clean && npm run build",
     "release": "release-it",
     "test": "jest",
-    "toc": "doctoc README.md"
+    "toc": "doctoc README.md",
+    "tsup": "tsup src/index.ts src/cli.ts -d lib"
   },
   "types": "lib/index.d.ts",
   "main": "lib/index.js",
@@ -69,6 +70,7 @@
   },
   "license": "MIT",
   "keywords": [
+    "create-app",
     "create-create-app"
   ]
 }

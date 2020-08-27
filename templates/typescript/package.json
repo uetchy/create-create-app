@@ -15,7 +15,7 @@
     "templates"
   ],
   "dependencies": {
-    "create-create-app": "^6.0.1"
+    "create-create-app": "^7.0.0"
   },
   "devDependencies": {
     "tsup": "^3.6.1",

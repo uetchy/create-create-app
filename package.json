@@ -5,7 +5,7 @@
   "author": "Yasuaki Uechi <y@uechi.io>",
   "scripts": {
     "build": "npm run tsup -- --minify --dts",
-    "clean": "shx rm -rf lib",
+    "clean": "shx rm -rf lib 'templates/*/{yarn.lock,package-lock.json,node_modules}'",
     "dev": "npm run tsup -- --watch",
     "prepublishOnly": "npm run clean && npm run build",
     "release": "release-it",

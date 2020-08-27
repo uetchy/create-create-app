@@ -1,3 +1,5 @@
+## [7.0.1](https://github.com/uetchy/create-create-app/compare/v7.0.0...v7.0.1) (2020-08-27)
+
 # [7.0.0](https://github.com/uetchy/create-create-app/compare/v6.0.1...v7.0.0) (2020-08-27)
 
 ### Bug Fixes

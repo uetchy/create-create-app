@@ -7,25 +7,8 @@ import fs from 'fs';
 import gitconfig from 'gitconfig';
 import { availableLicenses, makeLicenseSync } from 'license.js';
 import path from 'path';
-import yargsInteractive from 'yargs-interactive';
+import yargsInteractive, { OptionData } from 'yargs-interactive';
 import { copy, getAvailableTemplates } from './template';
-
-export interface OptionData {
-  type:
-    | 'input'
-    | 'number'
-    | 'confirm'
-    | 'list'
-    | 'rawlist'
-    | 'expand'
-    | 'checkbox'
-    | 'password'
-    | 'editor';
-  describe: string;
-  default?: string | number | boolean | any[];
-  prompt?: 'always' | 'never' | 'if-no-arg' | 'if-empty';
-  choices?: (string | { name: string; value: any })[];
-}
 
 export interface Option {
   [key: string]: OptionData | { default: boolean };
@@ -189,7 +172,7 @@ async function getYargsOptions(
     license: {
       type: 'list',
       describe: 'license',
-      choices: availableLicenses().concat(['UNLICENSED']),
+      choices: [...availableLicenses(), 'UNLICENSED'],
       prompt: 'if-no-arg',
     },
     ...extraOptions,

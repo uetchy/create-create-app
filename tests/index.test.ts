@@ -1,93 +1,135 @@
-import { create } from '../src/index';
-import * as path from 'path';
-import * as fs from 'fs';
-import * as os from 'os';
+import execa from 'execa';
+import { existsSync, mkdtempSync, readFileSync } from 'fs';
+import { tmpdir } from 'os';
+import { join, resolve } from 'path';
 
-const TEST_WORK_DIR = path.join(os.tmpdir(), 'jest_create_create_app_setup');
-const TEST_CURRENT_DIR = process.cwd();
+const pkg = require('../package.json');
+const SCRIPT_PATH = resolve(__dirname, '..', pkg.bin);
+const TEST_PREFIX = join(tmpdir(), 'create-create-app-');
 
-describe('create()', () => {
-  beforeEach(() => {
-    fs.mkdirSync(TEST_WORK_DIR, { recursive: true });
-  });
+it('show usage', async () => {
+  const { stdout } = await execa(SCRIPT_PATH, []);
+  expect(stdout).toBe('create-create-app <name>');
+});
 
-  afterEach(() => {
-    fs.rmdirSync(TEST_WORK_DIR, { recursive: true });
-    // back to current dir
-    process.chdir(TEST_CURRENT_DIR);
-  });
+test('create default project', async () => {
+  const baseDir = mkdtempSync(TEST_PREFIX);
 
-  test('create app', async () => {
-    process.argv = [
-      'create',
-      'create-app',
-      'sample_book',
+  const opts = [
+    'create-greet',
+    '--description',
+    'desc.',
+    '--author',
+    '"Awesome Doe"',
+    '--email',
+    'awesome@example.com',
+    '--template',
+    'default',
+    '--license',
+    'Apache-2.0',
+  ];
+  const { stdout } = await execa(SCRIPT_PATH, opts, { cwd: baseDir });
+  expect(stdout).toContain('Read the docs for the further information');
+
+  const newReadMe = readFileSync(`${baseDir}/create-greet/README.md`, 'utf-8');
+  expect(newReadMe).toContain('# Create Greet');
+  expect(newReadMe).toContain('- {{author}} => Awesome Doe');
+  expect(newReadMe).toContain('- {{email}} => awesome@example.com');
+  expect(newReadMe).toContain(
+    'See https://github.com/uetchy/create-create-app#template for the further details.'
+  );
+
+  const newPackageJson = readFileSync(
+    `${baseDir}/create-greet/package.json`,
+    'utf-8'
+  );
+  expect(newPackageJson).toContain('"name": "create-greet",');
+  expect(newPackageJson).toContain('"description": "desc.",');
+  expect(newPackageJson).toContain(
+    '"author": "Awesome Doe <awesome@example.com>",'
+  );
+  expect(newPackageJson).toContain('"license": "Apache-2.0"');
+
+  const newSrcCli = readFileSync(`${baseDir}/create-greet/src/cli.js`, 'utf-8');
+  expect(newSrcCli).toContain('#!/usr/bin/env node');
+  expect(newSrcCli).toContain("create('create-greet', {");
+}, 300000);
+
+it('create typescript project', async () => {
+  const baseDir = mkdtempSync(TEST_PREFIX);
+  const { stdout } = await execa(
+    SCRIPT_PATH,
+    [
+      'greet',
       '--description',
-      'desc.',
+      'say hello at ease.',
       '--author',
-      'Awesome Doe',
+      'John Doe',
       '--email',
-      'awesome@example.com',
+      'john@example.com',
       '--license',
       'Apache-2.0',
-    ];
-    process.chdir(TEST_WORK_DIR);
+      '--template',
+      'typescript',
+    ],
+    { cwd: baseDir }
+  );
+  expect(stdout).toContain('Build the app for production.');
 
-    const opts = await create('foo', {
-      templateRoot: `${TEST_CURRENT_DIR}/templates`,
-    });
-
-    const newReadMe = fs.readFileSync(`${TEST_WORK_DIR}/sample_book/README.md`);
-    expect(newReadMe.toString()).toMatch('# Sample Book');
-    expect(newReadMe.toString()).toMatch('- {{author}} => Awesome Doe');
-    expect(newReadMe.toString()).toMatch('- {{email}} => awesome@example.com');
-    expect(newReadMe.toString()).toMatch(
-      'See https://github.com/uetchy/create-create-app#template for the further details.'
-    );
-
-    const newPackageJson = fs.readFileSync(
-      `${TEST_WORK_DIR}/sample_book/package.json`
-    );
-    expect(newPackageJson.toString()).toMatch('"name": "sample-book",');
-    expect(newPackageJson.toString()).toMatch('"description": "desc.",');
-    expect(newPackageJson.toString()).toMatch(
-      '"author": "Awesome Doe <awesome@example.com>",'
-    );
-    expect(newPackageJson.toString()).toMatch('"license": "Apache-2.0"');
-
-    const newSrcCli = fs.readFileSync(
-      `${TEST_WORK_DIR}/sample_book/src/cli.js`
-    );
-    expect(newSrcCli.toString()).toMatch('#!/usr/bin/env node');
-    expect(newSrcCli.toString()).toMatch("create('sample-book', {");
-  }, 300000);
-
-  test('create unlicensed app', async () => {
-    process.argv = [
-      'create',
-      'create-app',
-      'sample_book',
+  const testDir = join(baseDir, 'create-greet');
+  await execa('npm', ['run', 'build'], {
+    cwd: testDir,
+  });
+  const { stdout: stdout2 } = await execa(
+    'node',
+    [
+      'dist/cli.js',
+      'test',
       '--description',
-      'desc.',
+      'Test',
       '--author',
-      'Awesome Doe',
+      'someone',
       '--email',
-      'awesome@example.com',
+      'someone@example.com',
       '--license',
-      'UNLICENSED',
-    ];
-    process.chdir(TEST_WORK_DIR);
+      'Apache-2.0',
+      '--architecture',
+      'macOS',
+    ],
+    {
+      cwd: testDir,
+    }
+  );
+  expect(stdout2).toContain('Ok you chose macOS');
+}, 300000);
 
-    const opts = await create('foo', {
-      templateRoot: `${TEST_CURRENT_DIR}/templates`,
-    });
+test('create unlicensed app', async () => {
+  const baseDir = mkdtempSync(TEST_PREFIX);
 
-    const newPackageJson = fs.readFileSync(
-      `${TEST_WORK_DIR}/sample_book/package.json`
-    );
-    expect(newPackageJson.toString()).toMatch('"license": "UNLICENSED"');
+  const opts = [
+    'create-greet',
+    '--description',
+    'desc.',
+    '--author',
+    '"Awesome Doe"',
+    '--email',
+    'awesome@example.com',
+    '--template',
+    'default',
+    '--license',
+    'UNLICENSED',
+  ];
+  const { stdout } = await execa(SCRIPT_PATH, opts, {
+    cwd: baseDir,
+  });
+  expect(stdout).toContain('Read the docs for the further information');
 
-    const existed = fs.existsSync(`${TEST_WORK_DIR}/sample_book/LICENSE`);
-    expect(existed).toBeFalsy();
-  }, 300000);
-});
+  const newPackageJson = readFileSync(
+    join(baseDir, 'create-greet', 'package.json'),
+    'utf-8'
+  );
+  expect(newPackageJson).toContain('"license": "UNLICENSED"');
+
+  const existed = existsSync(`${baseDir}/create-greet/LICENSE`);
+  expect(existed).toBeFalsy();
+}, 300000);

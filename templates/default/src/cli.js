@@ -18,11 +18,7 @@ create('{{kebab name}}', {
     architecture: {
       type: 'list',
       describe: 'choose your fave os',
-      choices: [
-        { name: 'macOS', value: 'mac' },
-        { name: 'Windows', value: 'win' },
-        { name: 'Linux', value: 'linux' },
-      ],
+      choices: ['macOS', 'Windows', 'Linux'],
       prompt: 'if-no-arg',
     },
   },

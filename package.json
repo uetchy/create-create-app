@@ -9,7 +9,7 @@
     "dev": "npm run tsup -- --watch",
     "prepublishOnly": "npm run clean && npm run build",
     "release": "release-it",
-    "test": "jest",
+    "test": "npm run tsup && jest",
     "toc": "doctoc README.md",
     "tsup": "tsup src/index.ts src/cli.ts -d lib"
   },
@@ -21,7 +21,7 @@
     "templates"
   ],
   "dependencies": {
-    "@types/inquirer": "^7.3.0",
+    "@types/inquirer": "^7.3.1",
     "@types/yargs-interactive": "^2.1.1",
     "chalk": "^4.1.0",
     "cross-spawn": "^7.0.3",
@@ -40,25 +40,33 @@
   "devDependencies": {
     "@release-it/conventional-changelog": "^1.1.4",
     "@types/cross-spawn": "^6.0.2",
-    "@types/jest": "^26.0.9",
-    "@types/node": "^14.0.27",
-    "@types/uuid": "^8.0.0",
+    "@types/jest": "^26.0.10",
+    "@types/node": "^14.6.1",
+    "@types/uuid": "^8.3.0",
     "@uetchy/doctoc": "^1.5.0",
     "husky": "^4.2.5",
-    "jest": "^26.4.0",
-    "prettier": "^2.0.5",
-    "pretty-quick": "^2.0.1",
-    "release-it": "^13.6.6",
+    "jest": "^26.4.2",
+    "lint-staged": "^10.2.13",
+    "prettier": "^2.1.1",
+    "pretty-quick": "^3.0.0",
+    "release-it": "^13.7.0",
     "shx": "^0.3.2",
-    "ts-jest": "^26.2.0",
-    "ts-node": "^8.10.2",
-    "tsup": "^3.4.2",
-    "typescript": "^3.9.7"
+    "ts-jest": "^26.3.0",
+    "ts-node": "^9.0.0",
+    "tsup": "^3.6.1",
+    "typescript": "^4.0.2"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "doctoc README.md && git add README.md && pretty-quick --staged"
+      "pre-commit": "lint-staged && pretty-quick --staged",
+      "pre-push": "npm test"
     }
+  },
+  "lint-staged": {
+    "*.md": [
+      "doctoc -p",
+      "git add"
+    ]
   },
   "homepage": "https://github.com/uetchy/create-create-app",
   "repository": {

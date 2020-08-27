@@ -1,1 +1,1 @@
-declare module 'gitconfig'
+declare module 'gitconfig';

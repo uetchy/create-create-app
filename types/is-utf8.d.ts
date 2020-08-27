@@ -1,1 +1,1 @@
-declare module 'is-utf8'
+declare module 'is-utf8';

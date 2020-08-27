@@ -1,3 +1,17 @@
+# [7.0.0](https://github.com/uetchy/create-create-app/compare/v6.0.1...v7.0.0) (2020-08-27)
+
+### Bug Fixes
+
+- choices only accept string[] ([180d4cd](https://github.com/uetchy/create-create-app/commit/180d4cdc073f6f649faecade8b971478fd3e2666))
+
+### Features
+
+- allow to choose UNLICENSED as license ([#25](https://github.com/uetchy/create-create-app/issues/25)) ([7275769](https://github.com/uetchy/create-create-app/commit/72757693b2a6d5c7da9098bac43b38b4f81c3ce2)), closes [#22](https://github.com/uetchy/create-create-app/issues/22)
+
+### BREAKING CHANGES
+
+- {"name": string, "value": string} style in `choices` has been deprecated.
+
 ## [6.0.1](https://github.com/uetchy/create-create-app/compare/v6.0.0...v6.0.1) (2020-08-10)
 
 ### Bug Fixes

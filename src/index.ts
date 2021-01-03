@@ -59,7 +59,7 @@ export class CLIError extends Error {
 async function getGitUser(): Promise<{ name?: string; email?: string }> {
   try {
     const config = await gitconfig.get({ location: 'global' });
-    return config.user;
+    return config.user ?? {};
   } catch (err) {
     return {};
   }

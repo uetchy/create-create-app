@@ -1,7 +1,7 @@
 {
   "name": "create-create-app",
   "description": "Create your own `create-something` app.",
-  "version": "7.0.1",
+  "version": "7.0.2",
   "author": "Yasuaki Uechi <y@uechi.io>",
   "scripts": {
     "build": "npm run tsup -- --minify --dts",
@@ -15,7 +15,9 @@
   },
   "types": "lib/index.d.ts",
   "main": "lib/index.js",
-  "bin": "lib/cli.js",
+  "bin": {
+    "create-create-app": "lib/cli.js"
+  },
   "files": [
     "lib",
     "templates"

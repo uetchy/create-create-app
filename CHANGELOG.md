@@ -1,3 +1,10 @@
+## [7.0.2](https://github.com/uetchy/create-create-app/compare/v7.0.1...v7.0.2) (2021-03-10)
+
+
+### Bug Fixes
+
+* avoid crashes when .gitconfig exists but user is not set ([1428db3](https://github.com/uetchy/create-create-app/commit/1428db30eb1417280b6c245952ed93eae3f79c8c))
+
 ## [7.0.1](https://github.com/uetchy/create-create-app/compare/v7.0.0...v7.0.1) (2020-08-27)
 
 # [7.0.0](https://github.com/uetchy/create-create-app/compare/v6.0.1...v7.0.0) (2020-08-27)

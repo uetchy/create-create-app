@@ -4,7 +4,7 @@ import { tmpdir } from 'os';
 import { join, resolve } from 'path';
 
 const pkg = require('../package.json');
-const SCRIPT_PATH = resolve(__dirname, '..', pkg.bin);
+const SCRIPT_PATH = resolve(__dirname, '..', pkg.bin['create-create-app']);
 const TEST_PREFIX = join(tmpdir(), 'create-create-app-');
 
 it('show usage', async () => {

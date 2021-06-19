@@ -11,9 +11,9 @@
 
 ## Why?
 
-- ⚖️ **Built-in License chooser** No need to care about license things.
-- 🎩 **Template engine** Just put files with template strings and we will do the rest.
-- 💄 **Highly customizable** Can change caveat text, and add extra cli options.
+- ⚖️ **Built-in License chooser** No need to worry about license thingy.
+- 🎩 **Template engine** You can use template strings in text files, file names, and folder names.
+- 💄 **Highly customizable** Can change caveat text, add extra command-line options.
 
 ## Table of contents
 
@@ -21,13 +21,13 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [Quick Start](#quick-start)
-  - [1. `npm create create-app`](#1-npm-create-create-app)
-  - [2. Edit templates](#2-edit-templates)
-    - [TypeScript](#typescript)
-  - [3. Publish package to npm](#3-publish-package-to-npm)
-  - [4. PROFIT!](#4-profit)
+  - [1. Bootstrap your project](#1-bootstrap-your-project)
+  - [2. Add and edit template files](#2-add-and-edit-template-files)
+  - [3. Build the app (TypeScript only)](#3-build-the-app-typescript-only)
+  - [4. Publish package to npm](#4-publish-package-to-npm)
+  - [5. PROFIT](#5-profit)
 - [Template](#template)
-  - [Adding a template](#adding-a-template)
+  - [Advanced: Multiple templates](#advanced-multiple-templates)
   - [Helper functions](#helper-functions)
     - [`upper`](#upper)
     - [`lower`](#lower)
@@ -53,95 +53,103 @@
 
 ## Quick Start
 
-Let's create `create-greet` package in four steps.
+Let's create `create-greet` package in five steps.
 
-### 1. `npm create create-app`
+### 1. Bootstrap your project
 
 ```shell
-npm create create-app greet
+npx create-create-app greet  # simplest route
+npm init create-app greet    # requires npm 6+
+yarn create create-app greet # requires Yarn 0.25+
 ```
 
-or if you use `yarn`, then run `yarn create create-app greet`
+You will then be asked about your project.
 
 ![screenshot](https://raw.githubusercontent.com/uetchy/create-create-app/master/.github/assets/ss1.png)
 
-### 2. Edit templates
+### 2. Add and edit template files
 
-`cd create-greet` and edit files inside `templates/default`.
+```shell
+cd create-greet
+```
 
-#### TypeScript
+Then you can see the `templates/default` folder where the actual template files go.
 
-Run `npm run build` or `yarn build` to transpile TypeScript code into JavaScript.
+### 3. Build the app (TypeScript only)
 
-### 3. Publish package to npm
+Run `npm run build` or `yarn build` to transpile TypeScript code into JavaScript. If you chose the default template, this step is not necessary.
+
+### 4. Publish package to npm
 
 Run `npm publish` or `yarn publish` to publish your `create-greet` app to npm.
 
-### 4. PROFIT!
+### 5. PROFIT
 
 ```bash
-npm create greet ohayo
+npx create-greet ohayo
+npm init greet ohayo
+yarn create greet ohayo
 ```
 
 ![screenshot](https://raw.githubusercontent.com/uetchy/create-create-app/master/.github/assets/ss2.png)
 
 ## Template
 
-Edit files inside `templates/default`. File names, directory names, and text files will be processed through Handlebars template engine to replace all template strings with respective value.
+Edit files inside `templates/default`. Every file name, directory name, and a text file will be processed through Handlebars template engine to replace all template strings with the respective value.
 
 Built-in variables are:
 
-- `{{name}}` package name
+- `{{name}}` package name (e.g. `ohayo`)
 - `{{description}}` package description
-- `{{author}}` author name
-- `{{email}}` author email
-- `{{contact}}` author name formatted with `{{name}} <{{email}}>` if email given, otherwise `{{name}}`
+- `{{author}}` author name (e.g. `John Doe`)
+- `{{email}}` author email (e.g. `john@example.com`)
+- `{{contact}}` author name formatted with `{{name}} <{{email}}>`. If email is missing, simply `{{name}}`
 - `{{license}}` package license (e.g. `MIT`)
-- `{{year}}` current year (e.g. `2020`)
+- `{{year}}` current year (e.g. `2021`)
 
-### Adding a template
+### Advanced: Multiple templates
 
-Add new directory to the location defined in `templateRoot`; it will be accessible in `--template` flag (e.g. `create-something <name> --template <template>`).
-Besides, set `promptForTemplate` true to explicitly ask users to pick a template in initialization phase, otherwise `default` will be used.
+Creates a new directory in the location defined by `templateRoot`. It can be accessed via `--template` flag (e.g. `create-something <name> --template <template>`).
+You might want to set `promptForTemplate` to `true` to explicitly ask the user to choose a template during the initialization phase. If `promptForTemplate` is `false`, which is the default behavior, `default` template will be used unless the user explicitly selects a template via `--template` cli flag.
 
 ### Helper functions
 
-In the following example, we assume that variable `name` is `create-react-app`.
+In the following example, we assume that the variable `name` is `create-react-app`.
 
 #### `upper`
 
-Output text in UPPERCASE.
+Convert text to UPPERCASE.
 
 `{{upper name}}` becomes `CREATE-REACT-APP`.
 
 #### `lower`
 
-Output text in lowercase.
+Convert text to lowercase.
 
 `{{lower name}}` becomes `create-react-app`.
 
 #### `capital`
 
-Output text in CapitalCase.
+Convert text to CapitalCase.
 
 - `{{capital name}}` becomes `CreateReactApp`
 - `{{capital name space=true}}` becomes `Create React App`.
 
 #### `camel`
 
-Output text in camelCase.
+Convert text to camelCase.
 
 `{{camel name}}` becomes `createReactApp`.
 
 #### `snake`
 
-Output text in snake_case.
+Convert text to snake_case.
 
 `{{snake name}}` becomes `create_react_app`.
 
 #### `kebab`
 
-Output text in kebab-case.
+Convert text to kebab-case.
 
 `{{kebab name}}` becomes `create-react-app`.
 
@@ -162,7 +170,7 @@ Generates unique UUID string.
 
 ## Config
 
-You can find the app config in `src/cli.js` (or `src/cli.ts` if you chose `typescript` template).
+The app configuration can be found in `src/cli.js` (or `src/cli.ts` if you choose the `typescript` template).
 
 ```ts
 import { resolve } from 'path';
@@ -186,13 +194,16 @@ create('create-greet', {
 
 ### templateRoot (required)
 
-`templateRoot` set to `path.resolve(__dirname, '../templates')`. You can change it to whereever you want.
+`templateRoot` is set to `path.resolve(__dirname, '../templates')`. You can change this to any location you like.
 
 ### promptForTemplate (default: `false`)
 
-Ask users to choose a template to be used for initialization only if `promptForTemplate` is set `true` AND there's multiple templates found in `templates/`.
+Interactively asks the user to select a template if and only if:
 
-With `promptForTemplate` set `false`, users still can specify template via command-line flag `--template`:
+1. `promptForTemplate` is set to `true`, and
+2. there are multiple templates in the `templates` directory.
+
+Even if `promptForTemplate` is set to `false`, the user can still specify a template with the command line flag `--template <template>`.
 
 ```
 create-something <name> --template <template>
@@ -202,9 +213,9 @@ create-something <name> --template <template>
 
 `object | undefined`
 
-Extra options passed to the app. These options will be accessible as a cli option, interactive question, and template string. In this case, `--language` cli option and `{{language}}` template string will be available.
+Additional questions can be defined. These options will be available as CLI flags, interactive questions, and template strings. In the example above, `--language` flag and the `{{language}}` template string will be enabled in the app.
 
-You can find all possible options in [yargs-interactive documentation](https://github.com/nanovazquez/yargs-interactive#options).
+All possible options can be found in the [yargs-interactive documentation](https://github.com/nanovazquez/yargs-interactive#options).
 
 ### modifyName (default: `undefined`)
 
@@ -212,17 +223,23 @@ You can find all possible options in [yargs-interactive documentation](https://g
 
 Modify `name` property.
 
+```js
+{
+  modifyName: (name) => (name.startsWith('create-') ? name : `create-${name}`);
+}
+```
+
 ### after (default: `undefined`)
 
 `(options: AfterHookOptions) => void`
 
-After hook script that runs after the initialization.
+Define after-hook script to be executed after initialization.
 
 ### caveat (default: `undefined`)
 
 `string | ((options: AfterHookOptions) => string | void) | undefined`
 
-The caveat message will be shown after the entire process completed.
+The caveat message will be shown after the entire process is completed.
 
 ```js
 create('create-greet', {
@@ -238,9 +255,17 @@ create('create-greet', {
 
 ```js
 create('create-greet', {
+  extra: {
+    plugin: {
+      type: 'input',
+      describe: 'plugin to be used in your project',
+      default: 'some-plugin',
+      prompt: 'if-no-arg',
+    },
+  },
   caveat: async ({ answers }) => {
-    const pkg = answers.plugin;
-    await execa('yarn', ['add', plugin]);
+    const plugin = answers.plugin;
+    await execa('npm', ['install', '-S', plugin]);
     console.log(`${plugin} has been added`);
   },
 });
@@ -251,36 +276,41 @@ create('create-greet', {
 ```typescript
 {
   // variables
-  packageDir: string;
-  templateDir: string;
-  year: number; // 2020
+  packageDir: string; // e.g. "/path/to/ohayo"
+  templateDir: string; // e.g. "/path/to/create-greet/templates/default"
+  year: number; // e.g. 2020
   answers: {
-    name: string; // package name
+    name: string; // package name passed through `modifyName`
     description: string; // description
-    author: string; // John Doe
-    email: string; // john@example.com
-    contact: string; // John Doe <john@example.com>
-    license: string; // MIT
+    author: string; // e.g. "John Doe"
+    email: string; // e.g. "john@example.com"
+    contact: string; // e.g. "John Doe <john@example.com>"
+    license: string; // e.g. "MIT"
     [key: string]: string | number | boolean | any[]; // any values defined in the `extra` field.
   };
-  // functions
-  run: (command: string, options?: CommonOptions<string>) => ExecaChildProcess<string>; // run shell command in the package dir
-  installNpmPackage: (packageName: string) => Promise<void>; // use yarn if available
+
+  // helper functions
+  run: (command: string, options?: CommonOptions<string>) => ExecaChildProcess<string>; // execute shell commands in the package dir
+  installNpmPackage: (packageName: string) => Promise<void>; // install npm package. uses yarn if available
 }
 ```
 
 ## Showcase
 
-List of amazing projects built on `create-create-app`.
+List of amazing projects built with `create-create-app`.
 
 - [create-create-app](https://github.com/uetchy/create-create-app) - Yes, `create-create-app` uses `create-create-app` itself to generate `create-<app>` template!
 - [create-book](https://github.com/vivliostyle/create-book) - Fast & frictionless book template generator.
+- [create-vivliostyle-theme](https://github.com/vivliostyle/themes/tree/master/packages/create-vivliostyle-theme) - Create Vivliostyle theme at ease.
+- [create-alfred-workflow](https://github.com/uetchy/create-alfred-workflow) - Create Alfred Workflow.
+- [create-catalyst](https://github.com/dvalinotti/create-catalyst) - NPM create-app command for scaffolding a new Web Components project with GitHub's Catalyst.
+- [create-lit](https://github.com/litelement-dev/create-lit) - Create simple-starter-kit `lit` applications.
 
 > Send a PR to add yours here!
 
 ## Contribution
 
-PRs are always welcome!
+PRs are always welcome.
 
 ### Contributors ✨
 

@@ -263,10 +263,10 @@ create('create-greet', {
       prompt: 'if-no-arg',
     },
   },
-  caveat: async ({ answers }) => {
-    const plugin = answers.plugin;
-    await execa('npm', ['install', '-S', plugin]);
-    console.log(`${plugin} has been added`);
+  caveat: async ({ packageDir, answers }) => {
+    const { plugin } = answers;
+    await execa('npm', ['install', '--prefix', packageDir, '-S', plugin]);
+    console.log(`"${plugin}" has been added`);
   },
 });
 ```

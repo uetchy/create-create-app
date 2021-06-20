@@ -13,7 +13,7 @@ cd ${chalk.bold.green(name)}
   switch (template) {
     case 'typescript':
       text += `
-Inside that directory, you can run several commands:
+Inside the directory, you can run several commands:
 
 ${chalk.bold.cyan('npm run dev')}
   ${chalk.gray("Starts 'tsc -w'.")}
@@ -21,12 +21,12 @@ ${chalk.bold.cyan('npm run build')}
   ${chalk.gray('Build the app for production.')}
 
 After the build, run ${chalk.cyan(
-        'node lib/cli.js <package>'
+        'node dist/cli.js <name>'
       )} to test your app.
 `;
       break;
     default:
-      text += `node src/cli.js <package>
+      text += `node src/cli.js <name>
 `;
   }
 

@@ -18,8 +18,8 @@
     "create-create-app": "^7.0.0"
   },
   "devDependencies": {
-    "tsup": "^3.6.1",
-    "typescript": "^4.0.2"
+    "tsup": "^4.6.1",
+    "typescript": "^4.2.3"
   },
   "license": "{{license}}"
 }

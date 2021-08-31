@@ -11,7 +11,7 @@
 
 ## Why?
 
-- ⚖️ **Built-in License chooser** No need to worry about license thingy.
+- ⚖️ **Built-in License selector** No need to worry about license things.
 - 🎩 **Template engine** You can use template strings in text files, file names, and folder names.
 - 💄 **Highly customizable** Can change caveat text, add extra command-line options.
 
@@ -198,12 +198,12 @@ create('create-greet', {
 
 ### promptForTemplate (default: `false`)
 
-Interactively asks the user to select a template if and only if:
+Interactively asks users to select a template if and only if:
 
 1. `promptForTemplate` is set to `true`, and
 2. there are multiple templates in the `templates` directory.
 
-Even if `promptForTemplate` is set to `false`, the user can still specify a template with the command line flag `--template <template>`.
+Even if `promptForTemplate` is set to `false`, users can still specify a template with the command line flag `--template <template>`.
 
 ```
 create-something <name> --template <template>
@@ -310,7 +310,7 @@ List of amazing projects built with `create-create-app`.
 
 ## Contribution
 
-PRs are always welcome.
+PRs are always welcomed.
 
 ### Contributors ✨
 

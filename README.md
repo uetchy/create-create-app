@@ -305,6 +305,7 @@ List of amazing projects built with `create-create-app`.
 - [create-alfred-workflow](https://github.com/uetchy/create-alfred-workflow) - Create Alfred Workflow.
 - [create-catalyst](https://github.com/dvalinotti/create-catalyst) - NPM create-app command for scaffolding a new Web Components project with GitHub's Catalyst.
 - [create-lit](https://github.com/litelement-dev/create-lit) - Create simple-starter-kit `lit` applications.
+- [create-vscode-extension](https://github.com/heybereket/create-vscode-extension) - Create Visual Studio Code extensions in one command
 
 > Send a PR to add yours here!
 

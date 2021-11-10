@@ -306,8 +306,11 @@ List of amazing projects built with `create-create-app`.
 - [create-catalyst](https://github.com/dvalinotti/create-catalyst) - NPM create-app command for scaffolding a new Web Components project with GitHub's Catalyst.
 - [create-lit](https://github.com/litelement-dev/create-lit) - Create simple-starter-kit `lit` applications.
 - [create-vscode-extension](https://github.com/heybereket/create-vscode-extension) - Create Visual Studio Code extensions in one command
+- [create-express-app](https://github.com/rocambille/create-express-app) - Set up a modern express app by running one command.
+- [tsnt](https://github.com/alii/tsnt) - 🚀An ESM node package template with ESLint, Prettier & TypeScript built in. Powered by esbuild.
+- [create-strawberry](https://github.com/strawberry-discord/create-strawberry) - npm template initializer for strawberry.js
 
-> Send a PR to add yours here!
+> Missing your project? Send a PR :)
 
 ## Contribution
 

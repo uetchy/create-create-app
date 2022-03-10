@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { CommonSpawnOptions } from 'child_process';
 import { spawn } from 'cross-spawn';
-import epicfail from 'epicfail';
+import { epicfail } from 'epicfail';
 import execa, { CommonOptions, ExecaChildProcess } from 'execa';
 import fs from 'fs';
 import gitconfig from 'gitconfig';
@@ -125,8 +125,8 @@ function isOccupied(dirname: string) {
     return (
       fs.readdirSync(dirname).filter((s) => !s.startsWith('.')).length !== 0
     );
-  } catch (err) {
-    if (err.code === 'ENOENT') {
+  } catch (err: any) {
+    if (err?.code === 'ENOENT') {
       return false;
     }
     throw err;
@@ -181,7 +181,7 @@ async function getYargsOptions(
 }
 
 export async function create(appName: string, options: Options) {
-  epicfail({
+  epicfail(require.main!.filename, {
     assertExpected: (err) => err.name === 'CLIError',
   });
 
@@ -272,8 +272,8 @@ export async function create(appName: string, options: Options) {
   try {
     await initGit(packageDir);
     console.log('\nInitialized a git repository');
-  } catch (err) {
-    if (err.exitCode == 127) return; // no git available
+  } catch (err: any) {
+    if (err?.exitCode == 127) return; // no git available
     throw err;
   }
 

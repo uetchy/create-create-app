@@ -4,7 +4,7 @@
 
 > created by [create-create-app](https://github.com/uetchy/create-create-app).
 
-## Use
+## Usage
 
 ```bash
 npx {{lower name}} <name>
@@ -12,7 +12,7 @@ npx {{lower name}} <name>
 
 ## Template string reference
 
-> remove this before publishing your package!
+> Don't forget to remove this before publishing your package!
 
 - \{{name}} => {{name}}
 - \{{upper name}} => {{upper name}}

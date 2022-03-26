@@ -15,11 +15,11 @@
     "templates"
   ],
   "dependencies": {
-    "create-create-app": "^7.0.0"
+    "create-create-app": "^7.1.0"
   },
   "devDependencies": {
-    "tsup": "^4.6.1",
-    "typescript": "^4.2.3"
+    "tsup": "^5.12.1",
+    "typescript": "^4.6.3"
   },
   "license": "{{license}}"
 }

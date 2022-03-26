@@ -23,7 +23,6 @@
     "templates"
   ],
   "dependencies": {
-    "@types/inquirer": "^8.2.0",
     "@types/yargs-interactive": "^2.1.3",
     "chalk": "^4",
     "cross-spawn": "^7.0.3",
@@ -32,7 +31,6 @@
     "gitconfig": "^2.0.8",
     "globby": "^11",
     "handlebars": "^4.7.7",
-    "inquirer": "^8.2.2",
     "is-utf8": "^0.2.1",
     "license.js": "^3.1.2",
     "slash": "^3",

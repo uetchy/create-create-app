@@ -1,13 +1,13 @@
 import chalk from 'chalk';
-import { CommonSpawnOptions } from 'child_process';
-import { spawn } from 'cross-spawn';
 import { epicfail } from 'epicfail';
 import execa, { CommonOptions, ExecaChildProcess } from 'execa';
 import fs from 'fs';
-import gitconfig from 'gitconfig';
 import { availableLicenses, makeLicenseSync } from 'license.js';
 import path from 'path';
 import yargsInteractive, { OptionData } from 'yargs-interactive';
+import { exists, isOccupied } from './fs';
+import { getGitUser, initGit } from './git';
+import { addDeps, installDeps } from './npm';
 import { copy, getAvailableTemplates } from './template';
 
 export interface Option {
@@ -49,6 +49,12 @@ export interface AfterHookOptions {
   installNpmPackage: (packageName: string) => Promise<void>;
 }
 
+export enum NodePM {
+  Npm = 'npm',
+  Yarn = 'yarn',
+  Pnpm = 'pnpm',
+}
+
 export class CLIError extends Error {
   constructor(message: string) {
     super(message);
@@ -56,81 +62,12 @@ export class CLIError extends Error {
   }
 }
 
-async function getGitUser(): Promise<{ name?: string; email?: string }> {
-  try {
-    const config = await gitconfig.get({ location: 'global' });
-    return config.user ?? {};
-  } catch (err) {
-    return {};
-  }
-}
-
-function spawnPromise(
-  command: string,
-  args: string[] = [],
-  options: CommonSpawnOptions = {}
-): Promise<number> {
-  return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { stdio: 'inherit', ...options });
-    child.on('close', (code) => {
-      if (code !== 0) {
-        return reject(code);
-      }
-      resolve(code);
-    });
-  });
-}
-
-async function installDeps(rootDir: string, useYarn: boolean) {
-  let command: string;
-  let args: string[];
-  if (useYarn) {
-    command = 'yarnpkg';
-    args = ['install', '--cwd', rootDir];
-  } else {
-    command = 'npm';
-    args = ['install'];
-    process.chdir(rootDir);
-  }
-  try {
-    await spawnPromise(command, args, { stdio: 'inherit' });
-  } catch (err) {
-    throw new CLIError(`installDeps failed: ${err}`);
-  }
-}
-
-async function IsYarnAvailable() {
-  try {
-    await execa('yarnpkg', ['--version']);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-function exists(filePath: string, baseDir: string): boolean {
-  return fs.existsSync(path.resolve(baseDir, filePath));
-}
-
-async function initGit(root: string) {
-  await execa('git init', { shell: true, cwd: root });
+export function printCommand(...commands: string[]) {
+  console.log(chalk.gray('>', ...commands));
 }
 
 function getContact(author: string, email?: string) {
   return `${author}${email ? ` <${email}>` : ''}`;
-}
-
-function isOccupied(dirname: string) {
-  try {
-    return (
-      fs.readdirSync(dirname).filter((s) => !s.startsWith('.')).length !== 0
-    );
-  } catch (err: any) {
-    if (err?.code === 'ENOENT') {
-      return false;
-    }
-    throw err;
-  }
 }
 
 async function getYargsOptions(
@@ -173,7 +110,16 @@ async function getYargsOptions(
       type: 'list',
       describe: 'license',
       choices: [...availableLicenses(), 'UNLICENSED'],
+      default: 'MIT',
       prompt: 'if-no-arg',
+    },
+    'node-pm': {
+      type: 'list',
+      describe:
+        'select package manager to use for installing packages from npm',
+      choices: ['npm', 'yarn', 'pnpm'],
+      default: 'npm',
+      prompt: 'never',
     },
     ...extraOptions,
   };
@@ -186,9 +132,11 @@ export async function create(appName: string, options: Options) {
   });
 
   const firstArg = process.argv[2];
+
   if (firstArg === undefined) {
     throw new CLIError(`${appName} <name>`);
   }
+
   const useCurrentDir = firstArg === '.';
   const name: string = useCurrentDir
     ? path.basename(process.cwd())
@@ -196,11 +144,12 @@ export async function create(appName: string, options: Options) {
     ? await Promise.resolve(options.modifyName(firstArg))
     : firstArg;
   const packageDir = useCurrentDir ? process.cwd() : path.resolve(name);
-  const { templateRoot, promptForTemplate = false } = options;
 
   if (isOccupied(packageDir)) {
     throw new CLIError(`${packageDir} is not empty directory.`);
   }
+
+  const { templateRoot, promptForTemplate = false } = options;
 
   const yargsOption = await getYargsOptions(
     templateRoot,
@@ -240,14 +189,14 @@ export async function create(appName: string, options: Options) {
   };
 
   // copy files from template
-  console.log(`\nCreating a new package in ${chalk.green(packageDir)}.\n`);
+  console.log(`\nCreating a new package in ${chalk.green(packageDir)}.`);
   await copy({
     packageDir,
     templateDir,
     view,
   });
 
-  // create LICENSE
+  // create license file
   try {
     const license = makeLicenseSync(args.license, {
       year,
@@ -262,17 +211,10 @@ export async function create(appName: string, options: Options) {
     // do not generate LICENSE
   }
 
-  // install dependencies using yarn / npm
-  const useYarn = await IsYarnAvailable();
-  if (exists('package.json', packageDir)) {
-    console.log(`Installing dependencies.`);
-    await installDeps(packageDir, useYarn);
-  }
-
   // init git
   try {
+    console.log('\nInitializing a git repository');
     await initGit(packageDir);
-    console.log('\nInitialized a git repository');
   } catch (err: any) {
     if (err?.exitCode == 127) return; // no git available
     throw err;
@@ -287,27 +229,27 @@ export async function create(appName: string, options: Options) {
     });
   };
 
-  const installNpmPackage = (packageName: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      let command: string;
-      let args: string[];
-      if (useYarn) {
-        command = 'yarnpkg';
-        args = ['--cwd', packageDir, 'add', packageName];
-      } else {
-        command = 'npm';
-        args = ['install', '-D', packageName];
-        process.chdir(packageDir);
-      }
-      const child = spawn(command, args, { stdio: 'inherit' });
-      child.on('close', (code) => {
-        if (code !== 0) {
-          return reject(`installDeps failed: ${command} ${args.join(' ')}`);
-        }
-        resolve();
+  // run Node.js related tasks (only if `package.json` does exist in the template root)
+  let installNpmPackage = async (packageName: string): Promise<void> => {};
+
+  if (exists('package.json', packageDir)) {
+    const packageManager = args['node-pm'];
+
+    console.log(`Installing dependencies using ${packageManager}`);
+    await installDeps(packageDir, packageManager);
+
+    installNpmPackage = async (
+      pkg: string | string[],
+      isDev: boolean = false
+    ): Promise<void> => {
+      await addDeps({
+        rootDir: packageDir,
+        deps: Array.isArray(pkg) ? pkg : [pkg],
+        isDev,
+        pm: packageManager,
       });
-    });
-  };
+    };
+  }
 
   const afterHookOptions = {
     name,
@@ -323,13 +265,14 @@ export async function create(appName: string, options: Options) {
     },
   };
 
-  // after hook script
+  // run after hook script
   if (options.after) {
     await Promise.resolve(options.after(afterHookOptions));
   }
 
-  console.log(`\nSuccess! Created ${chalk.bold.cyan(name)}.`);
+  console.log(`\nSuccessfully created ${chalk.bold.cyan(packageDir)}`);
 
+  // show caveat
   if (options.caveat) {
     switch (typeof options.caveat) {
       case 'string':

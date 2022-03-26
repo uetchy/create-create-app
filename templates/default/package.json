@@ -8,8 +8,6 @@
     "src",
     "templates"
   ],
-  "dependencies": {
-    "create-create-app": "^7.1.0"
-  },
+  "dependencies": {},
   "license": "{{license}}"
 }

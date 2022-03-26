@@ -5,6 +5,7 @@ import { resolve } from 'path';
 import { AfterHookOptions, create } from '.';
 
 const templateRoot = resolve(__dirname, '..', 'templates');
+
 const caveat = ({ name, template }: AfterHookOptions) => {
   let text = `
 cd ${chalk.bold.green(name)}
@@ -20,9 +21,7 @@ ${chalk.bold.cyan('npm run dev')}
 ${chalk.bold.cyan('npm run build')}
   ${chalk.gray('Build the app for production.')}
 
-After the build, run ${chalk.cyan(
-        'node dist/cli.js <name>'
-      )} to test your app.
+After the build, run ${chalk.cyan('node dist/cli.js <name>')} to test your app.
 `;
       break;
     default:
@@ -43,5 +42,9 @@ create('create-create-app', {
   templateRoot,
   promptForTemplate: true,
   modifyName: (name) => (name.startsWith('create-') ? name : `create-${name}`),
+  after: async ({ installNpmPackage }: AfterHookOptions) => {
+    console.log('Installing the latest version of create-create-app');
+    await installNpmPackage('create-create-app');
+  },
   caveat,
 });

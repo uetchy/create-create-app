@@ -187,7 +187,10 @@ create('create-greet', {
     },
   },
   modifyName: (name) => `package-prefix-${name}`,
-  after: ({ installNpmPackage }) => installNpmPackage('chalk'),
+  after: async ({ installNpmPackage }) => {
+    console.log('Installing additional packages');
+    await installNpmPackage('chalk');
+  },
   caveat: `Your app has been created successfully!`,
 });
 ```
@@ -233,7 +236,7 @@ Modify `name` property.
 
 `(options: AfterHookOptions) => void`
 
-Define after-hook script to be executed after initialization.
+Define after-hook script to be executed right after the initialization process.
 
 ### caveat (default: `undefined`)
 
@@ -263,10 +266,14 @@ create('create-greet', {
       prompt: 'if-no-arg',
     },
   },
-  caveat: async ({ packageDir, answers }) => {
-    const { plugin } = answers;
-    await execa('npm', ['install', '--prefix', packageDir, '-S', plugin]);
-    console.log(`"${plugin}" has been added`);
+  after: async ({ installNpmPackage, answers }) => {
+    const plugin = answers.plugin;
+    console.log(`Installing additional package: ${plugin}`);
+    await installNpmPackage(plugin);
+  },
+  caveat: ({ packageDir }) => {
+    console.log('Next step:');
+    console.log(`cd ${packageDir} && npm start`);
   },
 });
 ```
@@ -291,7 +298,7 @@ create('create-greet', {
 
   // helper functions
   run: (command: string, options?: CommonOptions<string>) => ExecaChildProcess<string>; // execute shell commands in the package dir
-  installNpmPackage: (packageName: string) => Promise<void>; // install npm package. uses yarn if available
+  installNpmPackage: (packageName: string | [string], isDev?: boolean) => Promise<void>; // install npm package. uses package manager specified by --node-pm CLI param (default: npm)
 }
 ```
 

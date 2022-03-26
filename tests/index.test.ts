@@ -16,7 +16,7 @@ test('create default project', async () => {
   const baseDir = mkdtempSync(TEST_PREFIX);
 
   const opts = [
-    'create-greet',
+    'greet',
     '--description',
     'desc.',
     '--author',
@@ -27,9 +27,14 @@ test('create default project', async () => {
     'default',
     '--license',
     'MIT',
+    '--node-pm',
+    'pnpm',
   ];
   const { stdout } = await execa(SCRIPT_PATH, opts, { cwd: baseDir });
   expect(stdout).toContain('Read the docs for the further information');
+
+  expect(existsSync(`${baseDir}/create-greet/package-lock.json`)).toBeFalsy();
+  expect(existsSync(`${baseDir}/create-greet/pnpm-lock.yaml`)).toBeTruthy();
 
   const newReadMe = readFileSync(`${baseDir}/create-greet/README.md`, 'utf-8');
   expect(newReadMe).toContain('# Create Greet');
@@ -49,6 +54,7 @@ test('create default project', async () => {
     '"author": "Awesome Doe <awesome@example.com>",'
   );
   expect(newPackageJson).toContain('"license": "MIT"');
+  expect(newPackageJson).toContain('"create-create-app": "^');
 
   const newSrcCli = readFileSync(`${baseDir}/create-greet/src/cli.js`, 'utf-8');
   expect(newSrcCli).toContain('#!/usr/bin/env node');

@@ -5,17 +5,17 @@ on:
 
 jobs:
   test:
-    name: Test
+    name: Test (Node ${{ matrix.node }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [12, 14]
+        node: [12, 14, 16]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
 

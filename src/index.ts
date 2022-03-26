@@ -255,7 +255,8 @@ export async function create(appName: string, options: Options) {
       description: args.description,
       organization: getContact(args.author, args.email),
     });
-    const licenseText = license.header + license.text + license.warranty;
+    const licenseText =
+      (license.header ?? '') + license.text + (license.warranty ?? '');
     fs.writeFileSync(path.resolve(packageDir, 'LICENSE'), licenseText);
   } catch (e) {
     // do not generate LICENSE

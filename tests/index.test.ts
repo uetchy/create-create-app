@@ -26,7 +26,7 @@ test('create default project', async () => {
     '--template',
     'default',
     '--license',
-    'Apache-2.0',
+    'MIT',
   ];
   const { stdout } = await execa(SCRIPT_PATH, opts, { cwd: baseDir });
   expect(stdout).toContain('Read the docs for the further information');
@@ -48,11 +48,34 @@ test('create default project', async () => {
   expect(newPackageJson).toContain(
     '"author": "Awesome Doe <awesome@example.com>",'
   );
-  expect(newPackageJson).toContain('"license": "Apache-2.0"');
+  expect(newPackageJson).toContain('"license": "MIT"');
 
   const newSrcCli = readFileSync(`${baseDir}/create-greet/src/cli.js`, 'utf-8');
   expect(newSrcCli).toContain('#!/usr/bin/env node');
   expect(newSrcCli).toContain("create('create-greet', {");
+
+  const newLicense = readFileSync(`${baseDir}/create-greet/LICENSE`, 'utf-8');
+  expect(newLicense)
+    .toBe(`Copyright (c) ${new Date().getFullYear()} Awesome Doe <awesome@example.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+OR OTHER DEALINGS IN THE SOFTWARE.
+`);
 }, 300000);
 
 it('create typescript project', async () => {

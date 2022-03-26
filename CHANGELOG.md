@@ -1,9 +1,16 @@
-## [7.0.2](https://github.com/uetchy/create-create-app/compare/v7.0.1...v7.0.2) (2021-03-10)
-
+# [7.2.0](https://github.com/uetchy/create-create-app/compare/v7.1.0...v7.2.0) (2022-03-26)
 
 ### Bug Fixes
 
-* avoid crashes when .gitconfig exists but user is not set ([1428db3](https://github.com/uetchy/create-create-app/commit/1428db30eb1417280b6c245952ed93eae3f79c8c))
+- prevent null being appeared on LICENSE ([c8e8ff3](https://github.com/uetchy/create-create-app/commit/c8e8ff3a983c1decafe2662eb9f9988fcc32da31)), closes [#30](https://github.com/uetchy/create-create-app/issues/30)
+
+### Features
+
+- add cli param for node.js package manager ([a1bb7a6](https://github.com/uetchy/create-create-app/commit/a1bb7a6bb4f632054b09aea8cc0be6964f7e06c9)), closes [#29](https://github.com/uetchy/create-create-app/issues/29)## [7.0.2](https://github.com/uetchy/create-create-app/compare/v7.0.1...v7.0.2) (2021-03-10)
+
+### Bug Fixes
+
+- avoid crashes when .gitconfig exists but user is not set ([1428db3](https://github.com/uetchy/create-create-app/commit/1428db30eb1417280b6c245952ed93eae3f79c8c))
 
 ## [7.0.1](https://github.com/uetchy/create-create-app/compare/v7.0.0...v7.0.1) (2020-08-27)
 

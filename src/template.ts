@@ -91,7 +91,7 @@ export async function copy(args: CopyConfig) {
     const targetPath = format(
       path.resolve(args.packageDir, relativePath),
       args.view
-    );
+    ).replace(/\/gitignore$/, '/.gitignore'); // https://github.com/uetchy/create-create-app/issues/38
     prepareDirectory(targetPath);
 
     let sourceData = fs.readFileSync(sourcePath);

@@ -36,6 +36,12 @@ test('create default project', async () => {
   expect(existsSync(`${baseDir}/create-greet/package-lock.json`)).toBeFalsy();
   expect(existsSync(`${baseDir}/create-greet/pnpm-lock.yaml`)).toBeTruthy();
 
+  const newGitignore = readFileSync(
+    `${baseDir}/create-greet/.gitignore`,
+    'utf-8'
+  );
+  expect(newGitignore).toContain('node_modules/');
+
   const newReadMe = readFileSync(`${baseDir}/create-greet/README.md`, 'utf-8');
   expect(newReadMe).toContain('# Create Greet');
   expect(newReadMe).toContain('- {{author}} => Awesome Doe');

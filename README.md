@@ -75,6 +75,8 @@ cd create-greet
 
 Then you can see the `templates/default` folder where the actual template files go.
 
+Note that `.gitignore` files should be named `gitignore` to avoid being ignored on publishing.
+
 ### 3. Build the app (TypeScript only)
 
 Run `npm run build` or `yarn build` to transpile TypeScript code into JavaScript. If you chose the default template, this step is not necessary.

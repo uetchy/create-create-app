@@ -1,3 +1,12 @@
+
+
+## [7.2.1](https://github.com/uetchy/create-create-app/compare/v7.2.0...v7.2.1) (2022-06-09)
+
+
+### Bug Fixes
+
+* typescript template is missing type defs for node ([e360b57](https://github.com/uetchy/create-create-app/commit/e360b57502d03057f836cdf93601ed91856da2c7))
+
 # [7.2.0](https://github.com/uetchy/create-create-app/compare/v7.1.0...v7.2.0) (2022-03-26)
 
 ### Bug Fixes

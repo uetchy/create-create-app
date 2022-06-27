@@ -1,7 +1,9 @@
 import execa from 'execa';
 import { existsSync, mkdtempSync, readFileSync } from 'fs';
+import { readdirSync } from 'node:fs';
 import { tmpdir } from 'os';
 import { join, resolve } from 'path';
+import { it, test, expect } from 'vitest';
 
 const pkg = require('../package.json');
 const SCRIPT_PATH = resolve(__dirname, '..', pkg.bin['create-create-app']);
@@ -10,7 +12,59 @@ const TEST_PREFIX = join(tmpdir(), 'create-create-app-');
 it('show usage', async () => {
   const { stdout } = await execa(SCRIPT_PATH, []);
   expect(stdout).toBe('create-create-app <name>');
-});
+}, 300000);
+
+test('template', async () => {
+  const baseDir = mkdtempSync(TEST_PREFIX);
+  const fixturePath = './tests/fixtures/create-test';
+
+  const opts = [
+    resolve(join(fixturePath, 'src/cli.js')),
+    'test',
+    '--description',
+    'desc.',
+    '--author',
+    '"Awesome Doe"',
+    '--email',
+    'awesome@example.com',
+    '--template',
+    'default',
+    '--license',
+    'UNLICENSED',
+    '--architecture',
+    'macOS',
+  ];
+  // console.log('node', ...opts);
+  await execa('yarn', ['install'], {
+    cwd: fixturePath,
+  });
+  const { stdout } = await execa('node', opts, {
+    cwd: baseDir,
+  });
+  // console.log(readdirSync(join(baseDir, 'test')));
+  expect(readdirSync(join(baseDir, 'test'))).toEqual(
+    expect.arrayContaining([
+      '.git',
+      '.gitignore',
+      'README.md',
+      'test.code-workspace',
+      'Test-config',
+    ])
+  );
+  expect(readFileSync(join(baseDir, 'test', 'test.code-workspace'), 'utf-8'))
+    .toBe(`{
+  "name": "test"
+}
+`);
+  expect(
+    readFileSync(
+      join(baseDir, 'test', 'Test-config', 'README-macOS.md'),
+      'utf-8'
+    )
+  ).toBe(`# README (macOS)
+`);
+  expect(stdout).toContain('Ok you chose macOS');
+}, 300000);
 
 test('create default project', async () => {
   const baseDir = mkdtempSync(TEST_PREFIX);

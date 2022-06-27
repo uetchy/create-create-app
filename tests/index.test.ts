@@ -222,7 +222,7 @@ test('create unlicensed app', async () => {
 
 it('should create project without npm install and without git', async () => {
   const baseDir = mkdtempSync(TEST_PREFIX);
-  
+
   const opts = [
     'create-greet',
     '--description',
@@ -238,7 +238,7 @@ it('should create project without npm install and without git', async () => {
     '--skip-install',
     '--skip-git'
   ];
-  const { stdout } = await execa(utils.scriptPath, opts, {
+  const { stdout } = await execa(SCRIPT_PATH, opts, {
     cwd: baseDir,
   });
 

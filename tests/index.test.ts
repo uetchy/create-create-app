@@ -51,18 +51,15 @@ test('template', async () => {
       'Test-config',
     ])
   );
-  expect(readFileSync(join(baseDir, 'test', 'test.code-workspace'), 'utf-8'))
-    .toBe(`{
-  "name": "test"
-}
-`);
+  expect(
+    readFileSync(join(baseDir, 'test', 'test.code-workspace'), 'utf-8')
+  ).toContain(`"name": "test"`);
   expect(
     readFileSync(
-      join(baseDir, 'test', 'Test-config', 'README-macOS.md'),
+      join(baseDir, 'test', 'Test-config', 'README-MACOS.md'),
       'utf-8'
     )
-  ).toBe(`# README (macOS)
-`);
+  ).toContain(`# README (macOS)`);
   expect(stdout).toContain('Ok you chose macOS');
 }, 300000);
 

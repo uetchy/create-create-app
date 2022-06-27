@@ -7,7 +7,7 @@ import path from 'path';
 import yargsInteractive, { OptionData } from 'yargs-interactive';
 import { exists, isOccupied } from './fs';
 import { getGitUser, initGit } from './git';
-import { addDeps, installDeps } from './npm';
+import { addDeps, installDeps, whichPm } from './npm';
 import { copy, getAvailableTemplates } from './template';
 
 export interface Option {
@@ -17,6 +17,10 @@ export interface Option {
 export interface Options {
   templateRoot: string;
   promptForTemplate?: boolean;
+  promptForLicense?: boolean;
+  promptForNodePM?: boolean;
+  skipGitInit?: boolean;
+  skipNpmInstall?: boolean;
   modifyName?: (name: string) => string | Promise<string>;
   extra?: Option;
   caveat?:
@@ -73,6 +77,8 @@ function getContact(author: string, email?: string) {
 async function getYargsOptions(
   templateRoot: string,
   promptForTemplate: boolean,
+  promptForLicense: boolean,
+  promptForNodePM: boolean,
   extraOptions: Option = {}
 ) {
   const gitUser = await getGitUser();
@@ -110,16 +116,16 @@ async function getYargsOptions(
       type: 'list',
       describe: 'license',
       choices: [...availableLicenses(), 'UNLICENSED'],
-      default: 'MIT',
-      prompt: 'if-no-arg',
+      default: promptForLicense ? 'MIT' : 'UNLICENSED',
+      prompt: promptForLicense ? 'if-no-arg' : 'never',
     },
     'node-pm': {
       type: 'list',
       describe:
         'select package manager to use for installing packages from npm',
       choices: ['npm', 'yarn', 'pnpm'],
-      default: 'npm',
-      prompt: 'never',
+      default: undefined, // undefined by default, we'll try to guess pm manager later
+      prompt: promptForNodePM ? 'if-no-arg' : 'never',
     },
     ...extraOptions,
   };
@@ -149,13 +155,21 @@ export async function create(appName: string, options: Options) {
     throw new CLIError(`${packageDir} is not empty directory.`);
   }
 
-  const { templateRoot, promptForTemplate = false } = options;
+  const {
+    templateRoot,
+    promptForTemplate = false,
+    promptForLicense = true,
+    promptForNodePM = false,
+  } = options;
 
   const yargsOption = await getYargsOptions(
     templateRoot,
     promptForTemplate,
+    promptForLicense,
+    promptForNodePM,
     options.extra
   );
+
   const args = await yargsInteractive()
     .usage('$0 <name> [args]')
     .interactive(yargsOption as any);
@@ -212,12 +226,17 @@ export async function create(appName: string, options: Options) {
   }
 
   // init git
-  try {
-    console.log('\nInitializing a git repository');
-    await initGit(packageDir);
-  } catch (err: any) {
-    if (err?.exitCode == 127) return; // no git available
-    throw err;
+  const skipGit = args['skip-git'];
+
+  // init git if option skipGitInit or arg --skip-git are not set
+  if (!(options.skipGitInit || skipGit)) {
+    try {
+      console.log('\nInitializing a git repository');
+      await initGit(packageDir);
+    } catch (err: any) {
+      if (err?.exitCode == 127) return; // no git available
+      throw err;
+    }
   }
 
   const run = (command: string, options: CommonOptions<string> = {}) => {
@@ -233,10 +252,16 @@ export async function create(appName: string, options: Options) {
   let installNpmPackage = async (packageName: string): Promise<void> => {};
 
   if (exists('package.json', packageDir)) {
-    const packageManager = args['node-pm'];
+    const nodePMArg = args['node-pm'];
+    const skipInstallArg = args['skip-install'];
 
-    console.log(`Installing dependencies using ${packageManager}`);
-    await installDeps(packageDir, packageManager);
+    // guess which package manager to use
+    const packageManager = whichPm(nodePMArg);
+
+    // install deps only if skipNpmInstall is not falsy
+    if (!(options.skipNpmInstall || skipInstallArg)) {
+      await installDeps(packageDir, packageManager);
+    }
 
     installNpmPackage = async (
       pkg: string | string[],

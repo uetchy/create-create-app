@@ -1,7 +1,6 @@
 import execa from 'execa';
-import { existsSync, mkdtempSync, readFileSync } from 'fs';
-import { tmpdir } from 'os';
-import { join, resolve } from 'path';
+import { existsSync, readFileSync } from 'fs';
+import { join } from 'path';
 import utils from '../utils';
 
 describe('e2e: cli test', () => {
@@ -42,6 +41,8 @@ describe('e2e: cli test', () => {
 
     expect(existsSync(`${baseDir}/create-greet/package-lock.json`)).toBeFalsy();
     expect(existsSync(`${baseDir}/create-greet/pnpm-lock.yaml`)).toBeTruthy();
+    expect(existsSync(`${baseDir}/create-greet/node_modules`)).toBeTruthy();
+    expect(existsSync(`${baseDir}/create-greet/.git`)).toBeTruthy();
 
     const newGitignore = readFileSync(
       `${baseDir}/create-greet/.gitignore`,
@@ -122,6 +123,8 @@ OR OTHER DEALINGS IN THE SOFTWARE.
       { cwd: baseDir }
     );
     expect(stdout).toContain('Build the app for production.');
+    expect(stdout).toContain('Installing dependencies using');
+    expect(stdout).toContain('Initializing a git repository');
 
     const testDir = join(baseDir, 'create-greet');
     await execa('npm', ['run', 'build'], {
@@ -168,6 +171,8 @@ OR OTHER DEALINGS IN THE SOFTWARE.
       cwd: baseDir,
     });
     expect(stdout).toContain('Read the docs for the further information');
+    expect(stdout).toContain('Installing dependencies using');
+    expect(stdout).toContain('Initializing a git repository');
 
     const newPackageJson = readFileSync(
       join(baseDir, 'create-greet', 'package.json'),
@@ -178,4 +183,32 @@ OR OTHER DEALINGS IN THE SOFTWARE.
     const existed = existsSync(`${baseDir}/create-greet/LICENSE`);
     expect(existed).toBeFalsy();
   }, 300000);
+
+  it('should create project without npm install and without git', async () => {
+    const opts = [
+      'create-greet',
+      '--description',
+      'desc.',
+      '--author',
+      '"Awesome Doe"',
+      '--email',
+      'awesome@example.com',
+      '--template',
+      'default',
+      '--license',
+      'UNLICENSED',
+      '--skip-install',
+      '--skip-git'
+    ];
+    const { stdout } = await execa(utils.scriptPath, opts, {
+      cwd: baseDir,
+    });
+
+    // cant check node_modules doesn't exist, because
+    // it will exist anyways after AfterHookOptions executes!
+    expect(stdout).not.toContain('Installing dependencies using');
+    expect(stdout).not.toContain('Initializing a git repository');
+    expect(existsSync(`${baseDir}/create-greet/.git`)).toBeFalsy();
+  }, 300000);
 });
+// Initializing a git repository

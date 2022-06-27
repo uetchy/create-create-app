@@ -87,15 +87,11 @@ export interface CopyConfig {
 export async function copy(args: CopyConfig) {
   const templateFiles = await globby(slash(args.templateDir), { dot: true });
   for (const sourcePath of templateFiles) {
-    let relativePath = format(
-      path.relative(args.templateDir, sourcePath),     
+    const relativePath = path.relative(args.templateDir, sourcePath);
+    const targetPath = format(
+      slash(path.resolve(args.packageDir, relativePath)),
       args.view
-    );
-
-    let targetPath = slash(
-      path.resolve(args.packageDir, relativePath)
-    ).replace(/\/gitignore$/, '/.gitignore'); // https://github.com/uetchy/create-create-app/issues/38
-
+    ).replace(/gitignore$/, '.gitignore'); // https://github.com/uetchy/create-create-app/issues/38
     prepareDirectory(targetPath);
 
     let sourceData = fs.readFileSync(sourcePath);

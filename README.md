@@ -339,6 +339,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://twitter.com/takahashim"><img src="https://avatars2.githubusercontent.com/u/10401?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Masayoshi Takahashi</b></sub></a><br /><a href="https://github.com/uetchy/create-create-app/commits?author=takahashim" title="Code">💻</a></td>
     <td align="center"><a href="http://alexanderliu.com"><img src="https://avatars.githubusercontent.com/u/41758627?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alexander Liu</b></sub></a><br /><a href="https://github.com/uetchy/create-create-app/commits?author=alexanderl19" title="Code">💻</a></td>
     <td align="center"><a href="https://vilja.me"><img src="https://avatars.githubusercontent.com/u/24564003?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Vilja</b></sub></a><br /><a href="https://github.com/uetchy/create-create-app/commits?author=iVilja" title="Code">💻</a></td>
+    <td align="center"><a href="https://lucaslabs.tech/"><img src="https://avatars.githubusercontent.com/u/12949236?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lucas Colombo</b></sub></a><br /><a href="https://github.com/uetchy/create-create-app/commits?author=lucas-labs" title="Code">💻</a></td>
   </tr>
 </table>
 

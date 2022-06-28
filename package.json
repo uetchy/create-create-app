@@ -1,7 +1,7 @@
 {
   "name": "create-create-app",
   "description": "Create your own `create-something` app.",
-  "version": "7.2.1",
+  "version": "7.3.0",
   "author": "Yasuaki Uechi <y@uechi.io>",
   "scripts": {
     "build": "npm run tsup -- --minify --dts",

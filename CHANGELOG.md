@@ -1,11 +1,22 @@
-
-
-## [7.2.1](https://github.com/uetchy/create-create-app/compare/v7.2.0...v7.2.1) (2022-06-09)
-
+# [7.3.0](https://github.com/uetchy/create-create-app/compare/v7.2.1...v7.3.0) (2022-06-28)
 
 ### Bug Fixes
 
-* typescript template is missing type defs for node ([e360b57](https://github.com/uetchy/create-create-app/commit/e360b57502d03057f836cdf93601ed91856da2c7))
+- more slash ([2083a33](https://github.com/uetchy/create-create-app/commit/2083a333612fc54f5e89b0b00bc00186a4fe102b))
+- only replace `gitignore` file ([bffca9c](https://github.com/uetchy/create-create-app/commit/bffca9ccd225fafa134b872a5e61d192064efe0b))
+- use shell to run npm command ([101e03c](https://github.com/uetchy/create-create-app/commit/101e03c6c0a846d3b07c951d2263c1e4f31292c2))
+- **windows:** slash before format ([8575810](https://github.com/uetchy/create-create-app/commit/8575810f2be349bcae08694233a7e36fbf2f49bc))
+
+### Features
+
+- guess pm, skip install/git ([#42](https://github.com/uetchy/create-create-app/issues/42)) by [@lucas-labs](https://github.com/lucas-labs) ([718b190](https://github.com/uetchy/create-create-app/commit/718b1909a2afa5adfbd1a7e1a19b4627e7de1685))
+- more options for prompts ([6623b9b](https://github.com/uetchy/create-create-app/commit/6623b9bb3f6b9be2b88d7f2cbe2c438e3b7fefbc)), closes [#36](https://github.com/uetchy/create-create-app/issues/36)
+
+## [7.2.1](https://github.com/uetchy/create-create-app/compare/v7.2.0...v7.2.1) (2022-06-09)
+
+### Bug Fixes
+
+- typescript template is missing type defs for node ([e360b57](https://github.com/uetchy/create-create-app/commit/e360b57502d03057f836cdf93601ed91856da2c7))
 
 # [7.2.0](https://github.com/uetchy/create-create-app/compare/v7.1.0...v7.2.0) (2022-03-26)
 

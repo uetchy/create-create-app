@@ -23,8 +23,6 @@ export async function installDeps(rootDir: string, pm: PackageManager) {
   let command: string;
   let args: string[];
 
-  console.log(`Installing dependencies using ${pm}`);
-
   switch (pm) {
     case 'npm': {
       command = 'npm';

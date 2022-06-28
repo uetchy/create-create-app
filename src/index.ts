@@ -276,9 +276,10 @@ export async function create(appName: string, options: Options) {
   if (exists('package.json', packageDir)) {
     // guess which package manager to use
     const packageManager = args['node-pm'] ?? whichPm();
-    console.log(args);
+
     // install deps only if skipNpmInstall is not falsy
     if (!(skipNpmInstall || args['skip-install'])) {
+      console.log(`\nInstalling dependencies using ${packageManager}`);
       await installDeps(packageDir, packageManager);
     }
 

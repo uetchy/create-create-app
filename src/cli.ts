@@ -40,13 +40,14 @@ ${chalk.yellow(
 
 create('create-create-app', {
   templateRoot,
-  caveat,
-  promptForTemplate: true,
-
   modifyName: (name) => (name.startsWith('create-') ? name : `create-${name}`),
+
+  promptForTemplate: true,
+  skipNpmInstall: true,
 
   after: async ({ installNpmPackage }: AfterHookOptions) => {
     console.log('Installing the latest version of create-create-app');
     await installNpmPackage('create-create-app');
   },
+  caveat,
 });

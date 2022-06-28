@@ -2,12 +2,15 @@ import chalk from 'chalk';
 import { epicfail } from 'epicfail';
 import execa, { CommonOptions, ExecaChildProcess } from 'execa';
 import fs from 'fs';
-import { availableLicenses, makeLicenseSync } from 'license.js';
+import {
+  availableLicenses as getAvailableLicenses,
+  makeLicenseSync,
+} from 'license.js';
 import path from 'path';
 import yargsInteractive, { OptionData } from 'yargs-interactive';
 import { exists, isOccupied } from './fs';
 import { getGitUser, initGit } from './git';
-import { addDeps, installDeps, whichPm } from './npm';
+import { addDeps, installDeps, PackageManager, whichPm } from './npm';
 import { copy, getAvailableTemplates } from './template';
 
 export interface Option {
@@ -16,17 +19,31 @@ export interface Option {
 
 export interface Options {
   templateRoot: string;
-  promptForTemplate?: boolean;
-  promptForLicense?: boolean;
-  promptForNodePM?: boolean;
-  skipGitInit?: boolean;
-  skipNpmInstall?: boolean;
+
   modifyName?: (name: string) => string | Promise<string>;
   extra?: Option;
+
+  defaultDescription?: string;
+  defaultAuthor?: string;
+  defaultEmail?: string;
+  defaultTemplate?: string;
+  defaultLicense?: string;
+  defaultPackageManager?: PackageManager;
+
+  promptForDescription?: boolean;
+  promptForAuthor?: boolean;
+  promptForEmail?: boolean;
+  promptForTemplate?: boolean;
+  promptForLicense?: boolean;
+  promptForPackageManager?: boolean;
+
+  skipGitInit?: boolean;
+  skipNpmInstall?: boolean;
+
+  after?: (options: AfterHookOptions) => void | Promise<void>;
   caveat?:
     | string
     | ((options: AfterHookOptions) => string | void | Promise<string | void>);
-  after?: (options: AfterHookOptions) => void | Promise<void>;
 }
 
 export interface View {
@@ -45,18 +62,12 @@ export interface AfterHookOptions {
   template: string;
   templateDir: string;
   year: number;
-  answers: Omit<View, 'name'>;
+  answers: View;
   run: (
     command: string,
     options?: CommonOptions<string>
   ) => ExecaChildProcess<string>;
   installNpmPackage: (packageName: string, isDev?: boolean) => Promise<void>;
-}
-
-export enum NodePM {
-  Npm = 'npm',
-  Yarn = 'yarn',
-  Pnpm = 'pnpm',
 }
 
 export class CLIError extends Error {
@@ -74,109 +85,128 @@ function getContact(author: string, email?: string) {
   return `${author}${email ? ` <${email}>` : ''}`;
 }
 
-async function getYargsOptions(
-  templateRoot: string,
-  promptForTemplate: boolean,
-  promptForLicense: boolean,
-  promptForNodePM: boolean,
-  extraOptions: Option = {}
-) {
-  const gitUser = await getGitUser();
-  const availableTemplates = getAvailableTemplates(templateRoot);
-  const isMultipleTemplates = availableTemplates.length > 1;
-  const askForTemplate = isMultipleTemplates && promptForTemplate;
-  const yargOption: Option = {
-    interactive: { default: true },
-    description: {
-      type: 'input',
-      describe: 'Description',
-      default: 'description',
-      prompt: 'if-no-arg',
-    },
-    author: {
-      type: 'input',
-      describe: 'Author name',
-      default: gitUser.name,
-      prompt: 'if-no-arg',
-    },
-    email: {
-      type: 'input',
-      describe: 'Author email',
-      default: gitUser.email,
-      prompt: 'if-no-arg',
-    },
-    template: {
-      type: 'list',
-      describe: 'Template',
-      default: 'default',
-      prompt: askForTemplate ? 'if-no-arg' : 'never',
-      choices: availableTemplates,
-    },
-    license: {
-      type: 'list',
-      describe: 'License',
-      choices: [...availableLicenses(), 'UNLICENSED'],
-      default: promptForLicense ? 'MIT' : 'UNLICENSED',
-      prompt: promptForLicense ? 'if-no-arg' : 'never',
-    },
-    'node-pm': {
-      type: 'list',
-      describe: 'package manager to use for installing packages from npm',
-      choices: ['npm', 'yarn', 'pnpm'],
-      default: undefined, // undefined by default, we'll try to guess pm manager later
-      prompt: promptForNodePM ? 'if-no-arg' : 'never',
-    },
-    ...extraOptions,
-  };
-  return yargOption;
-}
-
 export async function create(appName: string, options: Options) {
   epicfail(require.main!.filename, {
     assertExpected: (err) => err.name === 'CLIError',
   });
 
-  const firstArg = process.argv[2];
+  const gitUser = await getGitUser();
 
+  const {
+    templateRoot,
+    modifyName,
+    extra: extraOptions = {},
+    after,
+    caveat,
+
+    defaultDescription = 'description',
+    defaultAuthor = gitUser.name ?? 'Your name',
+    defaultEmail = gitUser.email ?? 'Your email',
+    defaultTemplate = 'default',
+    defaultLicense = 'MIT',
+    defaultPackageManager = undefined, // undefined by default, we'll try to guess pm manager later
+
+    promptForDescription = true,
+    promptForAuthor = true,
+    promptForEmail = true,
+    promptForTemplate = false,
+    promptForLicense = true,
+    promptForPackageManager = false,
+
+    skipGitInit = false,
+    skipNpmInstall = false,
+  } = options;
+
+  // verify args
+  const firstArg = process.argv[2];
   if (firstArg === undefined) {
     throw new CLIError(`${appName} <name>`);
   }
 
+  // configure package name and root direcotry
   const useCurrentDir = firstArg === '.';
+
   const name: string = useCurrentDir
     ? path.basename(process.cwd())
-    : options.modifyName
-    ? await Promise.resolve(options.modifyName(firstArg))
+    : modifyName
+    ? await Promise.resolve(modifyName(firstArg))
     : firstArg;
-  const packageDir = useCurrentDir ? process.cwd() : path.resolve(name);
 
+  const packageDir = useCurrentDir ? process.cwd() : path.resolve(name);
   if (isOccupied(packageDir)) {
     throw new CLIError(`${packageDir} is not empty directory.`);
   }
 
-  const {
-    templateRoot,
-    promptForTemplate = false,
-    promptForLicense = true,
-    promptForNodePM = false,
-  } = options;
+  // construct yargs options
+  const availableTemplates = getAvailableTemplates(templateRoot);
+  if (availableTemplates.length === 0) {
+    throw new CLIError(`No template found`);
+  }
 
-  const yargsOption = await getYargsOptions(
-    templateRoot,
-    promptForTemplate,
-    promptForLicense,
-    promptForNodePM,
-    options.extra
-  );
+  const availableLicenses = [...getAvailableLicenses(), 'UNLICENSED'];
 
-  const args = await yargsInteractive()
+  const isMultipleTemplates = availableTemplates.length > 1;
+
+  const yargsOption = {
+    interactive: { default: true },
+    description: {
+      type: 'input',
+      describe: 'Description',
+      default: defaultDescription,
+      prompt: promptForDescription ? 'if-no-arg' : 'never',
+    },
+    author: {
+      type: 'input',
+      describe: 'Author name',
+      default: defaultAuthor,
+      prompt: promptForAuthor ? 'if-no-arg' : 'never',
+    },
+    email: {
+      type: 'input',
+      describe: 'Author email',
+      default: defaultEmail,
+      prompt: promptForEmail ? 'if-no-arg' : 'never',
+    },
+    template: {
+      type: 'list',
+      describe: 'Template',
+      default: defaultTemplate,
+      prompt: isMultipleTemplates && promptForTemplate ? 'if-no-arg' : 'never',
+      choices: availableTemplates,
+    },
+    license: {
+      type: 'list',
+      describe: 'License',
+      choices: availableLicenses,
+      default: defaultLicense,
+      prompt: promptForLicense ? 'if-no-arg' : 'never',
+    },
+    'node-pm': {
+      type: 'list',
+      describe: 'Package manager to use for installing packages from npm',
+      choices: ['npm', 'yarn', 'pnpm'],
+      default: defaultPackageManager, // undefined by default, we'll try to guess pm later
+      prompt: promptForPackageManager ? 'if-no-arg' : 'never',
+    },
+    'skip-git': {
+      type: 'confirm',
+      describe: 'Skip initializing git repository',
+      prompt: 'never',
+    },
+    'skip-install': {
+      type: 'confirm',
+      describe: 'Skip installing package dependencies',
+      prompt: 'never',
+    },
+    ...extraOptions,
+  };
+
+  const args = (await yargsInteractive()
     .usage('$0 <name> [args]')
-    .interactive(yargsOption as any);
+    .interactive(yargsOption as any)) as Record<keyof typeof yargsOption, any>;
 
-  const template = args.template;
+  const template = args['template'];
   const templateDir = path.resolve(templateRoot, template);
-  const year = new Date().getFullYear();
-  const contact = getContact(args.author, args.email);
 
   if (!fs.existsSync(templateDir)) {
     throw new CLIError('No template found');
@@ -194,28 +224,30 @@ export async function create(appName: string, options: Options) {
       }
     );
 
-  const view = {
-    ...filteredArgs,
-    name,
-    year,
-    contact,
-  };
+  const year = new Date().getFullYear();
+  const contact = getContact(args['author'], args['email']);
 
-  // copy files from template
+  // copy files from the template folder
   console.log(`\nCreating a new package in ${chalk.green(packageDir)}.`);
+
   await copy({
     packageDir,
     templateDir,
-    view,
+    view: {
+      ...filteredArgs,
+      name,
+      year,
+      contact,
+    },
   });
 
   // create license file
   try {
-    const license = makeLicenseSync(args.license, {
+    const license = makeLicenseSync(args['license'], {
       year,
       project: name,
       description: args.description,
-      organization: getContact(args.author, args.email),
+      organization: getContact(args['author'], args['email']),
     });
     const licenseText =
       (license.header ?? '') + license.text + (license.warranty ?? '');
@@ -224,20 +256,8 @@ export async function create(appName: string, options: Options) {
     // do not generate LICENSE
   }
 
-  const run = (command: string, options: CommonOptions<string> = {}) => {
-    const args = command.split(' ');
-    return execa(args[0], args.slice(1), {
-      stdio: 'inherit',
-      cwd: packageDir,
-      ...options,
-    });
-  };
-
-  // init git
-
   // init git if option skipGitInit or arg --skip-git are not set
-  const skipGit = args['skip-git'];
-  if (!(options.skipGitInit || skipGit)) {
+  if (!(skipGitInit || args['skip-git'])) {
     try {
       console.log('\nInitializing a git repository');
       await initGit(packageDir);
@@ -254,14 +274,11 @@ export async function create(appName: string, options: Options) {
   ): Promise<void> => {};
 
   if (exists('package.json', packageDir)) {
-    const nodePMArg = args['node-pm'];
-    const skipInstallArg = args['skip-install'];
-
     // guess which package manager to use
-    const packageManager = whichPm(nodePMArg);
-
+    const packageManager = args['node-pm'] ?? whichPm();
+    console.log(args);
     // install deps only if skipNpmInstall is not falsy
-    if (!(options.skipNpmInstall || skipInstallArg)) {
+    if (!(skipNpmInstall || args['skip-install'])) {
       await installDeps(packageDir, packageManager);
     }
 
@@ -276,7 +293,18 @@ export async function create(appName: string, options: Options) {
     };
   }
 
-  const afterHookOptions: AfterHookOptions = {
+  // setup afterHookOptions
+  const run = (command: string, options: CommonOptions<string> = {}) => {
+    const [script, ...scriptArgs] = command.split(' ');
+
+    return execa(script, scriptArgs, {
+      stdio: 'inherit',
+      cwd: packageDir,
+      ...options,
+    });
+  };
+
+  const hookOptions: AfterHookOptions = {
     name,
     packageDir,
     template,
@@ -291,22 +319,20 @@ export async function create(appName: string, options: Options) {
   };
 
   // run after hook script
-  if (options.after) {
-    await Promise.resolve(options.after(afterHookOptions));
+  if (after) {
+    await Promise.resolve(after(hookOptions));
   }
 
   console.log(`\nSuccessfully created ${chalk.bold.cyan(packageDir)}`);
 
   // show caveat
-  if (options.caveat) {
-    switch (typeof options.caveat) {
+  if (caveat) {
+    switch (typeof caveat) {
       case 'string':
-        console.log(options.caveat);
+        console.log(caveat);
         break;
       case 'function':
-        const response = await Promise.resolve(
-          options.caveat(afterHookOptions)
-        );
+        const response = await Promise.resolve(caveat(hookOptions));
         if (response) {
           console.log(response);
         }

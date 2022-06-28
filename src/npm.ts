@@ -1,62 +1,43 @@
-import { CLIError, NodePM, printCommand } from '.';
+import { CLIError, printCommand } from '.';
 import { spawnPromise } from './fs';
 
-function getPm(name: string) {
-  switch (name) {
-    case 'pnpm':
-      return NodePM.Pnpm;
-
-    case 'yarn':
-      return NodePM.Yarn;
-
-    case 'npm':
-      return NodePM.Npm;
-
-    default:
-      return NodePM.Npm;
-  }
-}
+export type PackageManager = 'npm' | 'yarn' | 'pnpm';
 
 // License for `whichPm`
 // The MIT License (MIT)
 // Copyright (c) 2017-2022 Zoltan Kochan <z@kochan.io>
 // https://github.com/zkochan/packages/tree/main/which-pm-runs
-export function whichPm(defaultPm?: string) {
-  // if there's a default pm (passed by argv), use it
-  if (defaultPm) {
-    return getPm(defaultPm);
-  }
-
+export function whichPm(): PackageManager {
   if (!process.env.npm_config_user_agent) {
-    return NodePM.Npm;
+    return 'npm';
   }
 
   const pmSpec = process.env.npm_config_user_agent.split(' ')[0];
   const separatorPos = pmSpec.lastIndexOf('/');
   const name = pmSpec.substring(0, separatorPos);
 
-  return getPm(name);
+  return name as PackageManager;
 }
 
-export async function installDeps(rootDir: string, pm: NodePM) {
+export async function installDeps(rootDir: string, pm: PackageManager) {
   let command: string;
   let args: string[];
 
   console.log(`Installing dependencies using ${pm}`);
 
   switch (pm) {
-    case NodePM.Npm: {
+    case 'npm': {
       command = 'npm';
       args = ['install'];
       process.chdir(rootDir);
       break;
     }
-    case NodePM.Yarn: {
+    case 'yarn': {
       command = 'yarnpkg';
       args = ['install', '--cwd', rootDir];
       break;
     }
-    case NodePM.Pnpm: {
+    case 'pnpm': {
       command = 'pnpm';
       args = ['install', '--dir', rootDir];
       break;
@@ -80,25 +61,25 @@ export async function addDeps(
     pm,
   }: {
     isDev?: boolean;
-    pm: NodePM;
+    pm: PackageManager;
   }
 ) {
   let command: string;
   let args: string[];
 
   switch (pm) {
-    case NodePM.Npm: {
+    case 'npm': {
       command = 'npm';
       args = ['install', isDev ? '-D' : '-S', ...deps];
       process.chdir(rootDir);
       break;
     }
-    case NodePM.Yarn: {
+    case 'yarn': {
       command = 'yarnpkg';
       args = ['add', '--cwd', rootDir, ...deps, isDev ? '-D' : ''];
       break;
     }
-    case NodePM.Pnpm: {
+    case 'pnpm': {
       command = 'pnpm';
       args = ['add', '--dir', rootDir, ...deps, isDev ? '-D' : ''];
       break;

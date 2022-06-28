@@ -39,12 +39,25 @@
     - [`uuid`](#uuid)
 - [Config](#config)
   - [templateRoot (required)](#templateroot-required)
-  - [promptForTemplate (default: `false`)](#promptfortemplate-default-false)
-  - [extra (default: `undefined`)](#extra-default-undefined)
   - [modifyName (default: `undefined`)](#modifyname-default-undefined)
+  - [extra (default: `undefined`)](#extra-default-undefined)
+  - [defaultDescription (default: `description`)](#defaultdescription-default-description)
+  - [defaultAuthor (default: `user.name` in `~/.gitconfig` otherwise `Your name`)](#defaultauthor-default-username-in-gitconfig-otherwise-your-name)
+  - [defaultEmail (default: `user.email` in `~/.gitconfig` otherwise `Your email`)](#defaultemail-default-useremail-in-gitconfig-otherwise-your-email)
+  - [defaultTemplate (default: `default`)](#defaulttemplate-default-default)
+  - [defaultLicense (default: `MIT`)](#defaultlicense-default-mit)
+  - [defaultPackageManager (default: `undefined`)](#defaultpackagemanager-default-undefined)
+  - [promptForDescription (default: `true`)](#promptfordescription-default-true)
+  - [promptForAuthor (default: `true`)](#promptforauthor-default-true)
+  - [promptForEmail (default: `true`)](#promptforemail-default-true)
+  - [promptForTemplate (default: `false`)](#promptfortemplate-default-false)
+  - [promptForLicense (default: `true`)](#promptforlicense-default-true)
+  - [promptForPackageManager (default: `false`)](#promptforpackagemanager-default-false)
+  - [skipGitInit (default: `false`)](#skipgitinit-default-false)
+  - [skipNpmInstall (default: `false`)](#skipnpminstall-default-false)
   - [after (default: `undefined`)](#after-default-undefined)
   - [caveat (default: `undefined`)](#caveat-default-undefined)
-  - [AfterHookOptions](#afterhookoptions)
+  - [`AfterHookOptions`](#afterhookoptions)
 - [Showcase](#showcase)
 - [Contribution](#contribution)
   - [Contributors ✨](#contributors-)
@@ -201,27 +214,6 @@ create('create-greet', {
 
 `templateRoot` is set to `path.resolve(__dirname, '../templates')`. You can change this to any location you like.
 
-### promptForTemplate (default: `false`)
-
-Interactively asks users to select a template if and only if:
-
-1. `promptForTemplate` is set to `true`, and
-2. there are multiple templates in the `templates` directory.
-
-Even if `promptForTemplate` is set to `false`, users can still specify a template with the command line flag `--template <template>`.
-
-```
-create-something <name> --template <template>
-```
-
-### extra (default: `undefined`)
-
-`object | undefined`
-
-Additional questions can be defined. These options will be available as CLI flags, interactive questions, and template strings. In the example above, `--language` flag and the `{{language}}` template string will be enabled in the app.
-
-All possible options can be found in the [yargs-interactive documentation](https://github.com/nanovazquez/yargs-interactive#options).
-
 ### modifyName (default: `undefined`)
 
 `(name: string) => string | Promise<string>`
@@ -233,6 +225,76 @@ Modify `name` property.
   modifyName: (name) => (name.startsWith('create-') ? name : `create-${name}`);
 }
 ```
+
+### extra (default: `undefined`)
+
+`object | undefined`
+
+Additional questions can be defined. These options will be available as CLI flags, interactive questions, and template strings. In the example above, `--language` flag and the `{{language}}` template string will be enabled in the app.
+
+All possible options can be found in the [yargs-interactive documentation](https://github.com/nanovazquez/yargs-interactive#options).
+
+### defaultDescription (default: `description`)
+
+Default value for a package description.
+
+### defaultAuthor (default: `user.name` in `~/.gitconfig` otherwise `Your name`)
+
+Default value for a package author.
+
+### defaultEmail (default: `user.email` in `~/.gitconfig` otherwise `Your email`)
+
+Default value for a package author email.
+
+### defaultTemplate (default: `default`)
+
+Default value for a template.
+
+### defaultLicense (default: `MIT`)
+
+Default value for license.
+
+### defaultPackageManager (default: `undefined`)
+
+Default value for package manager. `npm`, `yarn` and `pnpm` are available. `undefined` to auto detect package manager.
+
+### promptForDescription (default: `true`)
+
+Interactively asks users for a package description.
+
+### promptForAuthor (default: `true`)
+
+Interactively asks users for a package author.
+
+### promptForEmail (default: `true`)
+
+Interactively asks users for a package author email.
+
+### promptForTemplate (default: `false`)
+
+Interactively asks users to select a template. If there are no multiple templates in the `templates` directory, it won't display a prompt anyways.
+
+Even if `promptForTemplate` is set to `false`, users can still specify a template via a command line flag `--template <template>`.
+
+```
+create-something <name> --template <template>
+```
+
+### promptForLicense (default: `true`)
+
+Interactively asks users for a package license.
+
+### promptForPackageManager (default: `false`)
+
+Interactively asks users for a package manager to use for installing packages from npm.
+
+### skipGitInit (default: `false`)
+
+Skip initializing a git repository at a creation time.
+
+### skipNpmInstall (default: `false`)
+
+Skip installing package dependencies at a creation time.
 
 ### after (default: `undefined`)
 
@@ -280,7 +342,7 @@ create('create-greet', {
 });
 ```
 
-### AfterHookOptions
+### `AfterHookOptions`
 
 ```typescript
 {
@@ -300,7 +362,7 @@ create('create-greet', {
 
   // helper functions
   run: (command: string, options?: CommonOptions<string>) => ExecaChildProcess<string>; // execute shell commands in the package dir
-  installNpmPackage: (packageName: string | [string], isDev?: boolean) => Promise<void>; // install npm package. uses package manager specified by --node-pm CLI param (default: npm)
+  installNpmPackage: (packageName: string | [string], isDev?: boolean) => Promise<void>; // install npm package. uses package manager specified by --node-pm CLI param (default: auto-detect)
 }
 ```
 

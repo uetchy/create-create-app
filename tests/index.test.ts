@@ -219,3 +219,32 @@ test('create unlicensed app', async () => {
   const existed = existsSync(`${baseDir}/create-greet/LICENSE`);
   expect(existed).toBeFalsy();
 }, 300000);
+
+it('should create project without npm install and without git', async () => {
+  const baseDir = mkdtempSync(TEST_PREFIX);
+
+  const opts = [
+    'create-greet',
+    '--description',
+    'desc.',
+    '--author',
+    '"Awesome Doe"',
+    '--email',
+    'awesome@example.com',
+    '--template',
+    'default',
+    '--license',
+    'UNLICENSED',
+    '--skip-install',
+    '--skip-git'
+  ];
+  const { stdout } = await execa(SCRIPT_PATH, opts, {
+    cwd: baseDir,
+  });
+
+  // cant check node_modules doesn't exist, because
+  // it will exist anyways after AfterHookOptions executes!
+  expect(stdout).not.toContain('Installing dependencies using');
+  expect(stdout).not.toContain('Initializing a git repository');
+  expect(existsSync(`${baseDir}/create-greet/.git`)).toBeFalsy();
+}, 300000);

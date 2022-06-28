@@ -1,9 +1,48 @@
 import { NodePM, printCommand, CLIError } from '.';
 import { spawnPromise } from './fs';
 
+function getPm(name: string) {
+  switch (name) {
+    case 'pnpm':
+      return NodePM.Pnpm;
+
+    case 'yarn':
+      return NodePM.Yarn;
+
+    case 'npm':
+      return NodePM.Npm;
+  
+    default:
+      return NodePM.Npm;
+  }
+}
+
+// License for `whichPm`
+// The MIT License (MIT)
+// Copyright (c) 2017-2022 Zoltan Kochan <z@kochan.io>
+// https://github.com/zkochan/packages/tree/main/which-pm-runs
+export function whichPm(defaultPm?: string) {
+  // if there's a default pm (passed by argv), use it
+  if(defaultPm) {
+    return getPm(defaultPm);
+  }
+
+  if (!process.env.npm_config_user_agent) {
+    return NodePM.Npm;
+  }
+
+  const pmSpec = process.env.npm_config_user_agent.split(' ')[0]
+  const separatorPos = pmSpec.lastIndexOf('/')
+  const name = pmSpec.substring(0, separatorPos)
+
+  return getPm(name);
+}
+
 export async function installDeps(rootDir: string, pm: NodePM) {
   let command: string;
   let args: string[];
+
+  console.log(`Installing dependencies using ${pm}`);
 
   switch (pm) {
     case NodePM.Npm: {

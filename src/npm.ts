@@ -27,7 +27,7 @@ export async function installDeps(rootDir: string, pm: NodePM) {
   printCommand(command, ...args);
 
   try {
-    await spawnPromise(command, args, { stdio: 'inherit' });
+    await spawnPromise(command, args, { stdio: 'inherit', shell: true });
   } catch (err) {
     throw new CLIError(`Failed to install dependencies: ${err}`);
   }
@@ -69,7 +69,7 @@ export async function addDeps({
   printCommand(command, ...args);
 
   try {
-    await spawnPromise(command, args, { stdio: 'inherit' });
+    await spawnPromise(command, args, { stdio: 'inherit', shell: true });
   } catch (err) {
     throw new CLIError(`Failed to add dependencies: ${err}`);
   }

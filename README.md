@@ -17,8 +17,7 @@
 
 ## Table of contents
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<!-- START mdmod {use: 'toc'} -->
 
 - [Quick Start](#quick-start)
   - [1. Bootstrap your project](#1-bootstrap-your-project)
@@ -62,7 +61,7 @@
 - [Contribution](#contribution)
   - [Contributors ✨](#contributors-)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- END mdmod -->
 
 ## Quick Start
 

@@ -10,7 +10,7 @@
     "prepublishOnly": "npm run clean && npm run build",
     "readme": "doctoc -p README.md",
     "release": "release-it",
-    "test": "npm run tsup && vitest --run",
+    "test": "npm run build && vitest --run",
     "toc": "doctoc README.md",
     "tsup": "tsup src/index.ts src/cli.ts -d lib"
   },

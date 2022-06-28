@@ -50,7 +50,7 @@ export interface AfterHookOptions {
     command: string,
     options?: CommonOptions<string>
   ) => ExecaChildProcess<string>;
-  installNpmPackage: (packageName: string) => Promise<void>;
+  installNpmPackage: (packageName: string, isDev?: boolean) => Promise<void>;
 }
 
 export enum NodePM {
@@ -89,40 +89,39 @@ async function getYargsOptions(
     interactive: { default: true },
     description: {
       type: 'input',
-      describe: 'description',
+      describe: 'Description',
       default: 'description',
       prompt: 'if-no-arg',
     },
     author: {
       type: 'input',
-      describe: 'author name',
+      describe: 'Author name',
       default: gitUser.name,
       prompt: 'if-no-arg',
     },
     email: {
       type: 'input',
-      describe: 'author email',
+      describe: 'Author email',
       default: gitUser.email,
       prompt: 'if-no-arg',
     },
     template: {
       type: 'list',
-      describe: 'template',
+      describe: 'Template',
       default: 'default',
       prompt: askForTemplate ? 'if-no-arg' : 'never',
       choices: availableTemplates,
     },
     license: {
       type: 'list',
-      describe: 'license',
+      describe: 'License',
       choices: [...availableLicenses(), 'UNLICENSED'],
       default: promptForLicense ? 'MIT' : 'UNLICENSED',
       prompt: promptForLicense ? 'if-no-arg' : 'never',
     },
     'node-pm': {
       type: 'list',
-      describe:
-        'select package manager to use for installing packages from npm',
+      describe: 'package manager to use for installing packages from npm',
       choices: ['npm', 'yarn', 'pnpm'],
       default: undefined, // undefined by default, we'll try to guess pm manager later
       prompt: promptForNodePM ? 'if-no-arg' : 'never',
@@ -225,10 +224,19 @@ export async function create(appName: string, options: Options) {
     // do not generate LICENSE
   }
 
+  const run = (command: string, options: CommonOptions<string> = {}) => {
+    const args = command.split(' ');
+    return execa(args[0], args.slice(1), {
+      stdio: 'inherit',
+      cwd: packageDir,
+      ...options,
+    });
+  };
+
   // init git
-  const skipGit = args['skip-git'];
 
   // init git if option skipGitInit or arg --skip-git are not set
+  const skipGit = args['skip-git'];
   if (!(options.skipGitInit || skipGit)) {
     try {
       console.log('\nInitializing a git repository');
@@ -239,17 +247,11 @@ export async function create(appName: string, options: Options) {
     }
   }
 
-  const run = (command: string, options: CommonOptions<string> = {}) => {
-    const args = command.split(' ');
-    return execa(args[0], args.slice(1), {
-      stdio: 'inherit',
-      cwd: packageDir,
-      ...options,
-    });
-  };
-
   // run Node.js related tasks (only if `package.json` does exist in the template root)
-  let installNpmPackage = async (packageName: string): Promise<void> => {};
+  let installNpmPackage = async (
+    pkg: string,
+    isDev?: boolean
+  ): Promise<void> => {};
 
   if (exists('package.json', packageDir)) {
     const nodePMArg = args['node-pm'];
@@ -267,16 +269,14 @@ export async function create(appName: string, options: Options) {
       pkg: string | string[],
       isDev: boolean = false
     ): Promise<void> => {
-      await addDeps({
-        rootDir: packageDir,
-        deps: Array.isArray(pkg) ? pkg : [pkg],
+      await addDeps(packageDir, Array.isArray(pkg) ? pkg : [pkg], {
         isDev,
         pm: packageManager,
       });
     };
   }
 
-  const afterHookOptions = {
+  const afterHookOptions: AfterHookOptions = {
     name,
     packageDir,
     template,

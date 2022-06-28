@@ -1,4 +1,4 @@
-import { NodePM, printCommand, CLIError } from '.';
+import { CLIError, NodePM, printCommand } from '.';
 import { spawnPromise } from './fs';
 
 function getPm(name: string) {
@@ -11,7 +11,7 @@ function getPm(name: string) {
 
     case 'npm':
       return NodePM.Npm;
-  
+
     default:
       return NodePM.Npm;
   }
@@ -23,7 +23,7 @@ function getPm(name: string) {
 // https://github.com/zkochan/packages/tree/main/which-pm-runs
 export function whichPm(defaultPm?: string) {
   // if there's a default pm (passed by argv), use it
-  if(defaultPm) {
+  if (defaultPm) {
     return getPm(defaultPm);
   }
 
@@ -31,9 +31,9 @@ export function whichPm(defaultPm?: string) {
     return NodePM.Npm;
   }
 
-  const pmSpec = process.env.npm_config_user_agent.split(' ')[0]
-  const separatorPos = pmSpec.lastIndexOf('/')
-  const name = pmSpec.substring(0, separatorPos)
+  const pmSpec = process.env.npm_config_user_agent.split(' ')[0];
+  const separatorPos = pmSpec.lastIndexOf('/');
+  const name = pmSpec.substring(0, separatorPos);
 
   return getPm(name);
 }
@@ -72,17 +72,17 @@ export async function installDeps(rootDir: string, pm: NodePM) {
   }
 }
 
-export async function addDeps({
-  rootDir,
-  deps,
-  isDev = false,
-  pm,
-}: {
-  rootDir: string;
-  deps: string[];
-  isDev?: boolean;
-  pm: NodePM;
-}) {
+export async function addDeps(
+  rootDir: string,
+  deps: string[],
+  {
+    isDev = false,
+    pm,
+  }: {
+    isDev?: boolean;
+    pm: NodePM;
+  }
+) {
   let command: string;
   let args: string[];
 

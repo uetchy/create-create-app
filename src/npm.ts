@@ -17,7 +17,10 @@ function getPm(name: string) {
   }
 }
 
-// based on https://github.com/zkochan/packages/tree/main/which-pm-runs
+// License for `whichPm`
+// The MIT License (MIT)
+// Copyright (c) 2017-2022 Zoltan Kochan <z@kochan.io>
+// https://github.com/zkochan/packages/tree/main/which-pm-runs
 export function whichPm(defaultPm?: string) {
   // if there's a default pm (passed by argv), use it
   if(defaultPm) {

@@ -2,7 +2,7 @@ import fs from 'fs';
 import globby from 'globby';
 import Handlebars from 'handlebars';
 import isUtf8 from 'is-utf8';
-import path from 'path';
+import path, { sep } from 'path';
 import slash from 'slash';
 import { v4 as uuidv4 } from 'uuid';
 import { View } from '.';
@@ -91,7 +91,7 @@ export async function copy(args: CopyConfig) {
     const targetPath = format(
       slash(path.resolve(args.packageDir, relativePath)),
       args.view
-    ).replace(/gitignore$/, '.gitignore'); // https://github.com/uetchy/create-create-app/issues/38
+    ).replace(new RegExp(`${sep}gitignore$`, 'g'), `${sep}.gitignore`); // https://github.com/uetchy/create-create-app/issues/38
     prepareDirectory(targetPath);
 
     let sourceData = fs.readFileSync(sourcePath);

@@ -6,7 +6,7 @@ import { AfterHookOptions, create } from '.';
 
 const templateRoot = resolve(__dirname, '..', 'templates');
 
-const caveat = ({ name, template }: AfterHookOptions) => {
+const caveat = ({ answers: { name, template } }: AfterHookOptions) => {
   let text = `
 cd ${chalk.bold.green(name)}
 `;
@@ -40,14 +40,15 @@ ${chalk.yellow(
 
 create('create-create-app', {
   templateRoot,
-  modifyName: (name) => (name.startsWith('create-') ? name : `create-${name}`),
-
   promptForTemplate: true,
   skipNpmInstall: true,
 
+  modifyName: (name) => (name.startsWith('create-') ? name : `create-${name}`),
+
   after: async ({ installNpmPackage }: AfterHookOptions) => {
-    console.log('Installing the latest version of create-create-app');
+    console.log('\nInstalling the latest version of create-create-app');
     await installNpmPackage('create-create-app');
   },
+
   caveat,
 });

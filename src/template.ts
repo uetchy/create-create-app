@@ -5,7 +5,7 @@ import isUtf8 from 'is-utf8';
 import path, { sep } from 'path';
 import slash from 'slash';
 import { v4 as uuidv4 } from 'uuid';
-import { View } from '.';
+import { Answers } from '.';
 
 function split(word: string): string[] {
   return word.split(/[-_\s]+/);
@@ -79,22 +79,23 @@ export function getAvailableTemplates(root: string) {
 }
 
 export interface CopyConfig {
-  packageDir: string;
-  templateDir: string;
-  view: View;
+  targetDir: string;
+  sourceDir: string;
+  view: Answers;
 }
 
 export async function copy(args: CopyConfig) {
-  const templateFiles = await globby(slash(args.templateDir), { dot: true });
-  for (const sourcePath of templateFiles) {
-    const relativePath = path.relative(args.templateDir, sourcePath);
+  const sourceFiles = await globby(slash(args.sourceDir), { dot: true });
+
+  for (const sourceFile of sourceFiles) {
+    const relativePath = path.relative(args.sourceDir, sourceFile);
     const targetPath = format(
-      slash(path.resolve(args.packageDir, relativePath)),
+      slash(path.resolve(args.targetDir, relativePath)),
       args.view
     ).replace(new RegExp(`${sep}gitignore$`, 'g'), `${sep}.gitignore`); // https://github.com/uetchy/create-create-app/issues/38
     prepareDirectory(targetPath);
 
-    let sourceData = fs.readFileSync(sourcePath);
+    let sourceData = fs.readFileSync(sourceFile);
     let targetData = sourceData;
     if (isUtf8(sourceData)) {
       targetData = Buffer.from(format(sourceData, args.view));

@@ -19,6 +19,46 @@ export function whichPm(): PackageManager {
   return name as PackageManager;
 }
 
+export async function initPackage(
+  rootDir: string,
+  {
+    pm,
+  }: {
+    pm: PackageManager;
+  }
+) {
+  let command: string;
+  let args: string[];
+
+  switch (pm) {
+    case 'npm': {
+      command = 'npm';
+      args = ['init', '-y'];
+      process.chdir(rootDir);
+      break;
+    }
+    case 'yarn': {
+      command = 'yarnpkg';
+      args = ['init', '-y', '--cwd', rootDir];
+      break;
+    }
+    case 'pnpm': {
+      command = 'pnpm';
+      args = ['init', '-y'];
+      process.chdir(rootDir);
+      break;
+    }
+  }
+
+  printCommand(command, ...args);
+
+  try {
+    await spawnPromise(command, args, { stdio: 'inherit', shell: true });
+  } catch (err) {
+    throw new CLIError(`Failed to install dependencies: ${err}`);
+  }
+}
+
 export async function installDeps(rootDir: string, pm: PackageManager) {
   let command: string;
   let args: string[];

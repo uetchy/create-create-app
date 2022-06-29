@@ -8,6 +8,7 @@ import { test, expect } from 'vitest';
 const pkg = require('../package.json');
 
 const SCRIPT_PATH = resolve(__dirname, '..', pkg.bin['create-create-app']);
+const FIXTURE_PATH = join(__dirname, 'fixtures');
 const TMP_PREFIX = join(tmpdir(), 'create-create-app-');
 
 const DEFAULT_ANSWERS = [
@@ -19,22 +20,31 @@ const DEFAULT_ANSWERS = [
   'awesome@example.com',
 ];
 
-test('show usage', async () => {
-  const { stdout } = await execa(SCRIPT_PATH, []);
-  expect(stdout).toBe('create-create-app <name>');
-}, 300000);
-
-test('template', async () => {
+async function useFixture(projectName: string, opts: readonly string[]) {
   const tmpDir = mkdtempSync(TMP_PREFIX);
-  const projectPath = './tests/fixtures/create-test';
+  const projectPath = join(FIXTURE_PATH, projectName);
   const cliPath = resolve(join(projectPath, 'src/cli.js'));
 
   await execa('yarn', ['install'], {
     cwd: projectPath,
   });
 
+  const { stdout } = await execa('node', [cliPath, ...opts], {
+    cwd: tmpDir,
+  });
+
+  return { stdout, tmpDir };
+}
+
+// Tests
+
+test('show usage', async () => {
+  const { stdout } = await execa(SCRIPT_PATH, []);
+  expect(stdout).toBe('create-create-app <name>');
+}, 300000);
+
+test('template', async () => {
   const opts = [
-    cliPath,
     'test',
     ...DEFAULT_ANSWERS,
     '--template',
@@ -45,9 +55,7 @@ test('template', async () => {
     'macOS',
   ];
 
-  const { stdout } = await execa('node', opts, {
-    cwd: tmpDir,
-  });
+  const { stdout, tmpDir } = await useFixture('create-test', opts);
 
   expect(readdirSync(join(tmpDir, 'test'))).toEqual(
     expect.arrayContaining([
@@ -217,16 +225,7 @@ test('create unlicensed app', async () => {
 }, 300000);
 
 test('should create project with minimal footprint', async () => {
-  const tmpDir = mkdtempSync(TMP_PREFIX);
-  const projectPath = './tests/fixtures/create-test';
-  const cliPath = resolve(join(projectPath, 'src/cli.js'));
-
-  await execa('yarn', ['install'], {
-    cwd: projectPath,
-  });
-
   const opts = [
-    cliPath,
     'test',
     ...DEFAULT_ANSWERS,
     '--license',
@@ -239,9 +238,7 @@ test('should create project with minimal footprint', async () => {
     '--skip-git',
   ];
 
-  await execa('node', opts, {
-    cwd: tmpDir,
-  });
+  const { tmpDir } = await useFixture('create-test', opts);
 
   expect(existsSync(`${tmpDir}/test/LICENSE`)).toBeFalsy();
   expect(existsSync(`${tmpDir}/test/node_modules`)).toBeFalsy();
@@ -249,19 +246,7 @@ test('should create project with minimal footprint', async () => {
 }, 300000);
 
 test('should create project with minimal questions', async () => {
-  const tmpDir = mkdtempSync(TMP_PREFIX);
-  const projectPath = './tests/fixtures/minimal';
-  const cliPath = resolve(join(projectPath, 'src/cli.js'));
-
-  await execa('yarn', ['install'], {
-    cwd: projectPath,
-  });
-
-  const opts = [cliPath, 'test'];
-
-  await execa('node', opts, {
-    cwd: tmpDir,
-  });
+  const { tmpDir } = await useFixture('minimal', ['test']);
 
   expect(existsSync(`${tmpDir}/test/.git`)).toBeFalsy();
   expect(existsSync(`${tmpDir}/test/yarn.lock`)).toBeTruthy();

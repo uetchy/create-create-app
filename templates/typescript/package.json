@@ -5,7 +5,7 @@
   "author": "{{contact}}",
   "scripts": {
     "build": "tsup src/cli.ts --minify",
-    "clean": "shx rm -rf lib",
+    "clean": "shx rm -rf dist",
     "dev": "tsup src/cli.ts --watch",
     "prepublishOnly": "npm run clean && npm run build"
   },
@@ -16,6 +16,7 @@
   ],
   "devDependencies": {
     "@types/node": "^17.0.29",
+    "shx": "^0.3.4",
     "tsup": "^5.12.1",
     "typescript": "^4.6.3"
   },

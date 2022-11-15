@@ -1,7 +1,7 @@
 {
   "name": "create-create-cli",
   "description": "Create your own `create-something` cli.",
-  "version": "7.3.1",
+  "version": "7.3.2",
   "author": "Yasuaki Uechi <y@uechi.io>",
   "contributors": [
     {
@@ -17,6 +17,7 @@
   "scripts": {
     "build": "npm run tsup -- --minify --dts",
     "clean": "shx rm -rf lib 'templates/*/{yarn.lock,package-lock.json,node_modules}'",
+    "depcheck": "depcheck --ignore-bin-package --skip-missing",
     "dev": "npm run tsup -- --watch",
     "ncu:major": "ncu",
     "ncu:minor": "ncu -t minor -u",
@@ -39,16 +40,16 @@
   ],
   "dependencies": {
     "@types/yargs-interactive": "2.1.3",
-    "chalk": "4",
+    "chalk": "4.1.2",
     "cross-spawn": "7.0.3",
     "epicfail": "3.0.0",
-    "execa": "5",
+    "execa": "5.1.1",
     "gitconfig": "2.0.8",
-    "globby": "11",
+    "globby": "11.1.0",
     "handlebars": "4.7.7",
     "is-utf8": "0.2.1",
     "license.js": "3.1.2",
-    "slash": "3",
+    "slash": "3.0.0",
     "uuid": "8.3.2",
     "yargs-interactive": "3.0.1"
   },
@@ -57,10 +58,9 @@
     "@types/cross-spawn": "6.0.2",
     "@types/node": "18.11.9",
     "@types/uuid": "8.3.4",
+    "depcheck": "1.4.3",
     "husky": "8.0.2",
     "lint-staged": "13.0.3",
-    "mdmod": "2.0.0",
-    "mdmod-plugin-toc": "0.1.1",
     "npm-run-all": "4.1.5",
     "npm-check-updates": "16.4.1",
     "prettier": "2.7.1",

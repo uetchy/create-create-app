@@ -76,7 +76,7 @@ function prepareDirectory(filePath: string) {
   try {
     const target = path.dirname(filePath);
     fs.mkdirSync(target, { recursive: true });
-  } catch { }
+  } catch {}
 }
 
 export function getAvailableTemplates(root: string) {

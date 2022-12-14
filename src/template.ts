@@ -62,6 +62,11 @@ function uuid() {
 }
 Handlebars.registerHelper('uuid', uuid);
 
+function rawHelper(options: Handlebars.HelperDeclareSpec) {
+  return options.fn();
+}
+Handlebars.registerHelper('raw-helper', rawHelper);
+
 function format<T>(text: Buffer | string, view: T) {
   const template = Handlebars.compile(text.toString(), { noEscape: true });
   return template(view);
@@ -71,7 +76,7 @@ function prepareDirectory(filePath: string) {
   try {
     const target = path.dirname(filePath);
     fs.mkdirSync(target, { recursive: true });
-  } catch {}
+  } catch { }
 }
 
 export function getAvailableTemplates(root: string) {

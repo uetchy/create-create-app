@@ -20,50 +20,50 @@
 <!-- START mdmod {use: 'toc'} -->
 
 
-- [✨ Create Create App](#-create-create-app)
-  - [Why?](#why)
-  - [Table of contents](#table-of-contents)
-  - [Quick Start](#quick-start)
-    - [1. Bootstrap your project](#1-bootstrap-your-project)
-    - [2. Add and edit template files](#2-add-and-edit-template-files)
-    - [3. Build the app (TypeScript only)](#3-build-the-app-typescript-only)
-    - [4. Publish package to npm](#4-publish-package-to-npm)
-    - [5. PROFIT](#5-profit)
-  - [Template](#template)
-    - [Advanced: Multiple templates](#advanced-multiple-templates)
-    - [Helper functions](#helper-functions)
-      - [`upper`](#upper)
-      - [`lower`](#lower)
-      - [`capital`](#capital)
-      - [`camel`](#camel)
-      - [`snake`](#snake)
-      - [`kebab`](#kebab)
-      - [`space`](#space)
-      - [`uuid`](#uuid)
-  - [Config](#config)
-    - [templateRoot (required)](#templateroot-required)
-    - [modifyName (default: `undefined`)](#modifyname-default-undefined)
-    - [extra (default: `undefined`)](#extra-default-undefined)
-    - [defaultDescription (default: `description`)](#defaultdescription-default-description)
-    - [defaultAuthor (default: `user.name` in `~/.gitconfig` otherwise `Your name`)](#defaultauthor-default-username-in-gitconfig-otherwise-your-name)
-    - [defaultEmail (default: `user.email` in `~/.gitconfig` otherwise `Your email`)](#defaultemail-default-useremail-in-gitconfig-otherwise-your-email)
-    - [defaultTemplate (default: `default`)](#defaulttemplate-default-default)
-    - [defaultLicense (default: `MIT`)](#defaultlicense-default-mit)
-    - [defaultPackageManager (default: `undefined`)](#defaultpackagemanager-default-undefined)
-    - [promptForDescription (default: `true`)](#promptfordescription-default-true)
-    - [promptForAuthor (default: `true`)](#promptforauthor-default-true)
-    - [promptForEmail (default: `true`)](#promptforemail-default-true)
-    - [promptForTemplate (default: `false`)](#promptfortemplate-default-false)
-    - [promptForLicense (default: `true`)](#promptforlicense-default-true)
-    - [promptForPackageManager (default: `false`)](#promptforpackagemanager-default-false)
-    - [skipGitInit (default: `false`)](#skipgitinit-default-false)
-    - [skipNpmInstall (default: `false`)](#skipnpminstall-default-false)
-    - [after (default: `undefined`)](#after-default-undefined)
-    - [caveat (default: `undefined`)](#caveat-default-undefined)
-    - [`AfterHookOptions`](#afterhookoptions)
-  - [Showcase](#showcase)
-  - [Contribution](#contribution)
-    - [Contributors ✨](#contributors-)
+- [Why?](#why)
+- [Table of contents](#table-of-contents)
+- [Quick Start](#quick-start)
+  - [1. Bootstrap your project](#1-bootstrap-your-project)
+  - [2. Add and edit template files](#2-add-and-edit-template-files)
+  - [3. Build the app (TypeScript only)](#3-build-the-app-typescript-only)
+  - [4. Publish package to npm](#4-publish-package-to-npm)
+  - [5. PROFIT](#5-profit)
+- [Template](#template)
+  - [Advanced: Multiple templates](#advanced-multiple-templates)
+  - [Helper functions](#helper-functions)
+    - [`upper`](#upper)
+    - [`lower`](#lower)
+    - [`capital`](#capital)
+    - [`camel`](#camel)
+    - [`snake`](#snake)
+    - [`kebab`](#kebab)
+    - [`space`](#space)
+    - [`uuid`](#uuid)
+    - [`raw-helper`](#raw-helper)
+- [Config](#config)
+  - [templateRoot (required)](#templateroot-required)
+  - [modifyName (default: `undefined`)](#modifyname-default-undefined)
+  - [extra (default: `undefined`)](#extra-default-undefined)
+  - [defaultDescription (default: `description`)](#defaultdescription-default-description)
+  - [defaultAuthor (default: `user.name` in `~/.gitconfig` otherwise `Your name`)](#defaultauthor-default-username-in-gitconfig-otherwise-your-name)
+  - [defaultEmail (default: `user.email` in `~/.gitconfig` otherwise `Your email`)](#defaultemail-default-useremail-in-gitconfig-otherwise-your-email)
+  - [defaultTemplate (default: `default`)](#defaulttemplate-default-default)
+  - [defaultLicense (default: `MIT`)](#defaultlicense-default-mit)
+  - [defaultPackageManager (default: `undefined`)](#defaultpackagemanager-default-undefined)
+  - [promptForDescription (default: `true`)](#promptfordescription-default-true)
+  - [promptForAuthor (default: `true`)](#promptforauthor-default-true)
+  - [promptForEmail (default: `true`)](#promptforemail-default-true)
+  - [promptForTemplate (default: `false`)](#promptfortemplate-default-false)
+  - [promptForLicense (default: `true`)](#promptforlicense-default-true)
+  - [promptForPackageManager (default: `false`)](#promptforpackagemanager-default-false)
+  - [skipGitInit (default: `false`)](#skipgitinit-default-false)
+  - [skipNpmInstall (default: `false`)](#skipnpminstall-default-false)
+  - [after (default: `undefined`)](#after-default-undefined)
+  - [caveat (default: `undefined`)](#caveat-default-undefined)
+  - [`AfterHookOptions`](#afterhookoptions)
+- [Showcase](#showcase)
+- [Contribution](#contribution)
+  - [Contributors ✨](#contributors-)
 
 <!-- END mdmod -->
 
@@ -186,6 +186,21 @@ Generates unique UUID string.
 ```
 {{uuid}} // => a5df7100-da46-47a6-907e-afe861f48b39
 {{upper (uuid)}} // => A5DF7100-DA46-47A6-907E-AFE861F48B39
+```
+
+#### `raw-helper`
+
+Raw blocks to handle unprocessed blocks.
+
+```
+{{{{raw-helper}}}}
+  {{bar}}
+{{{{/raw-helper}}}}
+```
+will render
+
+```
+{{bar}}
 ```
 
 ## Config

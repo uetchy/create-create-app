@@ -1,3 +1,10 @@
+## Fork of create-create-app
+
+This is a fork of uetchy/create-create-app. The reason for the fork is that there is an
+issue with using the original in projects that use ES modules as opposed to commonJS.
+The issue is to do with calling `epicfail` in the create function, where commonJS is
+presumed.
+
 <div align="center">
 <h1 align="center">✨ Create Create App</h1>
 <h6>Create your own `create-something` app.</h6>

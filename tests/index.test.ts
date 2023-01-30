@@ -152,6 +152,88 @@ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 OR OTHER DEALINGS IN THE SOFTWARE.
 `);
+  const newRawHelper = readFileSync(`${tmpDir}/create-greet/.github/workflows/unit-test.yml`, 'utf-8');
+  expect(newRawHelper).toBe('name: Unit Test\n' +
+    'on:\n' +
+    '  push:\n' +
+    '    branches: ["main"]\n' +
+    '  pull_request:\n' +
+    '    branches: ["main"]\n' +
+    'jobs:\n' +
+    '  build:\n' +
+    '    environment: dev\n' +
+    '    runs-on: ubuntu-latest\n' +
+    '    env:\n' +
+    '      MY_KEY: hello_ci # ${{ secrets.MY_KEY }}\n' +
+    '    strategy:\n' +
+    '      matrix:\n' +
+    '        node-version: [16.x]\n' +
+    '    steps:\n' +
+    '      - name: Checkout\n' +
+    '        uses: actions/checkout@v3\n' +
+    '      - name: Detect package manager\n' +
+    '        id: detect-package-manager\n' +
+    '        run: |\n' +
+    '          if [ -f "${{ github.workspace }}/yarn.lock" ]; then\n' +
+    '            echo "manager=yarn" >> $GITHUB_OUTPUT\n' +
+    '            echo "command=install" >> $GITHUB_OUTPUT\n' +
+    '            echo "runner=yarn" >> $GITHUB_OUTPUT\n' +
+    '            exit 0\n' +
+    '          elif [ -f "${{ github.workspace }}/package.json" ]; then\n' +
+    '            echo "manager=npm" >> $GITHUB_OUTPUT\n' +
+    '            echo "command=ci" >> $GITHUB_OUTPUT\n' +
+    '            echo "runner=npx --no-install" >> $GITHUB_OUTPUT\n' +
+    '            exit 0\n' +
+    '          else\n' +
+    '            echo "Unable to determine packager manager"\n' +
+    '            exit 1\n' +
+    '          fi\n' +
+    '      - name: Use Node.js ${{ matrix.node-version }}\n' +
+    '        uses: actions/setup-node@v3\n' +
+    '        with:\n' +
+    '          node-version: ${{ matrix.node-version }}\n' +
+    '          cache: ${{ steps.detect-package-manager.outputs.manager }}\n' +
+    '      - name: Restore cache\n' +
+    '        uses: actions/cache@v3\n' +
+    '        with:\n' +
+    '          path: |\n' +
+    '            node_modules\n' +
+    "          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}\n" +
+    '          restore-keys: |\n' +
+    "            ${{ runner.os }}-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-\n" +
+    '      - name: Install dependencies\n' +
+    '        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}\n' +
+    '      - name: Type Check\n' +
+    '        env:\n' +
+    '          NODE_OPTIONS: "--max_old_space_size=4096"\n' +
+    '        run: ${{ steps.detect-package-manager.outputs.runner }} typecheck\n' +
+    '      - name: Unit Test\n' +
+    '        env:\n' +
+    '          NODE_OPTIONS: "--max_old_space_size=4096"\n' +
+    '        run: ${{ steps.detect-package-manager.outputs.runner }} test --collectCoverage\n' +
+    '      - name: Code Coverage Summary\n' +
+    '        uses: irongut/CodeCoverageSummary@v1.3.0\n' +
+    '        with:\n' +
+    '          filename: coverage/cobertura-coverage.xml\n' +
+    '          badge: true\n' +
+    '          fail_below_min: true\n' +
+    '          format: markdown\n' +
+    '          hide_branch_rate: false\n' +
+    '          hide_complexity: true\n' +
+    '          indicators: true\n' +
+    '          output: both\n' +
+    '          thresholds: "60 80"\n' +
+    '      - name: Build\n' +
+    '        env:\n' +
+    '          CI: false\n' +
+    '        run: ${{ steps.detect-package-manager.outputs.runner }} build\n' +
+    '      - name: Add Coverage PR Comment\n' +
+    '        uses: marocchino/sticky-pull-request-comment@v2\n' +
+    "        if: github.event_name == 'pull_request'\n" +
+    '        with:\n' +
+    '          recreate: true\n' +
+    '          append: true\n' +
+    '          path: code-coverage-results.md\n')
 }, 300000);
 
 test('create typescript project', async () => {

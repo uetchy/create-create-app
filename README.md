@@ -19,7 +19,6 @@
 
 <!-- START mdmod {use: 'toc'} -->
 
-
 - [✨ Create Create App](#-create-create-app)
   - [Why?](#why)
   - [Table of contents](#table-of-contents)
@@ -40,6 +39,7 @@
       - [`kebab`](#kebab)
       - [`space`](#space)
       - [`uuid`](#uuid)
+      - [`raw-helper`](#raw-helper)
   - [Config](#config)
     - [templateRoot (required)](#templateroot-required)
     - [modifyName (default: `undefined`)](#modifyname-default-undefined)
@@ -186,6 +186,22 @@ Generates unique UUID string.
 ```
 {{uuid}} // => a5df7100-da46-47a6-907e-afe861f48b39
 {{upper (uuid)}} // => A5DF7100-DA46-47A6-907E-AFE861F48B39
+```
+
+#### `raw`
+
+Raw blocks to handle unprocessed blocks.
+
+```
+{{{{raw}}}}
+  {{bar}}
+{{{{/raw}}}}
+```
+
+will render
+
+```
+{{bar}}
 ```
 
 ## Config

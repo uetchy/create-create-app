@@ -67,6 +67,11 @@ function rawHelper(options: Handlebars.HelperDeclareSpec) {
 }
 Handlebars.registerHelper('raw-helper', rawHelper);
 
+function raw(option: Handlebars.HelperDeclareSpec) {
+  return option.fn();
+}
+Handlebars.registerHelper('raw', raw);
+
 function format<T>(text: Buffer | string, view: T) {
   const template = Handlebars.compile(text.toString(), { noEscape: true });
   return template(view);

@@ -19,7 +19,6 @@
 
 <!-- START mdmod {use: 'toc'} -->
 
-
 - [✨ Create Create App](#-create-create-app)
   - [Why?](#why)
   - [Table of contents](#table-of-contents)
@@ -189,15 +188,16 @@ Generates unique UUID string.
 {{upper (uuid)}} // => A5DF7100-DA46-47A6-907E-AFE861F48B39
 ```
 
-#### `raw-helper`
+#### `raw`
 
 Raw blocks to handle unprocessed blocks.
 
 ```
-{{{{raw-helper}}}}
+{{{{raw}}}}
   {{bar}}
-{{{{/raw-helper}}}}
+{{{{/raw}}}}
 ```
+
 will render
 
 ```

@@ -7,7 +7,7 @@
     "build": "npm run tsup -- --minify --dts",
     "clean": "shx rm -rf lib 'templates/*/{yarn.lock,package-lock.json,node_modules}'",
     "dev": "npm run tsup -- --watch",
-    "prepublishOnly": "npm run clean && npm run build",
+    "prepack": "npm run clean && npm run build",
     "release": "release-it",
     "test": "run-p build typecheck && vitest --run",
     "tsup": "tsup src/index.ts src/cli.ts -d lib",

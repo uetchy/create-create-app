@@ -198,7 +198,10 @@ export interface AfterHookOptions {
   ) => ExecaChildProcess<string>;
 
   /** install npm package. uses package manager specified by --node-pm CLI param (default: auto-detect) */
-  installNpmPackage: (packageName: string, isDev?: boolean) => Promise<void>;
+  installNpmPackage: (
+    packageName: string | string[],
+    isDev?: boolean
+  ) => Promise<void>;
 }
 
 export class CLIError extends Error {

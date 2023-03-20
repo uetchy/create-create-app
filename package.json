@@ -1,10 +1,10 @@
 {
-  "name": "create-create-app",
+  "name": "@mcqj/create-create-app",
   "description": "Create your own `create-something` app.",
-  "version": "7.3.0",
-  "author": "Yasuaki Uechi <y@uechi.io>",
+  "version": "7.3.0-patch.1",
+  "author": "John Mc Quillan <@mcqj>",
   "scripts": {
-    "build": "npm run tsup -- --minify --dts",
+    "build": "npm run tsup -- --dts",
     "clean": "shx rm -rf lib 'templates/*/{yarn.lock,package-lock.json,node_modules}'",
     "dev": "npm run tsup -- --watch",
     "prepublishOnly": "npm run clean && npm run build",
@@ -59,13 +59,13 @@
   "lint-staged": {
     "*.md": "mdmod"
   },
-  "homepage": "https://github.com/uetchy/create-create-app",
+  "homepage": "https://github.com/mcqj/create-create-app",
   "repository": {
     "type": "git",
-    "url": "https://github.com/uetchy/create-create-app.git"
+    "url": "https://github.com/mcqj/create-create-app.git"
   },
   "bugs": {
-    "url": "https://github.com/uetchy/create-create-app/issues"
+    "url": "https://github.com/mcqj/create-create-app/issues"
   },
   "license": "MIT",
   "keywords": [

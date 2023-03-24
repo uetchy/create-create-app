@@ -1,6 +1,9 @@
 lib/
 tmp/
+
+# Editor / IDE temp files
 .vscode
+*.sw?
 
 # Logs
 logs

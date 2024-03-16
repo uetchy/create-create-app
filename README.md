@@ -124,8 +124,8 @@ Built-in variables are:
 - `{{contact}}` author name formatted with `{{name}} <{{email}}>`. If email is missing, simply `{{name}}`
 - `{{license}}` package license (e.g. `MIT`)
 - `{{year}}` current year (e.g. `2021`)
-- `{{template}} selected template name (e.g. `typescript`)
-- `{{packageManager}} package manager (e.g. `yarn`)
+- `{{template}}` selected template name (e.g. `typescript`)
+- `{{packageManager}}` package manager (e.g. `yarn`)
 
 ### Advanced: Multiple templates
 
